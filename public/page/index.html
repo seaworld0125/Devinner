@@ -244,7 +244,7 @@
     // socket.io Event naming
     const CONNECTED = 'connected';
     const UPDATE_CLIENTNUM = 'update-clientNum';
-    const CHAT_MSG = 'chat-msg';
+    const CHAT_MSG = 'chat-message';
     const CHECK_NICKNAME = 'check-nickname';
     const CHECK_ACCOUNT = 'check-account';
     const CHECK_IP = 'check-ip';
@@ -387,11 +387,11 @@
     socket.on(CONNECTED, (count) => {
       countBox.textContent = "접속자 수 : " + count;
       if(!first_set){
-        getIp().then((ip) => {
-          console.log('ip :' + ip);
-          socket.emit(CHECK_BAN_LIST, ip);
-          ip_address = ip;
-        });
+        // getIp().then((ip) => {
+        //   console.log('ip :' + ip);
+        //   socket.emit(CHECK_BAN_LIST, ip);
+        //   ip_address = ip;
+        // });
         document.getElementById('nick_name').textContent = '개미';
         titleBox.innerHTML = `안녕하세요 <b>개미</b> 님`;
         appendMsg('채팅방에 오신 것을 환영합니다! (욕설/도배 자동 ip 밴입니다.)', null);
