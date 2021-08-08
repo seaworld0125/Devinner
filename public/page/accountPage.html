@@ -1,0 +1,279 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, height=device-height, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+        <style>
+            header{
+                color: white;
+                display:flex;
+                justify-content: center;
+            }
+            form{
+                padding: 10px 10px 30px 10px;
+                width: 400px;
+                margin: 0 auto;
+                border-radius: 5px;
+                border: solid 1px;
+                border-color: blueviolet;
+                background-color: white;
+            }
+            .button-box{
+                position:relative;
+                margin:10px 0px;
+                margin-top: 20px;
+            }
+            .button-box > button{
+                background-color:white;
+                border: solid 1px;
+                color:black;
+                border-radius: 5px;
+            }
+            .input-box{
+                position:relative;
+                margin:10px 0;
+                margin-top: 20px;
+            }
+            .input-box > input{
+                width: 400px;
+                background:transparent;
+                background-color: rgba(255, 255, 255, 0.733);
+                border:none;
+                border-bottom: solid 1px;
+                padding:20px 10px 5px 0px;
+                font-size:14pt;
+            }
+            input::placeholder{
+                color:transparent;
+            }
+            input:placeholder-shown + label{
+                color:rgb(62, 36, 87);
+                font-size:14pt;
+                top:15px;
+            }
+            input:focus + label, label{
+                color:rgb(62, 36, 87);
+                font-size:10pt;
+                pointer-events: none;
+                position: absolute;
+                left:0px;
+                top:0px;
+                transition: all 0.2s ease ;
+                -webkit-transition: all 0.2s ease;
+                -moz-transition: all 0.2s ease;
+                -o-transition: all 0.2s ease;
+            }
+
+            input:focus, input:not(:placeholder-shown){
+                border-bottom: solid 1px rgb(62, 36, 87);
+                outline:none;
+            }
+            input[type=submit]{
+                background-color: blueviolet;
+                border:none;
+                color:black;
+                border-radius: 5px;
+                width:400px;
+                height:35px;
+                font-size: 14pt;
+                margin-top: 70px;
+            }
+        </style>
+    </head>
+    <body style="background-color: rgb(33, 33, 33);">
+        <header>
+            <h2>회원가입</h2>
+        </header>
+        <form id="form-new-account" action="" method="POST">
+            <div class="input-box">
+                <input id="username" type="text" name="username" placeholder="아이디">
+                <label for="username">아이디</label>
+            </div>
+            <div class="button-box">
+                <button id="button01" type="button">중복확인</button>
+            </div>
+            <div class="input-box">
+                <input id="password" type="password" name="password" placeholder="비밀번호">
+                <label for="password">비밀번호</label>
+            </div>
+            <div class="input-box">
+                <input id="nickname" type="text" name="nickname" placeholder="닉네임">
+                <label for="nickname">닉네임</label>
+            </div>
+            <div class="button-box">
+                <button id="button02" type="button">중복확인</button>
+            </div>
+            <input type="submit" value="가입완료">
+        </form>
+    </body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        const socket = io('http://localhost:3000');
+
+        // make account form area
+        const username = document.getElementById('username');
+        const password = document.getElementById('password');
+        const nickname = document.getElementById('nickname');
+        const button01 = document.getElementById('button01');
+        const button02 = document.getElementById('button02');
+        const createAccountForm = document.getElementById('form-new-account');
+
+        // socket.io Event naming
+        const CHECK_USERNAME = 'check-username';
+        const CHECK_NICKNAME = 'check-nickname';
+        const CREATE_ACCOUNT = 'create-account';
+        const SET_NICKNAME = 'set-nickname';
+
+        // account check values
+        let password_check = false;
+        let username_check = false;
+        let nickname_check = false;
+        let username_length_check = false;
+        let nickname_length_check = false;
+        let ip_check = false;
+
+        // check ip adress
+        var ip = "";
+        $.getJSON('https://ipapi.co/json/', function(data){
+            ip =  data.ip;
+            ip_check = true;
+        });
+
+        // Real-time Input Value Change Detection
+        var old_username = "";       
+        $("#username").on("propertychange change keyup paste input", function() {
+            var currentVal = $(this).val();
+            if(currentVal == old_username) {
+                return;
+            }
+            old_username = currentVal;
+            let length_ = old_username.length;
+            console.log(length_);
+            if(length_ == 0){
+                $("label[for='username']").text('아이디');
+                username_length_check = false;
+            }
+            else if(length_ < 6 || length_ > 20){
+                $("label[for='username']").text('6글자 이상 20글자 이하입니다.');
+                username_length_check = false;
+            }
+            else if(length_ > 5 && length_ < 21){
+                $("label[for='username']").text('적당한 길이네요!');
+                username_length_check = true;
+            }
+        });      
+        var old_password = "";      
+        $("#password").on("propertychange change keyup paste input", function() {
+            var currentVal = $(this).val();
+            if(currentVal == old_password) {
+                return;
+            }
+            old_password = currentVal;
+            let length_ = old_password.length;
+            console.log(length_);
+            if(length_ == 0){
+                $("label[for='password']").text('비밀번호');
+                password_check = false;
+            }
+            else if(length_ < 6 || length_ > 20){
+                $("label[for='password']").text('6글자 이상 20글자 이하입니다.');
+                password_check = false;
+            }
+            else if(length_ > 5 && length_ < 21){
+                $("label[for='password']").text('적당한 길이네요!');
+                password_check = true;
+            }
+        });
+        var old_nickname = "";      
+        $("#nickname").on("propertychange change keyup paste input", function() {
+            var currentVal = $(this).val();
+            if(currentVal == old_nickname) {
+                return;
+            }
+            old_nickname = currentVal;
+            let length_ = old_nickname.length;
+            console.log(length_);
+            if(length_ == 0){
+                $("label[for='nickname']").text('닉네임');
+                nickname_length_check = false;
+            }
+            else if(length_ < 4 || length_ > 10){
+                $("label[for='nickname']").text('4글자 이상 10글자 이하입니다.');
+                nickname_length_check = false;
+            }
+            else if(length_ > 3 && length_ < 11){
+                $("label[for='nickname']").text('적당한 길이네요!');
+                nickname_length_check = true;
+            }
+        });
+        
+        // check Id length
+        button01.addEventListener('click', (e) => {
+            e.preventDefault();
+            if(username_length_check){
+                let username_ = username.value;
+                socket.emit(CHECK_USERNAME, username_, (unique) => {
+                    if(unique){
+                        console.log("입력한 별명 :", username_);
+                        alert(username_ + ' 은 사용가능한 ID입니다.');
+                        username_check = true;
+                    }
+                    else{
+                        alert(username_ + '은 이미 존재하는 ID입니다.');
+                        username_check = false;
+                    }
+                });     
+            }
+            else alert('아이디 길이를 다시 확인해주세요');
+        });
+        
+        // check Nickname length
+        button02.addEventListener('click', (e) => {
+            e.preventDefault();
+            if(nickname_length_check){
+                let nickname_ = nickname.value;
+                socket.emit(CHECK_NICKNAME, nickname_, (unique) => {
+                    if(unique){
+                        console.log("입력한 별명 :", nickname_);
+                        alert(nickname_ + ' 은 사용가능한 별명입니다.');
+                        nickname_check = true;
+                    }
+                    else{
+                        alert(nickname_ + '은 이미 존재하는 별명입니다.');
+                        nickname_check = false;
+                    }
+                });
+            }
+            else alert('닉네임 길이를 다시 확인해주세요');              
+        });
+
+        // create new account & redirect
+        createAccountForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // check new account
+            if(!username_length_check) {alert('아이디 길이를 확인해주세요'); return;}
+            if(!password_check) {alert('비밀번호를 확인해주세요'); return;}
+            if(!nickname_length_check) {alert('닉네임 길이를 확인해주세요'); return;}
+            if(!username_check) {alert('아이디 중복을 확인해주세요'); return;}
+            if(!nickname_check) {alert('닉네임 중복을 확인해주세요'); return;}
+            
+            // get users input
+            let username_ = username.value;
+            let password_ = password.value;
+            let nickname_ = nickname.value;
+
+            // Send Account Information & Redirect to Home Screen
+            if(ip_check){
+                let account = {id : username_, 
+                           password : password_, 
+                           nickname : nickname_, 
+                           ip : ip};
+                socket.emit(CREATE_ACCOUNT, account);
+            }
+            else{
+                alert('ip check error');
+                return;
+            }
+            location.href = '/';
+        });
+    </script>
+</html>

@@ -1,0 +1,8 @@
+#changeButton { 
+background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; font-size: small;
+}
+
+#nick_name {
+background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; font-size: small;      
+}
+
