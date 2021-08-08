@@ -13,7 +13,7 @@ const { resolve } = require("path");
 var DB = MySQL.createConnection({
     host : 'localhost',
     user : 'root',
-    password : '989900ooPP@ktk',
+    password : 'your password',
     database : 'user_account'
 });
 
