@@ -9,13 +9,15 @@ const {Server} = require("socket.io");
 const io = new Server(server);
 
 const MySQL = require("MySQL2");
-const { resolve } = require("path");
+const path = require("path");
 var DB = MySQL.createConnection({
     host : 'localhost',
     user : 'root',
-    password : 'your password',
+    password : '989900ooPP@ktk',
     database : 'user_account'
 });
+
+app.use(express.static(path.join(__dirname,'/')));
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/page/index.html');
@@ -106,6 +108,7 @@ io.on('connection', (socket) => {
     });
     socket.on(CHAT_MSG, (msg) => {
         msg = socket.nickname + ' : ' + msg;
+        console.log("msg :" + msg);
         socket.broadcast.emit(CHAT_MSG, msg);
     });
     socket.on(CHECK_USERNAME, (username, returnUnique) => {

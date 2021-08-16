@@ -2,178 +2,8 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
-    <!-- <link rel="stylesheet" href="../css/index.css"> -->
-    <style>
-      html {
-        height: 100vh;
-        overflow: hidden;
-      }
-      body { 
-        height: 100%;
-        margin: 0px; 
-        z-index: -1000; 
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-      }
-
-      #sector01 {
-        width: 400px;
-        height: 100%;
-        position: fixed; top: 0; right: 0;
-        background-color: rgb(33, 33, 33);
-      } 
-      #sector02 {
-        width: calc(100% - 400px);
-        min-width: 592px;
-        height: 100%;
-        position: fixed; top: 0; left: 0;
-        background-color: rgb(26, 25, 25);
-        overflow-x: scroll;
-      }
-      #navigator{
-        height: 59.6px;
-        width: calc(100% - 400px);
-        position: fixed; top: 0; left: 0;
-      }
-
-      #bar-top{
-        height: 33px;
-        width: calc(100% - 400px);
-        position: fixed; top: 60.4px; left: 0;
-        text-align: left;
-        border-bottom-color: rgba(255, 255, 255, 0.486);
-        border-bottom-width: 0.1px;
-        border-bottom-style: solid;
-      }
-      #bar-top > .form-top{
-        height: 33px;
-        padding-left: 1.5vw;
-        font-size: medium;
-        color: honeydew;
-      }
-      #bar-top .button{
-        background: #333; 
-        border: none; 
-        padding: 0 1rem; 
-        margin: 0.25rem; 
-        border-radius: 3px; 
-        outline: none; 
-        color: #fff; 
-        width: 8vw; 
-        min-width: 85.5px; 
-        height: 1.2rem;
-        background-color: blueviolet;
-      }
-      #box-top{
-        width: 400px;
-        background-color: blueviolet;
-        position: fixed; 
-        top: 0; 
-        right: 0;
-      }
-      #box-msg{
-        width: 400px;
-        height: calc(100% - (60px + 48px));
-        position: fixed; 
-        top: 60px; 
-        right: 0;
-        overflow: scroll;
-      }
-      #box-send{
-        width: 400px;
-        height: 3rem;
-        position: fixed; 
-        bottom: 0; 
-        right: 0;
-      } 
-      #box-title{
-        border: none; 
-        padding: 0.5rem 1rem;
-        margin: 0; 
-        outline: none; 
-        font-size: medium;
-      }
-
-      #input-msg { 
-        border: none; 
-        padding: 0 1rem; 
-        border-radius: 2rem; 
-        margin: 0.25rem; 
-        width: 80%; 
-      }
-      #input-msg:focus { 
-        outline: none; 
-      }
-      #input-id{
-        border: none; 
-        padding: 0 1rem; 
-        border-radius: 2rem; 
-        margin: 0.25rem; 
-        width: 8vw; 
-        height: 1.2rem;
-      }
-      #input-id:focus { 
-        outline: none; 
-      }
-      #input-password{
-        border: none; 
-        padding: 0 1rem; 
-        border-radius: 2rem; 
-        margin: 0.25rem; 
-        width: 8vw; 
-        height: 1.2rem;
-      }
-      #input-password:focus {
-        outline: none; 
-      }
-
-      .button{
-        background: #333; 
-        border: none; 
-        padding: 0px 7px; 
-        margin-left: 7px; 
-        border-radius: 3px; 
-        outline: none; 
-        color: #fff; 
-        font-size: small;
-        height: 20px;
-      }
-      #form-msg {
-        padding: 0.25rem; 
-        display: flex; 
-        height: 3rem; 
-        box-sizing: border-box; 
-        backdrop-filter: blur(10px);
-      }
-      #form-msg > button { 
-        background: #333; 
-        border: none; 
-        padding: 0 1rem; 
-        margin: 0.25rem; 
-        border-radius: 3px; 
-        outline: none; 
-        color: #fff; 
-        width: 20%;
-      }
-
-      #messages { 
-        list-style-type: none; 
-        margin: 0; 
-        padding: 0;
-      }
-      #messages > li { 
-        color: rgb(189, 185, 185); 
-        font-size: medium;
-        padding: 0.5rem 1rem; 
-      }
-      @media (max-width : 992px){
-        #sector02{
-          display: none;
-        }
-        #sector01, #box-top, #box-msg, #box-send{
-          width: 100%;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="/public/css/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/css/uikit.min.css" />
   </head>
   <body>
     <div id="sector01">
@@ -189,20 +19,44 @@
       <div id="box-send">
         <form id="form-msg" action="">
           <input id="input-msg" autocomplete="off" />
-          <button id="send-button" style="background-color: blueviolet;">Send</button>
+          <button id="send-button">Send</button>
         </form>
       </div>
     </div>
     <div id="sector02">
-      <div id="navigator"></div>
+      <div id="navigator" style="padding-left: 0vw; padding-top: 0px;">
+        <nav class="uk-navbar-container" uk-navbar id="navbar">
+          <div class="uk-navbar-left">
+              <ul class="uk-navbar-nav">
+                  <li class="uk-active"><a href="#" style="color: white;">메뉴</a></li>
+                  <li>
+                      <a href="#">Parent</a>
+                      <div class="uk-navbar-dropdown">
+                          <ul class="uk-nav uk-navbar-dropdown-nav">
+                              <li class="uk-active"><a href="#">Active</a></li>
+                              <li><a href="#">Item1</a></li>
+                              <li class="uk-nav-header">Header</li>
+                              <li><a href="#">Item2</a></li>
+                              <li><a href="#">Item3</a></li>
+                              <li class="uk-nav-divider"></li>
+                              <li><a href="#">Item4</a></li>
+                          </ul>
+                      </div>
+                  </li>
+                  <li><a href="#">Item</a>
+                  </li>
+              </ul>
+          </div>
+        </nav>
+      </div>
       <div id="bar-top">
         <form id="form-login" class="form-top">
           아이디 :
           <input id="input-id" type="text" autocomplete="off">
           비밀번호 :
           <input id="input-password" type="password" autocomplete="off">
-          <button id="button-login" class="button" type="submit">로그인</button>
-          <button id="button-create-account" class="button" type="button">회원가입</button>
+          <button id="button-login" class="button" type="submit"">로그인</button>
+          <button id="button-create-account" class="button" type="button"">회원가입</button>
         </form>
         <form id="form-logout" class="form-top" style="display: none;">
             <div id="form-comment" style="float: left; margin: 2.5px 10px 5px 0px;">
@@ -211,46 +65,106 @@
           <button id="button-logout" class="button" type="submit">로그아웃</button>
         </form>
       </div>
+      <!--  -->
+      <div id="content-box">
+        <div class="uk-child-width-expand@s uk-text-center uk-margin-small-bottom" uk-grid>
+          <div>
+              <div class="uk-card uk-card-default uk-card-body">Item</div>
+          </div>
+          <div>
+              <div class="uk-card uk-card-default uk-card-body">Item</div>
+          </div>
+          <div>
+              <div class="uk-card uk-card-default uk-card-body">Item</div>
+          </div>
+        </div>
+        <div uk-slideshow="animation: slide; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;">
+          <ul class="uk-slideshow-items">
+              <li>
+                <article class="uk-article">
+                  <h1 class="uk-article-title"><a class="uk-link-reset" href="">Heading</a></h1>
+                  <p class="uk-article-meta">Written by <a href="#">Super User</a> on 12 April 2012. Posted in <a href="#">Blog</a></p>
+                  <p class="uk-text-lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                  <div class="uk-grid-small uk-child-width-auto" uk-grid>
+                      <div>
+                          <a class="uk-button uk-button-text" href="#">Read more</a>
+                      </div>
+                  </div>
+                </article>
+              </li>
+              <li>
+                <div class="uk-section uk-section-large uk-section-secondary">
+                  <div class="uk-container">
+                      <h3>Section Large</h3>
+                      <div class="uk-grid-match uk-child-width-1-3@m" uk-grid>
+                          <div>
+                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                          </div>
+                          <div>
+                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                          </div>
+                          <div>
+                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </li>
+          </ul>
+          <ul class="uk-slideshow-nav uk-dotnav uk-flex-center uk-margin"></ul>
+        </div>
+        <div uk-slideshow="animation: slide; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;">
+          <ul class="uk-slideshow-items">
+              <li>
+                <div class="uk-section uk-section-large uk-section-secondary">
+                  <div class="uk-container">
+                      <h3>Section Large</h3>
+                      <div class="uk-grid-match uk-child-width-1-3@m" uk-grid>
+                          <div>
+                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                          </div>
+                          <div>
+                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                          </div>
+                          <div>
+                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="uk-section uk-section-large uk-section-secondary">
+                  <div class="uk-container">
+                      <h3>Section Large</h3>
+                      <div class="uk-grid-match uk-child-width-1-3@m" uk-grid>
+                          <div>
+                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                          </div>
+                          <div>
+                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                          </div>
+                          <div>
+                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </li>
+          </ul>
+          <ul class="uk-slideshow-nav uk-dotnav uk-flex-center uk-margin"></ul>
+        </div>
+      </div>
+      <!--  -->
     </div>
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/js/uikit.min.js"></script>
+  <script src="/public/js/reference.js"></script>
   <script>
     const socket = io('http://localhost:3000');
-    
-    // sector01 under area
-    const msgForm = document.getElementById('form-msg');
-    const messages = document.getElementById('messages');
-    const inputMsg = document.getElementById('input-msg');
-    const msgBox = document.getElementById('box-msg');
-    
-    // sector01 top area 
-    const titleBox = document.getElementById('box-title');
-    const countBox = document.getElementById('box-count');
-    const changeButton = document.getElementById('button-change');
-    
-    // sector02 login area 
-    const loginForm = document.getElementById('form-login');
-    const buttonLogin = document.getElementById('button-login');
-    const inputId = document.getElementById('input-id');
-    const inputPassword = document.getElementById('input-password');
-    const accountPage = document.getElementById('button-create-account');
-    
-    // sector already login area 
-    const logoutForm = document.getElementById('form-logout');
-    const commentForm = document.getElementById('form-comment');
-    const logoutButton = document.getElementById('button-logout');
-    
-    // socket.io Event naming
-    const CONNECTED = 'connected';
-    const UPDATE_CLIENTNUM = 'update-clientNum';
-    const CHAT_MSG = 'chat-message';
-    const CHECK_NICKNAME = 'check-nickname';
-    const CHECK_ACCOUNT = 'check-account';
-    const CHECK_IP = 'check-ip';
-    const SET_NICKNAME = 'set-nickname';
-    const CHECK_BAN_LIST = 'check-ban-list';
-    const GET_ALERT = 'get-alert';
 
     // get ip adress
     let ip_address = "";
@@ -261,6 +175,12 @@
         });
       });
     };
+
+    function timer(sec){
+      setTimeout((sec) => {
+        console.log("time out!");
+      }, 1000 * sec);
+    }
     
     let setNickname = (nick_name) => {
       document.getElementById('nick_name').textContent = nick_name;
@@ -387,14 +307,9 @@
     socket.on(CONNECTED, (count) => {
       countBox.textContent = "접속자 수 : " + count;
       if(!first_set){
-        // getIp().then((ip) => {
-        //   console.log('ip :' + ip);
-        //   socket.emit(CHECK_BAN_LIST, ip);
-        //   ip_address = ip;
-        // });
         document.getElementById('nick_name').textContent = '개미';
         titleBox.innerHTML = `안녕하세요 <b>개미</b> 님`;
-        appendMsg('채팅방에 오신 것을 환영합니다! (욕설/도배 자동 ip 밴입니다.)', null);
+        appendMsg('채팅방에 오신 것을 환영합니다! (욕설/도배 ip 밴입니다.)', null);
         first_set = true;
       }
     });
