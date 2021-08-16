@@ -175,6 +175,16 @@ body {
   z-index: -100;
   overflow-y: auto;
 }
+#content-box > div{
+  min-width: 690px;
+  width: 690px;
+  margin: 0 auto;
+}
+
+#daily-index-box{
+  background-color: grey;
+  color: white;
+}
 
 #navigator{
   height: 59.6px;
