@@ -10,10 +10,15 @@ const io = new Server(server);
 
 const MySQL = require("MySQL2");
 const path = require("path");
+
+const secret_ = require('./module_secret.js');
+const ref = require('./app_reference.js');
+const inet = require('./inet_function.js');
+
 var DB = MySQL.createConnection({
     host : 'localhost',
     user : 'root',
-    password : '989900ooPP@ktk',
+    password : secret_.db_password,
     database : 'user_account'
 });
 
@@ -32,8 +37,8 @@ var options = {
   'method': 'GET',
   'url': url,
   'headers': {
-    'X-Naver-Client-Id': 'KXvgDeQMNpKGEn1vIAZf',
-    'X-Naver-Client-Secret': 'ddSPdTPcu0'
+    'X-Naver-Client-Id': secret_.naver_id,
+    'X-Naver-Client-Secret': secret_.naver_password,
   }
 };
 // request(options, function (error, response) {
@@ -41,36 +46,12 @@ var options = {
 //   console.log(response.body);
 // });
 
-const ref = require('./app_reference.js');
-const inet = require('./inet_function.js');
-
 var clientsCount = 0;
 var clientsNickname = [];
 
 var inet_aton = inet.aton;
 var inet_ntoa = inet.ntoa;
 
-// function inet_aton(ip){
-//     // split into octets
-//     var a = ip.split('.');
-//     var buffer = new ArrayBuffer(4);
-//     var dv = new DataView(buffer);
-//     for(var i = 0; i < 4; i++){
-//         dv.setUint8(i, a[i]);
-//     }
-//     return(dv.getUint32(0));
-// };
-// function inet_ntoa(num){
-//     var nbuffer = new ArrayBuffer(4);
-//     var ndv = new DataView(nbuffer);
-//     ndv.setUint32(0, num);
-
-//     var a = new Array();
-//     for(var i = 0; i < 4; i++){
-//         a[i] = ndv.getUint8(i);
-//     }
-//     return a.join('.');
-// };
 function printStatus(){
     console.log("clientsCount :", clientsCount);
     console.log("nickname list :" + clientsNickname);
