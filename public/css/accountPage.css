@@ -1,0 +1,74 @@
+header{
+    color: white;
+    display:flex;
+    justify-content: center;
+}
+form{
+    padding: 10px 10px 30px 10px;
+    width: 400px;
+    margin: 0 auto;
+    border-radius: 5px;
+    border: solid 1px;
+    border-color: blueviolet;
+    background-color: white;
+}
+.button-box{
+    position:relative;
+    margin:10px 0px;
+    margin-top: 20px;
+}
+.button-box > button{
+    background-color:white;
+    border: solid 1px;
+    color:black;
+    border-radius: 5px;
+}
+.input-box{
+    position:relative;
+    margin:10px 0;
+    margin-top: 20px;
+}
+.input-box > input{
+    width: 400px;
+    background:transparent;
+    background-color: rgba(255, 255, 255, 0.733);
+    border:none;
+    border-bottom: solid 1px;
+    padding:20px 10px 5px 0px;
+    font-size:14pt;
+}
+input::placeholder{
+    color:transparent;
+}
+input:placeholder-shown + label{
+    color:rgb(62, 36, 87);
+    font-size:14pt;
+    top:15px;
+}
+input:focus + label, label{
+    color:rgb(62, 36, 87);
+    font-size:10pt;
+    pointer-events: none;
+    position: absolute;
+    left:0px;
+    top:0px;
+    transition: all 0.2s ease ;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+}
+
+input:focus, input:not(:placeholder-shown){
+    border-bottom: solid 1px rgb(62, 36, 87);
+    outline:none;
+}
+input[type=submit]{
+    background-color: blueviolet;
+    border:none;
+    color:black;
+    border-radius: 5px;
+    width:400px;
+    height:35px;
+    font-size: 14pt;
+    margin-top: 70px;
+}

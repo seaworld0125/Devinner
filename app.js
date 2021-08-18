@@ -19,7 +19,7 @@ const INET = require('./inet_func.js');
 const NAVER_API = require('./news_url.js');
 
 // static file location
-app.use(express.static(path.join(__dirname,'/public/')));
+app.use(express.static(path.join(__dirname,'/')));
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/page/index.html');

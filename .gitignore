@@ -2,7 +2,4 @@
 build/
 
 #
-app.js
-
-#
 module_secret.js
