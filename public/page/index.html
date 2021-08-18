@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
-    <link rel="stylesheet" href="/public/css/index.css">
+    <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/css/uikit.min.css" />
   </head>
   <body>
@@ -72,7 +72,7 @@
         <div id="box-index">
           <div id="daily-index-box">
             <h1>코스피</h1>
-            <img src="/public/img/KOSPI.png" alt="">
+            <img src="/img/KOSPI.png" alt="">
           </div>
           <div id="daily-index-box">
             <h1>코스닥</h1>
@@ -170,7 +170,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-latest.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/js/uikit.min.js"></script>
-  <script src="/public/js/index_reference.js"></script>
+  <script src="/js/index_reference.js"></script>
   <script>
     // get ip adress
     // let ip_address = "";
@@ -187,48 +187,48 @@
     //   console.log(ip_address);
     // });
     
-    // let setNickname = (nick_name) => {
-    //   document.getElementById('nick_name').textContent = nick_name;
-    //   titleBox.innerHTML = `안녕하세요 <b>${nick_name}</b> 님`;      
-    // };
+    let setNickname = (nick_name) => {
+      document.getElementById('nick_name').textContent = nick_name;
+      titleBox.innerHTML = `안녕하세요 <b>${nick_name}</b> 님`;      
+    };
 
-    // let getUsername = () => {
-    //   var exp = /개미/;
-    //   let nick_name = prompt('사용할 별명을 입력해주세요. (개미는 사용 불가합니다) (8자리)');
-    //   if(nick_name) {
-    //     if(!exp.test(nick_name)){
-    //       socket.emit(CHECK_NICKNAME, nick_name, (unique) => {
-    //         if(unique){
-    //           console.log("입력한 별명 :", nick_name);
-    //           socket.emit(SET_NICKNAME, nick_name);
-    //           alert(nick_name + ' 으로 설정되었습니다.');
-    //           setNickname(nick_name);
-    //         }
-    //         else{
-    //           alert(nick_name + '은 이미 존재하는 별명입니다.');
-    //           changeButton.click();
-    //         }
-    //       });
-    //     }
-    //     else{
-    //       alert('개미는 변경할 수 없는 별명입니다.');
-    //     }
-    //   }
-    //   else{
-    //     alert('별명을 입력하세요.');
-    //   }
-    // };
+    let getUsername = () => {
+      var exp = /개미/;
+      let nick_name = prompt('사용할 별명을 입력해주세요. (개미는 사용 불가합니다) (8자리)');
+      if(nick_name) {
+        if(!exp.test(nick_name)){
+          socket.emit(CHECK_NICKNAME, nick_name, (unique) => {
+            if(unique){
+              console.log("입력한 별명 :", nick_name);
+              socket.emit(SET_NICKNAME, nick_name);
+              alert(nick_name + ' 으로 설정되었습니다.');
+              setNickname(nick_name);
+            }
+            else{
+              alert(nick_name + '은 이미 존재하는 별명입니다.');
+              changeButton.click();
+            }
+          });
+        }
+        else{
+          alert('개미는 변경할 수 없는 별명입니다.');
+        }
+      }
+      else{
+        alert('별명을 입력하세요.');
+      }
+    };
 
-    // let appendMsg = (msg, align) => {
-    //   let item = document.createElement('li');
-    //   if(align == 'right')
-    //   {
-    //     item.style.textAlign="right";
-    //   }
-    //   item.textContent = msg;
-    //   messages.appendChild(item);
-    //   msgBox.scrollTo(0, msgBox.scrollHeight);
-    // };
+    let appendMsg = (msg, align) => {
+      let item = document.createElement('li');
+      if(align == 'right')
+      {
+        item.style.textAlign="right";
+      }
+      item.textContent = msg;
+      messages.appendChild(item);
+      msgBox.scrollTo(0, msgBox.scrollHeight);
+    };
 
     msgForm.addEventListener('submit', (e) => {
       e.preventDefault();

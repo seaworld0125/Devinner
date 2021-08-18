@@ -11,18 +11,15 @@ const io = new Server(server);
 const MySQL = require("MySQL2");
 const path = require("path");
 
+const request = require('request');
+
 const secret_ = require('./module_secret.js');
 const ref = require('./app_reference.js');
-const inet = require('./inet_function.js');
+const INET = require('./inet_func.js');
+const NAVER_API = require('./news_url.js');
 
-var DB = MySQL.createConnection({
-    host : 'localhost',
-    user : 'root',
-    password : secret_.db_password,
-    database : 'user_account'
-});
-
-app.use(express.static(path.join(__dirname,'/')));
+// static file location
+app.use(express.static(path.join(__dirname,'/public/')));
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/page/index.html');
@@ -31,17 +28,15 @@ app.get('/account', (req, res) => {
     res.sendFile(__dirname + '/public/page/accountPage.html');
 });
 
-var request = require('request');
-var url = encodeURI('https://openapi.naver.com/v1/search/news.json?query=코스피');
-var options = {
-  'method': 'GET',
-  'url': url,
-  'headers': {
-    'X-Naver-Client-Id': secret_.naver_id,
-    'X-Naver-Client-Secret': secret_.naver_password,
-  }
-};
-// request(options, function (error, response) {
+const DB = MySQL.createConnection({
+    host : 'localhost',
+    user : 'root',
+    password : secret_.db_password,
+    database : 'user_account'
+});
+
+var kospi_option = NAVER_API.kospi_option;
+// request(kospi_option, function (error, response) {
 //   if (error) throw new Error(error);
 //   console.log(response.body);
 // });
@@ -49,8 +44,8 @@ var options = {
 var clientsCount = 0;
 var clientsNickname = [];
 
-var inet_aton = inet.aton;
-var inet_ntoa = inet.ntoa;
+var aton = INET.aton;
+var ntoa = INET.ntoa;
 
 function printStatus(){
     console.log("clientsCount :", clientsCount);
@@ -67,8 +62,8 @@ function update_clientNum(){
 // use Promise
 function check_ban_list(ip){
     return new Promise((resolve, reject) => {
-        ip = inet_aton(ip);
-        console.log('inet_aton :' + ip);
+        ip = aton(ip);
+        console.log('aton :' + ip);
         DB.execute('SELECT ip FROM ban_list WHERE ip = ?',
             [ip], 
             function(err, results, fields) {
@@ -147,7 +142,7 @@ io.on('connection', (socket) => {
     });
     socket.on(ref.CHECK_IP, (ip, returnUnique) => {
         console.log('ip :' + ip);
-        ip = inet_aton(ip);
+        ip = aton(ip);
         DB.execute(
             'SELECT account_name FROM account WHERE ip_address = ?',
             [ip],
@@ -211,8 +206,8 @@ io.on('connection', (socket) => {
         console.log('password :' + account.password);
         console.log('nickname :' + account.nickname);
 
-        account.ip = inet_aton(account.ip);
-        console.log('inet_aton ip :' + account.ip);
+        account.ip = aton(account.ip);
+        console.log('aton ip :' + account.ip);
 
         DB.execute(
             'INSERT INTO account VALUE(?, ?, ?, ?, ?)',
