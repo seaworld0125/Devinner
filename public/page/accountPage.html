@@ -107,7 +107,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script>
-        const socket = io('http://localhost:3000');
+        // const socket = io('http://localhost:3000');
+        const socket = io.connect('http://121.127.175.142/', { transports: ['websocket'] });
 
         // make account form area
         const username = document.getElementById('username');
@@ -136,6 +137,12 @@
         $.getJSON('https://ipapi.co/json/', function(data){
             ip =  data.ip;
             ip_check = true;
+            socket.emit('check-ip', ip, (unique) => {
+                if(!unique){
+                    alert('접속자 ip는 이미 계정이 있습니다');
+                    location.href = '/';
+                }
+            });
         });
 
         // Real-time Input Value Change Detection

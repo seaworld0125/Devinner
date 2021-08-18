@@ -8,13 +8,15 @@
   <body>
     <div id="sector01">
       <div id="box-top">
-        <button id="nick_name" class="button"></button>
+        <button id="nick_name" class="button">개미</button>
         <button id="button-change" class="button">닉네임 변경</button>
         <button id="box-count" class="button"></button>
-        <div id="box-title"></div>
+        <div id="box-title">안녕하세요 <b>개미</b> 님</div>
       </div>
       <div id="box-msg">
-        <ul id="messages"></ul>
+        <ul id="messages">
+          <li>채팅방에 오신 것을 환영합니다! (욕설/도배 ip 밴입니다.)</li>
+        </ul>
       </div>
       <div id="box-send">
         <form id="form-msg" action="">
@@ -66,17 +68,24 @@
         </form>
       </div>
       <!--  -->
-      <div id="content-box">
-        <div class="uk-child-width-expand@s uk-text-center uk-margin-small-bottom" uk-grid>
-          <div id="daily-index-box" class="uk-card uk-card-default uk-card-large uk-card-body">
-            <h3 class="uk-card-title">Large</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <div id="box-content01">
+        <div id="box-index">
+          <div id="daily-index-box">
+            <h1>코스피</h1>
+            <img src="/public/img/KOSPI.png" alt="">
           </div>
-          <div id="daily-index-box" class="uk-card uk-card-default uk-card-large uk-card-body">
-            <h3 class="uk-card-title">Large</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <div id="daily-index-box">
+            <h1>코스닥</h1>
+          </div>
+          <div id="daily-index-box">
+            <h1>나스닥</h1>
+          </div>
+          <div id="daily-index-box">
+            <h1>다우산업</h1>
           </div>
         </div>
+      </div>
+      <div id="box-content02">
         <div class="uk-margin-small" uk-slideshow="min-height: 450; animation: slide; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;">
           <ul class="uk-slideshow-items">
               <li>
@@ -161,68 +170,65 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-latest.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/js/uikit.min.js"></script>
-  <script src="/public/js/reference.js"></script>
+  <script src="/public/js/index_reference.js"></script>
   <script>
-    const socket = io('http://localhost:3000');
-
     // get ip adress
-    let ip_address = "";
-    function getIp(){
-      return new Promise((resolve, reject) => {
-        $.getJSON('https://ipapi.co/json/', (data) => {
-          resolve(data.ip);
-        });
-      });
-    };
+    // let ip_address = "";
+    // function getIp(){
+    //   return new Promise((resolve, reject) => {
+    //     $.getJSON('https://ipapi.co/json/', (data) => {
+    //       resolve(data.ip);
+    //     });
+    //   });
+    // };
 
-    function timer(sec){
-      setTimeout((sec) => {
-        console.log("time out!");
-      }, 1000 * sec);
-    }
+    // getIp().then((result) => {
+    //   ip_address = result;
+    //   console.log(ip_address);
+    // });
     
-    let setNickname = (nick_name) => {
-      document.getElementById('nick_name').textContent = nick_name;
-      titleBox.innerHTML = `안녕하세요 <b>${nick_name}</b> 님`;      
-    };
+    // let setNickname = (nick_name) => {
+    //   document.getElementById('nick_name').textContent = nick_name;
+    //   titleBox.innerHTML = `안녕하세요 <b>${nick_name}</b> 님`;      
+    // };
 
-    let getUsername = () => {
-      var exp = /개미/;
-      let nick_name = prompt('사용할 별명을 입력해주세요. (개미는 사용 불가합니다) (8자리)');
-      if(nick_name) {
-        if(!exp.test(nick_name)){
-          socket.emit(CHECK_NICKNAME, nick_name, (unique) => {
-            if(unique){
-              console.log("입력한 별명 :", nick_name);
-              socket.emit(SET_NICKNAME, nick_name);
-              alert(nick_name + ' 으로 설정되었습니다.');
-              setNickname(nick_name);
-            }
-            else{
-              alert(nick_name + '은 이미 존재하는 별명입니다.');
-              changeButton.click();
-            }
-          });
-        }
-        else{
-          alert('개미는 변경할 수 없는 별명입니다.');
-        }
-      }
-      else{
-        alert('별명을 입력하세요.');
-      }
-    };
+    // let getUsername = () => {
+    //   var exp = /개미/;
+    //   let nick_name = prompt('사용할 별명을 입력해주세요. (개미는 사용 불가합니다) (8자리)');
+    //   if(nick_name) {
+    //     if(!exp.test(nick_name)){
+    //       socket.emit(CHECK_NICKNAME, nick_name, (unique) => {
+    //         if(unique){
+    //           console.log("입력한 별명 :", nick_name);
+    //           socket.emit(SET_NICKNAME, nick_name);
+    //           alert(nick_name + ' 으로 설정되었습니다.');
+    //           setNickname(nick_name);
+    //         }
+    //         else{
+    //           alert(nick_name + '은 이미 존재하는 별명입니다.');
+    //           changeButton.click();
+    //         }
+    //       });
+    //     }
+    //     else{
+    //       alert('개미는 변경할 수 없는 별명입니다.');
+    //     }
+    //   }
+    //   else{
+    //     alert('별명을 입력하세요.');
+    //   }
+    // };
 
-    let appendMsg = (msg, align) => {
-      let item = document.createElement('li');
-      if(align == 'right')
-      {
-        item.style.textAlign="right";
-      }
-      item.textContent = msg;
-      messages.appendChild(item);
-      msgBox.scrollTo(0, msgBox.scrollHeight);
-    };
+    // let appendMsg = (msg, align) => {
+    //   let item = document.createElement('li');
+    //   if(align == 'right')
+    //   {
+    //     item.style.textAlign="right";
+    //   }
+    //   item.textContent = msg;
+    //   messages.appendChild(item);
+    //   msgBox.scrollTo(0, msgBox.scrollHeight);
+    // };
 
     msgForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -285,15 +291,6 @@
     
     accountPage.addEventListener('click', (e) =>{
       e.preventDefault();
-
-      socket.emit(CHECK_IP, ip_address, (unique) => {
-        if(unique){
-          location.href = '/account';
-        }
-        else{
-          alert('접속자 ip는 이미 계정이 있습니다')
-        }
-      });
       location.href = '/account';
     });
     
@@ -302,15 +299,8 @@
       location.href = '/';
     });
 
-    var first_set = false;
     socket.on(CONNECTED, (count) => {
       countBox.textContent = "접속자 수 : " + count;
-      if(!first_set){
-        document.getElementById('nick_name').textContent = '개미';
-        titleBox.innerHTML = `안녕하세요 <b>개미</b> 님`;
-        appendMsg('채팅방에 오신 것을 환영합니다! (욕설/도배 ip 밴입니다.)', null);
-        first_set = true;
-      }
     });
     
     socket.on(UPDATE_CLIENTNUM, (count) => {

@@ -26,43 +26,51 @@ app.get('/account', (req, res) => {
     res.sendFile(__dirname + '/public/page/accountPage.html');
 });
 
-const CONNECTED = 'connected';
-const DISCONNECT = 'disconnect';
-const CHAT_MSG = 'chat-message';
-const UPDATE_CLIENTNUM = 'update-clientNum';
-const CHECK_NICKNAME = 'check-nickname';
-const CHECK_USERNAME = 'check-username';
-const CHECK_ACCOUNT = 'check-account';
-const CHECK_IP = 'check-ip';
-const CREATE_ACCOUNT = 'create-account';
-const SET_NICKNAME = 'set-nickname';
-const CHECK_BAN_LIST = 'check-ban-list';
-const GET_ALERT = 'get-alert';
+var request = require('request');
+var url = encodeURI('https://openapi.naver.com/v1/search/news.json?query=코스피');
+var options = {
+  'method': 'GET',
+  'url': url,
+  'headers': {
+    'X-Naver-Client-Id': 'KXvgDeQMNpKGEn1vIAZf',
+    'X-Naver-Client-Secret': 'ddSPdTPcu0'
+  }
+};
+// request(options, function (error, response) {
+//   if (error) throw new Error(error);
+//   console.log(response.body);
+// });
+
+const ref = require('./app_reference.js');
+const inet = require('./inet_function.js');
 
 var clientsCount = 0;
 var clientsNickname = [];
 
-function inet_aton(ip){
-    // split into octets
-    var a = ip.split('.');
-    var buffer = new ArrayBuffer(4);
-    var dv = new DataView(buffer);
-    for(var i = 0; i < 4; i++){
-        dv.setUint8(i, a[i]);
-    }
-    return(dv.getUint32(0));
-};
-function inet_ntoa(num){
-    var nbuffer = new ArrayBuffer(4);
-    var ndv = new DataView(nbuffer);
-    ndv.setUint32(0, num);
+var inet_aton = inet.aton;
+var inet_ntoa = inet.ntoa;
 
-    var a = new Array();
-    for(var i = 0; i < 4; i++){
-        a[i] = ndv.getUint8(i);
-    }
-    return a.join('.');
-};
+// function inet_aton(ip){
+//     // split into octets
+//     var a = ip.split('.');
+//     var buffer = new ArrayBuffer(4);
+//     var dv = new DataView(buffer);
+//     for(var i = 0; i < 4; i++){
+//         dv.setUint8(i, a[i]);
+//     }
+//     return(dv.getUint32(0));
+// };
+// function inet_ntoa(num){
+//     var nbuffer = new ArrayBuffer(4);
+//     var ndv = new DataView(nbuffer);
+//     ndv.setUint32(0, num);
+
+//     var a = new Array();
+//     for(var i = 0; i < 4; i++){
+//         a[i] = ndv.getUint8(i);
+//     }
+//     return a.join('.');
+// };
 function printStatus(){
     console.log("clientsCount :", clientsCount);
     console.log("nickname list :" + clientsNickname);
@@ -72,14 +80,15 @@ function nicknameSplice(nickname){
     if(index) clientsNickname.splice(index, 1);
 };
 function update_clientNum(){
-    console.log(UPDATE_CLIENTNUM + "() run");
-    io.emit(UPDATE_CLIENTNUM, clientsCount);
+    console.log(ref.UPDATE_CLIENTNUM + "() run");
+    io.emit(ref.UPDATE_CLIENTNUM, clientsCount);
 };
 // use Promise
 function check_ban_list(ip){
     return new Promise((resolve, reject) => {
-        console.log('inet_aton :' + inet_aton(ip));
-        DB.execute('SELECT ip FROM ban_list WHERE ip = inet_aton(?)',
+        ip = inet_aton(ip);
+        console.log('inet_aton :' + ip);
+        DB.execute('SELECT ip FROM ban_list WHERE ip = ?',
             [ip], 
             function(err, results, fields) {
                 if(err) console.log(err);
@@ -98,20 +107,20 @@ function check_ban_list(ip){
 io.on('connection', (socket) => {
     clientsCount++;
     socket.nickname = '개미';
-    io.emit(CONNECTED, clientsCount);
+    io.emit(ref.CONNECTED, clientsCount);
     printStatus();
 
-    socket.on(DISCONNECT, () => {
+    socket.on(ref.DISCONNECT, () => {
         --clientsCount;
         nicknameSplice(socket.nickname);
         update_clientNum();
     });
-    socket.on(CHAT_MSG, (msg) => {
+    socket.on(ref.CHAT_MSG, (msg) => {
         msg = socket.nickname + ' : ' + msg;
         console.log("msg :" + msg);
-        socket.broadcast.emit(CHAT_MSG, msg);
+        socket.broadcast.emit(ref.CHAT_MSG, msg);
     });
-    socket.on(CHECK_USERNAME, (username, returnUnique) => {
+    socket.on(ref.CHECK_USERNAME, (username, returnUnique) => {
         // use Prepared statement
         DB.execute(
             'SELECT account_name FROM account WHERE account_name = ?',
@@ -129,7 +138,7 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(CHECK_NICKNAME, (nickname, returnUnique) => {
+    socket.on(ref.CHECK_NICKNAME, (nickname, returnUnique) => {
         console.log('input nickname :' + nickname);
         nicknameSplice(socket.nickname);
         DB.execute(
@@ -155,10 +164,11 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(CHECK_IP, (ip, returnUnique) => {
+    socket.on(ref.CHECK_IP, (ip, returnUnique) => {
         console.log('ip :' + ip);
+        ip = inet_aton(ip);
         DB.execute(
-            'SELECT account_name FROM account WHERE ip_address = inet_aton(?)',
+            'SELECT account_name FROM account WHERE ip_address = ?',
             [ip],
             function(err, results, fields) {
                 console.log(results); // results contains rows returned by server
@@ -174,7 +184,7 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(CHECK_ACCOUNT, (account, returnData) => {
+    socket.on(ref.CHECK_ACCOUNT, (account, returnData) => {
         console.log(account);
         console.log('id :' + account.id);
         console.log('password :' + account.password);
@@ -201,12 +211,12 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(SET_NICKNAME, (nickname) => {
+    socket.on(ref.SET_NICKNAME, (nickname) => {
         socket.nickname = nickname;
         clientsNickname.push(nickname);
         console.log("nickname list :" + clientsNickname);
     });
-    socket.on(CHECK_BAN_LIST, (ip) => {
+    socket.on(ref.CHECK_BAN_LIST, (ip) => {
         check_ban_list(ip).then((result) => {
             if(result){
                 console.log('user ban!' + ip);
@@ -214,7 +224,7 @@ io.on('connection', (socket) => {
             }
         });
     });
-    socket.on(CREATE_ACCOUNT, (account) => {
+    socket.on(ref.CREATE_ACCOUNT, (account) => {
         console.log('create account');
         console.log('id :' + account.id);
         console.log('password :' + account.password);

@@ -167,23 +167,50 @@ body {
   padding: 0.5rem 1rem; 
 }
 
-#content-box{
-  height: calc(100% - (80px + 33.8px));
+#box-content01{
+  height: 140px;
   width: calc(100% - 400px);
   position: fixed; 
-  top: 125px; 
+  top: 150px; 
   z-index: -100;
   overflow-y: auto;
 }
-#content-box > div{
+#box-content02{
+  /* display: none; */
+  height: calc(100% - (80px + 33.8px + 300px));
+  width: calc(100% - 400px);
+  position: fixed; 
+  top: 310px; 
+  z-index: -100;
+  overflow-y: auto;
+}
+#box-content02 > div{
   min-width: 690px;
+  max-width: 690px;
+  margin: 0 auto;
+}
+
+#box-index{
+  height: 140px;
   width: 690px;
   margin: 0 auto;
 }
 
 #daily-index-box{
-  background-color: grey;
+  height: 120px;
+  width: 152.5px;
+  float: left;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  border-top-right-radius: 15px;
+  background-color: rgba(128, 128, 128, 0.445);
+  padding: 9px;
   color: white;
+}
+#daily-index-box > h1{
+  color: rgba(255, 255, 255, 0.61);
+  font-size: x-large;
 }
 
 #navigator{

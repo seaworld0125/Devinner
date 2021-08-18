@@ -31,3 +31,6 @@
     const SET_NICKNAME = 'set-nickname';
     const CHECK_BAN_LIST = 'check-ban-list';
     const GET_ALERT = 'get-alert';
+
+    // const socket = io('http://localhost:3000');
+    const socket = io.connect('http://121.127.175.142/', { transports: ['websocket'] });
