@@ -22,6 +22,3 @@ NAME : ban_list
 
 
 4. access ```localhost:3000``` on the web to view the app
-
-
-![image](https://user-images.githubusercontent.com/75168305/128642182-2ed5f66e-a71d-4be6-80f7-10ec4166c518.png)
