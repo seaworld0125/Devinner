@@ -13,3 +13,4 @@ module.exports = {
     GET_ALERT : 'get-alert',
     GET_NEWS : 'get-news',
 };
+

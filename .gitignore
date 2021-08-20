@@ -4,5 +4,5 @@ build/
 #
 module_secret.js
 
-db_config.js
-api_config.js
+db.js
+news_api.js

@@ -1,35 +1,42 @@
+// express, socket
 const {Socket} = require("dgram");
 const express = require("express");
 const app = express();
 
+// http, server
 const http = require("http");
 const server = http.createServer(app);
-
 const {Server} = require("socket.io"); 
 const io = new Server(server);
 
+// DB
 const MySQL = require("MySQL2");
-const PATH = require("path");
-
-const request = require('request');
-
-const DB_config = require('./config/db_config.js');
-const API_config = require('./config/api_config.js');
-
-const kospi_option = API_config.kospi_option;
-
-const ref = require('./app_reference.js');
-const INET = require('./inet.js');
-
-const aton = INET.aton;
-const ntoa = INET.ntoa;
-
+const DB_config = require('./config/db.js');
 const DB = MySQL.createConnection({
     host : DB_config.host,
     user : DB_config.user,
     password : DB_config.password,
     database : DB_config.database
 });
+
+// path
+const PATH = require("path");
+
+// request
+const request = require('request');
+
+// api
+const API_config = require('./config/news_api.js');
+const kospi_option = API_config.kospi_option;
+
+// reference value
+const ref = require('./event/app.js');
+
+// user def function
+const INET = require('./func/inet.js');
+
+const aton = INET.aton;
+const ntoa = INET.ntoa;
 
 // static file location
 app.use(express.static(PATH.join(__dirname, '/')));
