@@ -3,3 +3,6 @@ build/
 
 #
 module_secret.js
+
+db_config.js
+api_config.js
