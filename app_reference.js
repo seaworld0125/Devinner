@@ -11,4 +11,5 @@ module.exports = {
     SET_NICKNAME : 'set-nickname',
     CHECK_BAN_LIST : 'check-ban-list',
     GET_ALERT : 'get-alert',
+    GET_NEWS : 'get-news',
 };

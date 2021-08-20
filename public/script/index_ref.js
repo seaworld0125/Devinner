@@ -15,6 +15,9 @@
     const inputId = document.getElementById('input-id');
     const inputPassword = document.getElementById('input-password');
     const accountPage = document.getElementById('button-create-account');
+
+    // sector02 under area
+    const articleForm = document.getElementById('form-article');
     
     // sector already login area 
     const logoutForm = document.getElementById('form-logout');
@@ -31,6 +34,7 @@
     const SET_NICKNAME = 'set-nickname';
     const CHECK_BAN_LIST = 'check-ban-list';
     const GET_ALERT = 'get-alert';
+    const GET_NEWS = 'get-news';
 
     // const socket = io('http://localhost:3000');
     const socket = io.connect('http://121.127.175.142/', { transports: ['websocket'] });

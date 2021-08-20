@@ -1,4 +1,4 @@
-const { Socket } = require("dgram");
+const {Socket} = require("dgram");
 const express = require("express");
 const app = express();
 
@@ -9,44 +9,54 @@ const {Server} = require("socket.io");
 const io = new Server(server);
 
 const MySQL = require("MySQL2");
-const path = require("path");
+const PATH = require("path");
 
 const request = require('request');
 
-const secret_ = require('./module_secret.js');
+const DB_config = require('./config/db_config.js');
+const API_config = require('./config/api_config.js');
+
+const kospi_option = API_config.kospi_option;
+
 const ref = require('./app_reference.js');
-const INET = require('./inet_func.js');
-const NAVER_API = require('./news_url.js');
+const INET = require('./inet.js');
+
+const aton = INET.aton;
+const ntoa = INET.ntoa;
+
+const DB = MySQL.createConnection({
+    host : DB_config.host,
+    user : DB_config.user,
+    password : DB_config.password,
+    database : DB_config.database
+});
 
 // static file location
-app.use(express.static(path.join(__dirname,'/')));
+app.use(express.static(PATH.join(__dirname, '/')));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/page/index.html');
+    res.sendFile(__dirname + '/public/page/main.html');
 });
 app.get('/account', (req, res) => {
     res.sendFile(__dirname + '/public/page/accountPage.html');
 });
 
-const DB = MySQL.createConnection({
-    host : 'localhost',
-    user : 'root',
-    password : secret_.db_password,
-    database : 'user_account'
+var daily_kospi_news = new Array();
+request(kospi_option, function (error, response) {
+    if (error) throw new Error(error);
+    let arr = JSON.parse(response.body);
+    Object.values(arr)[4].forEach(element => {
+        let {title, link, description} = element;
+        daily_kospi_news.push({
+            title : title, 
+            link : link, 
+            description : description
+        });
+    });
 });
-
-var kospi_option = NAVER_API.kospi_option;
-// request(kospi_option, function (error, response) {
-//   if (error) throw new Error(error);
-//   console.log(response.body);
-// });
 
 var clientsCount = 0;
 var clientsNickname = [];
-
-var aton = INET.aton;
-var ntoa = INET.ntoa;
-
 function printStatus(){
     console.log("clientsCount :", clientsCount);
     console.log("nickname list :" + clientsNickname);
@@ -121,8 +131,7 @@ io.on('connection', (socket) => {
             'SELECT nickname FROM account WHERE nickname = ?',
             [nickname],
             function(err, results, fields) {
-                console.log(results); // results contains rows returned by server
-                //   console.log(fields); // fields contains extra meta data about results, if available
+                console.log(results);
                 if(results[0]){
                     console.log("별명 중복");
                     returnUnique(false);
@@ -147,8 +156,7 @@ io.on('connection', (socket) => {
             'SELECT account_name FROM account WHERE ip_address = ?',
             [ip],
             function(err, results, fields) {
-                console.log(results); // results contains rows returned by server
-                //   console.log(fields); // fields contains extra meta data about results, if available
+                console.log(results);
                 if(results[0]){
                     console.log("ip 중복");
                     returnUnique(false);
@@ -169,8 +177,7 @@ io.on('connection', (socket) => {
             'SELECT * FROM account WHERE account_name = ?',
             [account.id],
             function(err, results, fields) {
-                console.log(results); // results contains rows returned by server
-                //   console.log(fields); // fields contains extra meta data about results, if available
+                console.log(results);
                 if(err){
                     console.log(err);
                 }
@@ -219,6 +226,9 @@ io.on('connection', (socket) => {
                 console.log("계정 생성 성공");
             }   
         );
+    });
+    socket.on(ref.GET_NEWS, (returnNews) => {
+        returnNews(daily_kospi_news);
     });
 });
 

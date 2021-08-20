@@ -1,4 +1,4 @@
-const secret_ = require('./module_secret.js');
+const secret_ = require('./api_config.js');
 
 var url_kospi = encodeURI('https://openapi.naver.com/v1/search/news.json?query=코스피');
 

@@ -177,7 +177,7 @@ body {
 }
 #box-content02{
   /* display: none; */
-  height: calc(100% - (80px + 33.8px + 300px));
+  height: calc(100% - (80px + 33.8px + 200px));
   width: calc(100% - 400px);
   position: fixed; 
   top: 310px; 
@@ -231,11 +231,20 @@ body {
   color: black;
 }
 
-@media (max-width : 992px){
+@media only screen and (max-width:575.98px) {
+  #messages > li { 
+    font-size: x-large;
+    padding: 0.5rem 1rem; 
+  }
+}
+@media only screen and (max-width:991.98px) {
   #sector02{
     display: none;
   }
   #sector01, #box-top, #box-msg, #box-send{
     width: 100%;
   }
+}
+@media only screen and (max-width:1199.98px) {
+/* 데스크탑 */
 }
