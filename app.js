@@ -1,13 +1,11 @@
-// express, socket
-const {Socket} = require("dgram");
+// express, server
 const express = require("express");
 const app = express();
-
-// http, server
-const http = require("http");
-const server = http.createServer(app);
+const server = require("http").createServer(app);
 const {Server} = require("socket.io"); 
 const io = new Server(server);
+// const io = new require("socket.io")(server);
+
 
 // DB
 const MySQL = require("MySQL2");
@@ -40,6 +38,15 @@ const ntoa = INET.ntoa;
 
 // static file location
 app.use(express.static(PATH.join(__dirname, '/')));
+// redirect HTTP to HTTPS 
+// app.all('*', (req, res, next) => {
+//     if (req.secure) { 
+//         next(); 
+//     } 
+//     else {
+//         let to = `https://${req.hostname}${req.url}`;
+//         res.redirect(to); } 
+// });
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/page/main.html');
