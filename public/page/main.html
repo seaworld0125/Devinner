@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="/public/css/main.css?after">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/css/uikit.min.css" />
+    <title>Socket.IO chat</title>
   </head>
   <body>
     <div id="sector01">
       <div id="box-top">
-        <button id="nick_name" class="button">개미</button>
-        <button id="button-change" class="button">닉네임 변경</button>
-        <button id="box-count" class="button"></button>
+        <button id="nick_name">개미</button>
+        <button id="button-change">닉네임 변경</button>
+        <button id="box-count"></button>
         <div id="box-title">안녕하세요 <b>개미</b> 님</div>
       </div>
       <div id="box-msg">
@@ -20,7 +23,7 @@
       </div>
       <div id="box-send">
         <form id="form-msg" action="">
-          <input id="input-msg" autocomplete="off" />
+          <input id="input-msg" autocomplete="off"/>
           <button id="send-button">Send</button>
         </form>
       </div>
@@ -32,7 +35,7 @@
               <ul class="uk-navbar-nav">
                   <li class="uk-active"><a href="#" style="color: white;">메뉴</a></li>
                   <li>
-                      <a href="#">Parent</a>
+                      <a href="#">뭘 넣을까요?</a>
                       <div class="uk-navbar-dropdown">
                           <ul class="uk-nav uk-navbar-dropdown-nav">
                               <li class="uk-active"><a href="#">Active</a></li>
@@ -45,7 +48,7 @@
                           </ul>
                       </div>
                   </li>
-                  <li><a href="#">Item</a>
+                  <li><a href="#">음..</a>
                   </li>
               </ul>
           </div>
@@ -56,15 +59,15 @@
           아이디 :
           <input id="input-id" type="text" autocomplete="off">
           비밀번호 :
-          <input id="input-password" type="password" autocomplete="off">
-          <button id="button-login" class="button" type="submit"">로그인</button>
-          <button id="button-create-account" class="button" type="button"">회원가입</button>
+          <input id="input-password" type="password" autocomplete="off"/>
+          <button id="button-login" type="submit"">로그인</button>
+          <button id="button-create-account" type="button"">회원가입</button>
         </form>
         <form id="form-logout" class="form-top" style="display: none;">
             <div id="form-comment" style="float: left; margin: 2.5px 10px 5px 0px;">
               안녕하세요 어쩍ㄵ쩌거구 님!
             </div>
-          <button id="button-logout" class="button" type="submit">로그아웃</button>
+          <button id="button-logout" type="submit">로그아웃</button>
         </form>
       </div>
       <!--  -->

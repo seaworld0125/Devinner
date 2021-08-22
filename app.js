@@ -6,7 +6,6 @@ const {Server} = require("socket.io");
 const io = new Server(server);
 // const io = new require("socket.io")(server);
 
-
 // DB
 const MySQL = require("MySQL2");
 const DB_config = require('./config/db.js');
