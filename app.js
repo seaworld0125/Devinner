@@ -34,17 +34,20 @@ const ref = require('./event/app.js');
 
 // user def function
 const INET = require('./func/inet.js');
-const aton = INET.aton;
-const ntoa = INET.ntoa;
+// const aton = INET.aton;
+// const ntoa = INET.ntoa;
+// const getIp = INET.getIp;
 
 // static file location
 app.use(express.static(PATH.join(__dirname, '/')));
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/page/main.html');
+    // console.log("getip :" + INET.getIp(req));
 });
 app.get('/account', (req, res) => {
     res.sendFile(__dirname + '/public/page/accountPage.html');
+    console.log("ip :" + getIp(req));
 });
 
 var daily_kospi_news = new Array();
@@ -75,26 +78,6 @@ function update_clientNum(){
     console.log(ref.UPDATE_CLIENTNUM + "() run");
     io.emit(ref.UPDATE_CLIENTNUM, clientsCount);
 };
-// use Promise
-function check_ban_list(ip){
-    return new Promise((resolve, reject) => {
-        ip = aton(ip);
-        console.log('aton :' + ip);
-        DB.execute('SELECT ip FROM ban_list WHERE ip = ?',
-            [ip], 
-            function(err, results, fields) {
-                if(err) console.log(err);
-                console.log('check ban list :' + results[0]);
-                if(results[0]){
-                    resolve(true);
-                }
-                else{
-                    resolve(false);
-                }
-            }
-        );
-    });
-}
 
 io.on('connection', (socket) => {
     clientsCount++;
@@ -157,7 +140,7 @@ io.on('connection', (socket) => {
     });
     socket.on(ref.CHECK_IP, (ip, returnUnique) => {
         console.log('ip :' + ip);
-        ip = aton(ip);
+        ip = INET.aton(ip);
         DB.execute(
             'SELECT account_name FROM account WHERE ip_address = ?',
             [ip],
@@ -206,12 +189,23 @@ io.on('connection', (socket) => {
         console.log("nickname list :" + clientsNickname);
     });
     socket.on(ref.CHECK_BAN_LIST, (ip) => {
-        check_ban_list(ip).then((result) => {
-            if(result){
-                console.log('user ban!' + ip);
-                socket.disconnect();
+        console.log("ip :" + ip);
+        let aton = INET.aton(ip);
+        console.log('aton :' + aton);
+        DB.execute('SELECT ip FROM ban_list WHERE ip = ?',
+            [aton], 
+            function(err, results, fields) {
+                if(err) console.log(err);
+                console.log('check ban list :' + results[0]);
+                if(results[0]) {
+                    console.log('user ban!' + ip);
+                    socket.disconnect();
+                }
+                else {
+                    console.log("normal user");
+                }
             }
-        });
+        );
     });
     socket.on(ref.CREATE_ACCOUNT, (account) => {
         console.log('create account');
@@ -219,7 +213,7 @@ io.on('connection', (socket) => {
         console.log('password :' + account.password);
         console.log('nickname :' + account.nickname);
 
-        account.ip = aton(account.ip);
+        account.ip = INET.aton(account.ip);
         console.log('aton ip :' + account.ip);
 
         DB.execute(

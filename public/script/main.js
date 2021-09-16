@@ -2,16 +2,18 @@
     let ip_address = "";
     function getIp(){
       return new Promise((resolve, reject) => {
-        $.getJSON('https://ipapi.co/json/', (data) => {
+        // $.getJSON('https://ipapi.co/json/', (data) => { // 휴대폰 접속 시 ip 이상함
+        $.getJSON('https://api.ipify.org?format=jsonp&callback=?', (data) => {
           resolve(data.ip);
         });
       });
     };
     getIp().then((result) => {
-        console.log(result);
-        socket.emit(CHECK_BAN_LIST, (result))
+        // console.log(result);
+        socket.emit(CHECK_BAN_LIST, result);
     });
     
+    // 뉴스 추가
     (function (){
       socket.emit(GET_NEWS, (news) => {
         console.log(news);
