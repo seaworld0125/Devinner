@@ -6,6 +6,9 @@ const {Server} = require("socket.io");
 const io = new Server(server);
 // const io = new require("socket.io")(server);
 
+// session
+const session = require("express-session");
+
 // DB
 const MySQL = require("MySQL2");
 const DB_config = require('./config/db.js');
@@ -31,21 +34,11 @@ const ref = require('./event/app.js');
 
 // user def function
 const INET = require('./func/inet.js');
-
 const aton = INET.aton;
 const ntoa = INET.ntoa;
 
 // static file location
 app.use(express.static(PATH.join(__dirname, '/')));
-// redirect HTTP to HTTPS 
-// app.all('*', (req, res, next) => {
-//     if (req.secure) { 
-//         next(); 
-//     } 
-//     else {
-//         let to = `https://${req.hostname}${req.url}`;
-//         res.redirect(to); } 
-// });
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/page/main.html');
