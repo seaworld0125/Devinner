@@ -5,4 +5,4 @@ build/
 module_secret.js
 
 db.js
-news_api.js
+news-api.js
