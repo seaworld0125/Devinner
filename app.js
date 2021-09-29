@@ -6,49 +6,67 @@ const {Server} = require("socket.io");
 const io = new Server(server);
 // const io = new require("socket.io")(server);
 
-// session
 const session = require("express-session");
-
-// DB
 const MySQL = require("MySQL2");
-const DB_config = require('./config/db.js');
-const DB = MySQL.createConnection({
-    host : DB_config.host,
-    user : DB_config.user,
-    password : DB_config.password,
-    database : DB_config.database
-});
-
-// path
-const PATH = require("path");
-
-// request
 const request = require('request');
 
-// api
-const API_config = require('./config/news_api.js');
-const kospi_option = API_config.kospi_option;
+var createError = require('http-errors');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 
-// reference value
-const ref = require('./event/app.js');
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/account-page');
 
-// user def function
-const INET = require('./func/inet.js');
-// const aton = INET.aton;
-// const ntoa = INET.ntoa;
-// const getIp = INET.getIp;
+const eventName = require('./Helpers/event-name');
+const dbQuery = require('./Helpers/query-string');
+const INET = require('./Helpers/inet.js');
 
-// static file location
-app.use(express.static(PATH.join(__dirname, '/')));
+// config
+const app_config = require('./conf/app.js');
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/page/main.html');
-    // console.log("getip :" + INET.getIp(req));
+const kospi_option = app_config.kospi_option;
+const DB = MySQL.createConnection({
+    host : app_config.db_host,
+    user : app_config.db_user,
+    password : app_config.db_password,
+    database : app_config.db_database
 });
-app.get('/account', (req, res) => {
-    res.sendFile(__dirname + '/public/page/accountPage.html');
-    console.log("ip :" + getIp(req));
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    next(createError(404));
 });
+// error handler
+app.use(function(err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+  
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
+});
+
+// app.get('/', (req, res) => {
+//     res.sendFile(__dirname + '/public/page/main.html');
+// });
+// app.get('/account', (req, res) => {
+//     res.sendFile(__dirname + '/public/page/accountPage.html');
+// });
 
 var daily_kospi_news = new Array();
 request(kospi_option, function (error, response) {
@@ -64,41 +82,28 @@ request(kospi_option, function (error, response) {
     });
 });
 
-var clientsCount = 0;
-var clientsNickname = [];
-function printStatus(){
-    console.log("clientsCount :", clientsCount);
-    console.log("nickname list :" + clientsNickname);
-};
-function nicknameSplice(nickname){
-    let index = clientsNickname.findIndex(Element => Element == nickname);
-    if(index) clientsNickname.splice(index, 1);
-};
-function update_clientNum(){
-    console.log(ref.UPDATE_CLIENTNUM + "() run");
-    io.emit(ref.UPDATE_CLIENTNUM, clientsCount);
-};
+var clientManager = require('./Helpers/client-manager');
 
 io.on('connection', (socket) => {
-    clientsCount++;
     socket.nickname = '개미';
-    io.emit(ref.CONNECTED, clientsCount);
-    printStatus();
+    clientManager.addClientNum();
+    clientManager.printStatus();
+    io.emit(eventName.CONNECTED, clientManager.getClientNum());
 
-    socket.on(ref.DISCONNECT, () => {
-        --clientsCount;
-        nicknameSplice(socket.nickname);
-        update_clientNum();
+    socket.on(eventName.DISCONNECT, () => {
+        clientManager.subClientNum();
+        clientManager.nicknameSplice(socket.nickname);
+        io.emit(eventName.UPDATE_CLIENTNUM, clientManager.getClientNum());
     });
-    socket.on(ref.CHAT_MSG, (msg) => {
+    socket.on(eventName.CHAT_MSG, (msg) => {
         msg = socket.nickname + ' : ' + msg;
         console.log("msg :" + msg);
-        socket.broadcast.emit(ref.CHAT_MSG, msg);
+        socket.broadcast.emit(eventName.CHAT_MSG, msg);
     });
-    socket.on(ref.CHECK_USERNAME, (username, returnUnique) => {
+    socket.on(eventName.CHECK_USERNAME, (username, returnUnique) => {
         // use Prepared statement
         DB.execute(
-            'SELECT account_name FROM account WHERE account_name = ?',
+            dbQuery.CHECK_USERNAME,
             [username],
             function(err, results, fields) {
                 console.log(results);
@@ -113,11 +118,11 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(ref.CHECK_NICKNAME, (nickname, returnUnique) => {
+    socket.on(eventName.CHECK_NICKNAME, (nickname, returnUnique) => {
         console.log('input nickname :' + nickname);
-        nicknameSplice(socket.nickname);
+        clientManager.nicknameSplice(socket.nickname);
         DB.execute(
-            'SELECT nickname FROM account WHERE nickname = ?',
+            dbQuery.CHECK_NICKNAME,
             [nickname],
             function(err, results, fields) {
                 console.log(results);
@@ -126,7 +131,7 @@ io.on('connection', (socket) => {
                     returnUnique(false);
                 }
                 else{
-                    if(clientsNickname.find(Element => Element == nickname)){
+                    if(clientManager.findNickname(nickname)){
                         console.log("별명 중복");
                         returnUnique(false);                        
                     }
@@ -138,11 +143,11 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(ref.CHECK_IP, (ip, returnUnique) => {
+    socket.on(eventName.CHECK_IP, (ip, returnUnique) => {
         console.log('ip :' + ip);
         ip = INET.aton(ip);
         DB.execute(
-            'SELECT account_name FROM account WHERE ip_address = ?',
+            dbQuery.CHECK_IP,
             [ip],
             function(err, results, fields) {
                 console.log(results);
@@ -157,13 +162,13 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(ref.CHECK_ACCOUNT, (account, returnData) => {
+    socket.on(eventName.CHECK_ACCOUNT, (account, returnData) => {
         console.log(account);
         console.log('id :' + account.id);
         console.log('password :' + account.password);
 
         DB.execute(
-            'SELECT * FROM account WHERE account_name = ?',
+            dbQuery.CHECK_ACCOUNT,
             [account.id],
             function(err, results, fields) {
                 console.log(results);
@@ -183,16 +188,17 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(ref.SET_NICKNAME, (nickname) => {
+    socket.on(eventName.SET_NICKNAME, (nickname) => {
         socket.nickname = nickname;
-        clientsNickname.push(nickname);
-        console.log("nickname list :" + clientsNickname);
+        clientManager.addNickname(nickname);
+        console.log("nickname list :" + clientManager.getNicknameList());
     });
-    socket.on(ref.CHECK_BAN_LIST, (ip) => {
+    socket.on(eventName.CHECK_BAN_LIST, (ip) => {
         console.log("ip :" + ip);
         let aton = INET.aton(ip);
         console.log('aton :' + aton);
-        DB.execute('SELECT ip FROM ban_list WHERE ip = ?',
+        DB.execute(
+            dbQuery.CHECK_BAN_LIST,
             [aton], 
             function(err, results, fields) {
                 if(err) console.log(err);
@@ -207,7 +213,7 @@ io.on('connection', (socket) => {
             }
         );
     });
-    socket.on(ref.CREATE_ACCOUNT, (account) => {
+    socket.on(eventName.CREATE_ACCOUNT, (account) => {
         console.log('create account');
         console.log('id :' + account.id);
         console.log('password :' + account.password);
@@ -217,7 +223,7 @@ io.on('connection', (socket) => {
         console.log('aton ip :' + account.ip);
 
         DB.execute(
-            'INSERT INTO account VALUE(?, ?, ?, ?, ?)',
+            dbQuery.CREATE_ACCOUNT,
             [0, account.id, account.password, account.nickname, account.ip],
             function(err, results, fields) {
                 if(err){
@@ -227,12 +233,14 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(ref.GET_NEWS, (returnNews) => {
+    socket.on(eventName.GET_NEWS, (returnNews) => {
         returnNews(daily_kospi_news);
     });
 });
 
-server.listen(3000, () => {
-    console.log('listening on *:3000');
-});
+// server.listen(3000, () => {
+//     console.log('listening on *:3000');
+// });
 
+// bin/www 에서 사용된 app 모듈
+module.exports = app;

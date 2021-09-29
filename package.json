@@ -5,19 +5,24 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2 start app.js --watch",
-    "stop": "pm2 stop app.js",
-    "restart": "pm2 restart app.js"
+    "start": "pm2 start ./bin/www",
+    "stop": "pm2 stop ./bin/www",
+    "restart": "pm2 restart ./bin/www"
   },
   "author": "taekyoung_Kim",
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^5.1.0",
+    "cookie-parser": "^1.4.5",
     "crawler": "^1.3.0",
+    "debug": "~2.6.9",
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "http": "0.0.1-security",
+    "http-errors": "^1.8.0",
     "install": "^0.13.0",
+    "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "npm": "^6.14.15",
