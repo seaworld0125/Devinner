@@ -37,4 +37,4 @@
     const GET_NEWS = 'get-news';
 
     // const socket = io('http://localhost:3000');
-    const socket = io.connect('http://121.127.175.142/', { transports: ['websocket'] });
+    // const socket = io.connect('http://121.127.175.142/', { transports: ['websocket'] });

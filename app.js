@@ -1,9 +1,15 @@
 // express, server
 const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+
 const app = express();
-const server = require("http").createServer(app);
-const {Server} = require("socket.io"); 
-const io = new Server(server);
+// const port = normalizePort(process.env.PORT || '3000');
+const port = 3000;
+app.set('port', port);
+
+const httpServer = http.createServer(app);
+const io = new Server(httpServer);
 // const io = new require("socket.io")(server);
 
 const session = require("express-session");
@@ -44,7 +50,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/account', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -61,13 +67,6 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
-// app.get('/', (req, res) => {
-//     res.sendFile(__dirname + '/public/page/main.html');
-// });
-// app.get('/account', (req, res) => {
-//     res.sendFile(__dirname + '/public/page/accountPage.html');
-// });
-
 var daily_kospi_news = new Array();
 request(kospi_option, function (error, response) {
     if (error) throw new Error(error);
@@ -82,18 +81,19 @@ request(kospi_option, function (error, response) {
     });
 });
 
-var clientManager = require('./Helpers/client-manager');
+const clientManager = require('./Helpers/client-manager');
+let manager = new clientManager();
 
 io.on('connection', (socket) => {
     socket.nickname = '개미';
-    clientManager.addClientNum();
-    clientManager.printStatus();
-    io.emit(eventName.CONNECTED, clientManager.getClientNum());
+    manager.addClientNum();
+    manager.printStatus();
+    io.emit(eventName.CONNECTED, manager.getClientNum());
 
     socket.on(eventName.DISCONNECT, () => {
-        clientManager.subClientNum();
-        clientManager.nicknameSplice(socket.nickname);
-        io.emit(eventName.UPDATE_CLIENTNUM, clientManager.getClientNum());
+        manager.subClientNum();
+        manager.nicknameSplice(socket.nickname);
+        io.emit(eventName.UPDATE_CLIENTNUM, manager.getClientNum());
     });
     socket.on(eventName.CHAT_MSG, (msg) => {
         msg = socket.nickname + ' : ' + msg;
@@ -120,7 +120,7 @@ io.on('connection', (socket) => {
     });
     socket.on(eventName.CHECK_NICKNAME, (nickname, returnUnique) => {
         console.log('input nickname :' + nickname);
-        clientManager.nicknameSplice(socket.nickname);
+        manager.nicknameSplice(socket.nickname);
         DB.execute(
             dbQuery.CHECK_NICKNAME,
             [nickname],
@@ -131,7 +131,7 @@ io.on('connection', (socket) => {
                     returnUnique(false);
                 }
                 else{
-                    if(clientManager.findNickname(nickname)){
+                    if(manager.findNickname(nickname)){
                         console.log("별명 중복");
                         returnUnique(false);                        
                     }
@@ -190,8 +190,8 @@ io.on('connection', (socket) => {
     });
     socket.on(eventName.SET_NICKNAME, (nickname) => {
         socket.nickname = nickname;
-        clientManager.addNickname(nickname);
-        console.log("nickname list :" + clientManager.getNicknameList());
+        manager.addNickname(nickname);
+        console.log("nickname list :" + manager.getNicknameList());
     });
     socket.on(eventName.CHECK_BAN_LIST, (ip) => {
         console.log("ip :" + ip);
@@ -243,4 +243,4 @@ io.on('connection', (socket) => {
 // });
 
 // bin/www 에서 사용된 app 모듈
-module.exports = app;
+module.exports = {server : httpServer, port : port};

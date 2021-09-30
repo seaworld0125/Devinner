@@ -5,16 +5,16 @@ module.exports = class Manager {
     }
     printStatus() {
         console.log("clientsCount :", this.clientsCount);
-        console.log("nickname list :" + clientsNickname);
-    };
+        console.log("nickname list :" + this.clientsNickname);
+    }
     nicknameSplice(nickname) {
-        var index = clientsNickname.findIndex(Element => Element == nickname);
-        if(index) clientsNickname.splice(index, 1);
-    };
+        var index = this.clientsNickname.findIndex(Element => Element == nickname);
+        if(index) this.clientsNickname.splice(index, 1);
+    }
     updateClientNum() {
         console.log("update-clientNum()");
         io.emit(ref.UPDATE_CLIENTNUM, this.clientsCount);
-    };
+    }
     getClientNum() {
         return this.clientsCount;
     }

@@ -4,22 +4,23 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('learn-express:server');
-var http = require('http');
+const App = require('../app');
+const server = App.server;
+const port = App.port;
+const debug = require('debug')('socket.io-chat-app:server');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+// const port = normalizePort(process.env.PORT || '3000');
+// app.set('port', port);
 
-/**    // "start": "pm2 start app.js --watch",
+/**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+// var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.

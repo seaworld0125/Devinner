@@ -3,8 +3,7 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    // res.send('respond with a resource');
-    res.sendFile(__dirname + '/views/accountPage.html');
+    res.render('account-page', {});
 });
 
 module.exports = router;
