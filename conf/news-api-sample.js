@@ -1,5 +1,5 @@
-const naver_id = 'your id';
-const naver_key = 'your key';
+const naver_id = 'your_id';
+const naver_key = 'your_key';
 const url_kospi = encodeURI('https://openapi.naver.com/v1/search/news.json?query=코스피');
 
 module.exports = {
