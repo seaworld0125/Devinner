@@ -5,4 +5,5 @@ module.exports = {
     CHECK_IP : 'SELECT account_name FROM account WHERE ip_address = ?',
     CREATE_ACCOUNT : 'INSERT INTO account VALUE(?, ?, ?, ?, ?)',
     CHECK_BAN_LIST : 'SELECT ip FROM ban_list WHERE ip = ?',
+    SET_NICKNAME : 'UPDATE account SET nickname=? WHERE nickname=?',
 };

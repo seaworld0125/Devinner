@@ -44,21 +44,18 @@ const GET_NEWS = 'get-news';
 let ip_address = "";
 function getIp(){
   return new Promise((resolve, reject) => {
-    // $.getJSON('https://ipapi.co/json/', (data) => { // 휴대폰 접속 시 ip 이상함
     $.getJSON('https://api.ipify.org?format=jsonp&callback=?', (data) => {
       resolve(data.ip);
     });
   });
 };
 getIp().then((result) => {
-    // console.log(result);
     socket.emit(CHECK_BAN_LIST, result);
 });
 
 // 뉴스 추가
 (function (){
   socket.emit(GET_NEWS, (news) => {
-    console.log(news);
     for (let i = 0; i < news.length; i++) {
       let title = news[i].title;
       let link = news[i].link;
@@ -85,33 +82,6 @@ let setNickname = (nick_name) => {
   titleBox.innerHTML = `안녕하세요 <b>${nick_name}</b> 님`;      
 };
 
-let getUsername = () => {
-  var exp = /개미/;
-  let nick_name = prompt('사용할 별명을 입력해주세요. (개미는 사용 불가합니다) (8자리)');
-  if(nick_name) {
-    if(!exp.test(nick_name)){
-      socket.emit(CHECK_NICKNAME, nick_name, (unique) => {
-        if(unique){
-          console.log("입력한 별명 :", nick_name);
-          socket.emit(SET_NICKNAME, nick_name);
-          alert(nick_name + ' 으로 설정되었습니다.');
-          setNickname(nick_name);
-        }
-        else{
-          alert(nick_name + '은 이미 존재하는 별명입니다.');
-          changeButton.click();
-        }
-      });
-    }
-    else{
-      alert('개미는 변경할 수 없는 별명입니다.');
-    }
-  }
-  else{
-    alert('별명을 입력하세요.');
-  }
-};
-
 let appendMsg = (msg, align) => {
   let item = document.createElement('li');
   if(align == 'right')
@@ -132,6 +102,7 @@ msgForm.addEventListener('submit', (e) => {
   }
 });
 
+let isLogin = false;
 loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
   if(inputId.value && inputPassword.value){
@@ -143,6 +114,7 @@ loginForm.addEventListener('submit', (e) => {
           socket.emit(SET_NICKNAME, nick_name);
           loginForm.style.display='none';
           logoutForm.style.display='block';
+          isLogin = true;
         }
         else{
           alert('로그인 실패');
@@ -155,30 +127,33 @@ loginForm.addEventListener('submit', (e) => {
 
 changeButton.addEventListener('click', (e) => {
   e.preventDefault();
-  // getUserName();
-  var exp = /개미/;
-  let nick_name = prompt('사용할 별명을 입력해주세요. (개미는 사용할 수 없는 단어입니다) (8자리)');
-  if(nick_name) {
-    if(!exp.test(nick_name)){
-      socket.emit(CHECK_NICKNAME, nick_name, (unique) => {
-        if(unique){
-          console.log("입력한 별명 :", nick_name);
-          socket.emit(SET_NICKNAME, nick_name);
-          alert(nick_name + ' 으로 설정되었습니다.');
-          setNickname(nick_name);
-        }
-        else{
-          alert(nick_name + '은 이미 존재하는 별명입니다.');
-          changeButton.click();
-        }
-      });
+  if(isLogin){
+    var exp = /개미/;
+    let old_name = document.getElementById('nick_name').textContent;
+    let nick_name = prompt('사용할 별명을 입력해주세요. (개미는 사용할 수 없는 단어입니다) (8자리)');
+    if(nick_name) {
+      if(!exp.test(nick_name)){
+        socket.emit(CHECK_NICKNAME, {new :nick_name, old: old_name}, (unique) => {
+          if(unique){
+            alert(nick_name + ' 으로 설정되었습니다.');
+            setNickname(nick_name);
+          }
+          else{
+            alert(nick_name + '은 이미 존재하는 별명입니다.');
+            changeButton.click();
+          }
+        });
+      }
+      else{
+        alert('개미는 사용할 수 없는 단어입니다');
+      }
     }
     else{
-      alert('개미는 사용할 수 없는 단어입니다');
+      alert('별명을 입력하세요.');
     }
   }
-  else{
-    alert('별명을 입력하세요.');
+  else {
+    alert('로그인 또는 회원가입을 하면 사용할 수 있습니다.');
   }
 });
 
@@ -187,6 +162,7 @@ accountPage.addEventListener('click', (e) =>{
   location.href = '/account';
 });
 
+// 로그아웃 방식도 개선해야함
 logoutButton.addEventListener('click', (e) => {
   e.preventDefault();
   location.href = '/';

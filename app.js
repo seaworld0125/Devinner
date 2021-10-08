@@ -85,14 +85,11 @@ const clientManager = require('./Helpers/client-manager');
 let manager = new clientManager();
 
 io.on('connection', (socket) => {
-    socket.nickname = '개미';
     manager.addClientNum();
-    manager.printStatus();
     io.emit(eventName.CONNECTED, manager.getClientNum());
 
     socket.on(eventName.DISCONNECT, () => {
         manager.subClientNum();
-        manager.nicknameSplice(socket.nickname);
         io.emit(eventName.UPDATE_CLIENTNUM, manager.getClientNum());
     });
     socket.on(eventName.CHAT_MSG, (msg) => {
@@ -118,31 +115,6 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(eventName.CHECK_NICKNAME, (nickname, returnUnique) => {
-        console.log('input nickname :' + nickname);
-        manager.nicknameSplice(socket.nickname);
-        DB.execute(
-            dbQuery.CHECK_NICKNAME,
-            [nickname],
-            function(err, results, fields) {
-                console.log(results);
-                if(results[0]){
-                    console.log("별명 중복");
-                    returnUnique(false);
-                }
-                else{
-                    if(manager.findNickname(nickname)){
-                        console.log("별명 중복");
-                        returnUnique(false);                        
-                    }
-                    else{
-                        console.log("별명 중복아님");
-                        returnUnique(true);
-                    }
-                }
-            }   
-        );
-    });
     socket.on(eventName.CHECK_IP, (ip, returnUnique) => {
         console.log('ip :' + ip);
         ip = INET.aton(ip);
@@ -162,6 +134,31 @@ io.on('connection', (socket) => {
             }   
         );
     });
+    socket.on(eventName.CHECK_NICKNAME, (data, returnUnique) => {
+        console.log('input nickname :' + data.new);
+        DB.execute(
+            dbQuery.CHECK_NICKNAME,
+            [data.new],
+            function(err, results, fields) {
+                console.log(results);
+                if(results[0]){
+                    console.log("별명 중복");
+                    returnUnique(false);
+                }
+                else{
+                    console.log("별명 중복아님");
+                    DB.execute(
+                        dbQuery.SET_NICKNAME, 
+                        [data.new, data.old],
+                        function(err, results, fields) {
+                            console.log("별명 변경완료");
+                        }
+                    )
+                    returnUnique(true);
+                }
+            }   
+        );
+    });
     socket.on(eventName.CHECK_ACCOUNT, (account, returnData) => {
         console.log(account);
         console.log('id :' + account.id);
@@ -172,9 +169,6 @@ io.on('connection', (socket) => {
             [account.id],
             function(err, results, fields) {
                 console.log(results);
-                if(err){
-                    console.log(err);
-                }
                 if(results[0]){
                     if(account.password == results[0].password){
                         console.log("로그인 성공");
@@ -187,11 +181,6 @@ io.on('connection', (socket) => {
                 }
             }   
         );
-    });
-    socket.on(eventName.SET_NICKNAME, (nickname) => {
-        socket.nickname = nickname;
-        manager.addNickname(nickname);
-        console.log("nickname list :" + manager.getNicknameList());
     });
     socket.on(eventName.CHECK_BAN_LIST, (ip) => {
         console.log("ip :" + ip);
