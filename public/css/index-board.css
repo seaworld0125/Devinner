@@ -1,0 +1,70 @@
+:root {
+    --article-width : 900px;
+}
+
+#title {
+    width: 490px;
+}
+#author {
+    width: 150px;
+} 
+#date {
+    width: 150px;
+} 
+#views {
+    width: 80px;
+} 
+#hits {
+    width: 80px;
+} 
+.align-center {
+    text-align: center;
+}
+.align-left {
+    text-align: left;
+}
+article table {
+    border-collapse: collapse;
+
+    width: var(--article-width);
+}
+#board-top {
+    border-top: 1px solid rgba(255, 255, 255, 0.219);
+}
+article tr {
+    height: 30px;
+}
+article th {
+    background-color: rgba(134, 134, 134, 0.226);
+    
+    color: rgba(255, 255, 255, 0.808);
+    font-weight: 100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.219);
+}
+article td {
+    color: rgba(255, 255, 255, 0.685);
+    font-weight: 200;
+    font-size: 13px;
+}
+#article-title {
+    font-size: large;
+    font-weight: 600;
+    margin: 10px 0 10px 20px;
+    float: left;
+}
+#create-button {
+    background: #333; 
+    color: black;
+    font-size: small;
+    font-weight: 600;
+    margin: 10px 0px 10px 0px;
+    background-color: rgb(99, 152, 168);
+    
+    border: none;
+    border-radius: 3px; 
+    
+    width: 70px; 
+    height: 27px;
+
+    float: right;
+}

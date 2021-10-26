@@ -20,13 +20,14 @@ const inputId = document.getElementById('input-id');
 const inputPassword = document.getElementById('input-password');
 const accountPage = document.getElementById('button-create-account');
 
-// sector02 under area
-const articleForm = document.getElementById('form-article');
-
-// sector already login area 
+// sector02 logout area 
 const logoutForm = document.getElementById('form-logout');
 const commentForm = document.getElementById('form-comment');
 const logoutButton = document.getElementById('button-logout');
+
+// sector02 under area
+const articleForm = document.getElementById('form-article');
+const createButton = document.getElementById('create-button');
 
 // socket.io Event naming
 const CONNECTED = 'connected';
@@ -162,10 +163,15 @@ accountPage.addEventListener('click', (e) =>{
   location.href = '/account';
 });
 
-// 로그아웃 방식도 개선해야함
+// 로그아웃 // 세션 삭제도 추가해야함
 logoutButton.addEventListener('click', (e) => {
   e.preventDefault();
   location.href = '/';
+});
+
+createButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.open("/article", "글쓰기", "_blank");
 });
 
 socket.on(CONNECTED, (count) => {

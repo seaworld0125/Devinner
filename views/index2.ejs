@@ -5,7 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="shortcut icon" href="/img/icon.ico">
-    <link rel="stylesheet" href="/css/index2.css?after">
+    <link rel="stylesheet" href="/css/index01.css?after">
+    <link rel="stylesheet" href="/css/index02.css?after">
+    <link rel="stylesheet" href="/css/index-board.css?after">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/css/uikit.min.css" />
     <title>Socket.IO chat</title>
   </head>
@@ -30,6 +32,7 @@
       </div>
     </div>
     <div id="sector02">
+      <!-- 여기부터 시멘틱 적용 -->
       <div id="bar-top">
         <form id="form-login" class="form-top">
           아이디 :
@@ -46,7 +49,52 @@
           <button id="button-logout" type="submit">로그아웃</button>
         </form>
       </div>
-      <!--  -->
+      <header>
+        header
+      </header>
+      <nav>
+        nav
+      </nav>
+      <section>
+        <article id="article-board">
+          <div id="article-title">
+            개미굴 게시판
+          </div>
+          <button id="create-button">글쓰기</button>
+          <table id="article-content">
+            <tr id="board-top">
+              <th id="title" class="align-center">제목</th>
+              <th id="author" class="align-center">글쓴이</th>
+              <th id="date" class="align-center">날짜</th>
+              <th id="views" class="align-center">조회</th>
+              <th id="hits" class="align-center">추천</th>
+            </tr>
+            <!-- <tr>
+              <td id="title" class="align-left">제목 2</td>
+              <td id="author" class="align-left">글쓴이 2</td>
+              <td id="date" class="align-center">20211011</td>
+              <td id="views" class="align-center">20</td>
+              <td id="hits" class="align-center">1</td>
+            </tr> -->
+          </table>
+        </article>
+        <article id="article-news">
+          <div class="uk-height-medium" uk-slideshow="animation: slide; autoplay: true; autoplay-interval: 5000; pause-on-hover: true;">
+            <ul class="uk-slideshow-items" id="form-article">
+            </ul>
+          </div>
+        </article>
+        <aside id="aside01">
+          aside01 - 광고영역
+        </aside>
+        <aside id="aside02">
+          aside02 - 광고영역
+        </aside>
+      </section>
+      <footer>
+        footer
+      </footer>
+      <!-- <div id="box-content01"></div>
       <div id="box-content02">
         <div class="uk-margin-small" uk-slideshow="min-height: 450; animation: slide; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;">
           <ul class="uk-slideshow-items">
@@ -76,7 +124,7 @@
           </ul>
           <ul class="uk-slideshow-nav uk-dotnav uk-flex-center uk-margin"></ul>
         </div>
-      </div>
+      </div> -->
     </div>
   </body>
   <script src="/socket.io/socket.io.js"></script>
