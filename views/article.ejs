@@ -9,13 +9,13 @@
     </head>
     <body>
         <div id="top-box">
-            비방/욕설 주의해주세요
-            <!-- <button id="post-button">게시하기</button> -->
+            ...
         </div>
         <div id="content-box">
             <form name="form" action="/article" method="post" autocomplete="off">
-                제목 <input type="text" name="title" id="title"/>
-                내용 <textarea name="content" id="content" cols="30" rows="10" wrap="physical"></textarea>
+                작성자 : <input type="text" name="author" id="author" readonly /><br>
+                제목 <input type="text" name="title" id="title" maxlength="30" />
+                내용 <textarea name="content" id="content" cols="30" rows="10" wrap="physical">비방/욕설 주의해주세요</textarea>
                 <input type="submit" id="post-button"></input>
             </form>
         </div>

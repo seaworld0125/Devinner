@@ -103,13 +103,16 @@ msgForm.addEventListener('submit', (e) => {
   }
 });
 
-let isLogin = false;
+var isLogin = false;
+var nickName;
+
 loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
   if(inputId.value && inputPassword.value){
     let account = {id : inputId.value, password : inputPassword.value};
     socket.emit(CHECK_ACCOUNT, account, (nick_name) => {
         if(nick_name){
+          nickName = nick_name;
           alert(nick_name + ' 님 환영합니다.');
           setNickname(nick_name);
           socket.emit(SET_NICKNAME, nick_name);
@@ -171,7 +174,15 @@ logoutButton.addEventListener('click', (e) => {
 
 createButton.addEventListener('click', (e) => {
   e.preventDefault();
-  window.open("/article", "글쓰기", "_blank");
+  if(isLogin) {
+    // document.domain = "localhost";
+    window.name = "parentPage";
+
+    child_window = window.open("/article", "childPage", "_blank");
+    child_window.document.getElementById("author").value = nickName;
+  }
+  else
+    alert('로그인 또는 회원가입을 하면 사용할 수 있습니다.');
 });
 
 socket.on(CONNECTED, (count) => {

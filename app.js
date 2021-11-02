@@ -30,19 +30,20 @@ const dbQuery = require('./Helpers/query-string');
 const INET = require('./Helpers/inet.js');
 
 // config
-const app_config = require('./conf/app.js');
+const config = require('./conf/app.js');
 
-const kospi_option = app_config.kospi_option;
+const kospi_option = config.kospi_option;
 const DB = MySQL.createConnection({
-    host : app_config.db_host,
-    user : app_config.db_user,
-    password : app_config.db_password,
-    database : app_config.db_database
+    host : config.db_host,
+    user : config.db_user,
+    password : config.db_password,
+    database : config.db_database
 });
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.engine('html', require('ejs').renderFile);
+
+// view engine setup
+app.engine('ejs', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
@@ -63,8 +64,8 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // res.locals.message = err.message;
+    // res.locals.error = req.app.get('env') === 'development' ? err : {};
   
     // render the error page
     res.status(err.status || 500);
