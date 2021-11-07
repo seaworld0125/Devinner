@@ -1,4 +1,4 @@
 (function() {
-    alert("로그인 해주세요!");
+    alert("접근할 수 없습니다.");
     window.close();
 })();

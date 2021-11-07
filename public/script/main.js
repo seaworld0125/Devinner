@@ -18,7 +18,7 @@ const loginForm = document.getElementById('form-login');
 const buttonLogin = document.getElementById('button-login');
 const inputId = document.getElementById('input-id');
 const inputPassword = document.getElementById('input-password');
-const accountPage = document.getElementById('button-create-account');
+const signUpPage = document.getElementById('button-create-account');
 
 // sector02 logout area 
 // const logoutForm = document.getElementById('form-logout');
@@ -55,7 +55,7 @@ getIp().then((result) => {
     socket.emit(CHECK_BAN_LIST, result);
 });
 
-// 뉴스 추가
+// 뉴스 추가 // 이부분도 라우터가 처리할 것
 (function (){
   socket.emit(GET_NEWS, (news) => {
     for (let i = 0; i < news.length; i++) {
@@ -78,11 +78,6 @@ getIp().then((result) => {
     }
   });
 })();
-
-// let setNickname = (nick_name) => {
-//   document.getElementById('nick_name').textContent = nick_name;
-//   titleBox.innerHTML = `안녕하세요 <b>${nick_name}</b> 님`;      
-// };
 
 let appendMsg = (msg, align) => {
   let item = document.createElement('li');
@@ -146,22 +141,17 @@ changeButton.addEventListener('click', (e) => {
   }
 });
 
-accountPage.addEventListener('click', (e) =>{
+signUpPage.addEventListener('click', (e) =>{
   e.preventDefault();
-  location.href = '/account';
+  location.href = '/signup';
 });
-
-// 로그아웃 // 세션 삭제도 추가해야함
-// logoutButton.addEventListener('click', (e) => {
-//   e.preventDefault();
-//   location.href = '/';
-// });
 
 createButton.addEventListener('click', (e) => {
   e.preventDefault();
   window.name = "parentPage";
 
-  child_window = window.open("/article", "글 쓰기", "height=800");
+  let status = "toolbar=no,scrollbars=yes,resizable=yes,status=no,menubar=no,width=800,height=800,top=0,left=0"; 
+  child_window = window.open("/article", "글 쓰기", status);
   child_window.document.getElementById("author").value = nickName;
 });
 

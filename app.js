@@ -22,7 +22,7 @@ var logger = require('morgan');
 // Router
 const indexRouter = require('./routes/main');
 const authRouter = require('./routes/auth');
-const accountPageRouter = require('./routes/sign_up');
+const signUpPageRouter = require('./routes/sign_up');
 const articleRouter = require('./routes/article');
 
 // hellper
@@ -60,7 +60,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // router
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
-app.use('/account', accountPageRouter);
+app.use('/signup', signUpPageRouter);
 app.use('/article', articleRouter);
 
 // catch 404 and forward to error handler
@@ -92,6 +92,8 @@ request(news_config.kospi_option, function (error, response) {
         });
     });
 });
+
+var manager = require('./Helpers/client_manager');
 
 io.on('connection', (socket) => {
     manager.addClientNum();

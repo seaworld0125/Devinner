@@ -25,7 +25,7 @@ let username_length_check = false;
 let nickname_length_check = false;
 let ip_check = false;
 
-// check ip adress
+// 소켓연결을 통해 ip 체크 요청
 var ip = "";
 $.getJSON('https://ipapi.co/json/', function(data){
     ip =  data.ip;
@@ -111,17 +111,34 @@ button01.addEventListener('click', (e) => {
     e.preventDefault();
     if(username_length_check){
         let username_ = username.value;
-        socket.emit(CHECK_USERNAME, username_, (unique) => {
-            if(unique){
-                console.log("입력한 별명 :", username_);
-                alert(username_ + ' 은 사용가능한 ID입니다.');
-                username_check = true;
+        // socket.emit(CHECK_USERNAME, username_, (unique) => {
+        //     if(unique){
+        //         console.log("입력한 별명 :", username_);
+        //         alert(username_ + ' 은 사용가능한 ID입니다.');
+        //         username_check = true;
+        //     }
+        //     else{
+        //         alert(username_ + '은 이미 존재하는 ID입니다.');
+        //         username_check = false;
+        //     }
+        // });
+        $.ajax({
+            type: "GET",
+            url: "/signup/id",
+            data: {"id" : username_},
+            // dataType: "json",
+            success: (result) => {
+                console.log(result);
+                if(result.unique == true) {
+                    alert(username_ + ' 은 사용가능한 ID입니다.');
+                    username_check = true;
+                }
+                else if(result.unique == false) {
+                    alert(username_ + '은 이미 존재하는 ID입니다.');
+                    username_check = false;
+                }
             }
-            else{
-                alert(username_ + '은 이미 존재하는 ID입니다.');
-                username_check = false;
-            }
-        });     
+        });   
     }
     else alert('아이디 길이를 다시 확인해주세요');
 });
