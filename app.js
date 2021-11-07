@@ -2,18 +2,16 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+const ejs = require("ejs");
 
 const app = express();
-// const port = normalizePort(process.env.PORT || '3000');
 const port = 3000;
 app.set('port', port);
 
 const httpServer = http.createServer(app);
 const io = new Server(httpServer);
-// const io = new require("socket.io")(server);
 
 const session = require("express-session");
-const MySQL = require("MySQL2");
 const request = require('request');
 
 var createError = require('http-errors');
@@ -21,41 +19,48 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/account-page');
-var articleRouter = require('./routes/article');
+// Router
+const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth');
+const accountPageRouter = require('./routes/account-page');
+const articleRouter = require('./routes/article');
 
 const eventName = require('./Helpers/event-name');
 const dbQuery = require('./Helpers/query-string');
 const INET = require('./Helpers/inet.js');
 
-// config
-const config = require('./conf/app.js');
+// api connection
+const news_config = require('./conf/news-api.js');
 
-const kospi_option = config.kospi_option;
-const DB = MySQL.createConnection({
-    host : config.db_host,
-    user : config.db_user,
-    password : config.db_password,
-    database : config.db_database
-});
-
-app.set('views', path.join(__dirname, 'views'));
-
-// view engine setup
-app.engine('ejs', require('ejs').renderFile);
-app.set('view engine', 'ejs');
+const mysql = require("mysql2");
+const options = require('./db/db');
+const DB = mysql.createConnection(options);
+const sessionStore = require('./db/session-db');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(session({
+    key: "antstock_session_key_",
+    secret: "antstock_cookie_secret_",
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+}));
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/account', usersRouter);
+app.use('/auth', authRouter);
+app.use('/account', accountPageRouter);
 app.use('/article', articleRouter);
+
+// app.get('/test', (req, res) => {
+//     res.render('test', {'user' : 'tae'});
+// })
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -64,16 +69,17 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
-    // res.locals.message = err.message;
-    // res.locals.error = req.app.get('env') === 'development' ? err : {};
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
   
     // render the error page
+    console.log(err);
     res.status(err.status || 500);
-    res.render('error');
+    res.render('error', {'err' : err.status});
 });
 
 var daily_kospi_news = new Array();
-request(kospi_option, function (error, response) {
+request(news_config.kospi_option, function (error, response) {
     if (error) throw new Error(error);
     let arr = JSON.parse(response.body);
     Object.values(arr)[4].forEach(element => {

@@ -5,7 +5,11 @@ build/
 module_secret.js
 
 db.js
-
 news-api.js
+session.js
 
 trash/
+
+db/
+
+script/

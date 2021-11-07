@@ -5,17 +5,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="shortcut icon" href="/img/icon.ico">
-    <link rel="stylesheet" href="/css/index.css?after">
+    <link rel="stylesheet" href="/css/index01.css?after">
+    <link rel="stylesheet" href="/css/index02.css?after">
+    <link rel="stylesheet" href="/css/index-board.css?after">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/css/uikit.min.css" />
     <title>Socket.IO chat</title>
   </head>
   <body>
     <div id="sector01">
       <div id="box-top">
-        <button id="nick_name">개미</button>
+        <% if(session) { %>
+          <button id="nick_name"><%= session.nickname %></button>
+        <% } else { %>
+          <button id="nick_name">개미</button>
+        <% } %>
         <button id="button-change">닉네임 변경</button>
         <button id="box-count"></button>
-        <div id="box-title">안녕하세요 <b>개미</b> 님</div>
+        <% if(session) { %>
+          <div id="box-title">안녕하세요 <b><%= session.nickname %></b>님</div>
+          <% } else { %>
+            <div id="box-title">안녕하세요 <b>개미</b>님</div>
+        <% } %>
       </div>
       <div id="box-msg">
         <ul id="messages">
@@ -30,104 +40,90 @@
       </div>
     </div>
     <div id="sector02">
-      <div id="navigator" style="padding-left: 0vw; padding-top: 0px;">
-        <nav class="uk-navbar-container" uk-navbar id="navbar">
-          <div class="uk-navbar-left">
-              <ul class="uk-navbar-nav">
-                  <li class="uk-active"><a href="#" style="color: white;">메뉴</a></li>
-                  <li>
-                      <a href="#">뭘 넣을까요?</a>
-                      <div class="uk-navbar-dropdown">
-                          <ul class="uk-nav uk-navbar-dropdown-nav">
-                              <li class="uk-active"><a href="#">Active</a></li>
-                              <li><a href="#">Item1</a></li>
-                              <li class="uk-nav-header">Header</li>
-                              <li><a href="#">Item2</a></li>
-                              <li><a href="#">Item3</a></li>
-                              <li class="uk-nav-divider"></li>
-                              <li><a href="#">Item4</a></li>
-                          </ul>
-                      </div>
-                  </li>
-                  <li><a href="#">음..</a>
-                  </li>
-              </ul>
-          </div>
-        </nav>
-      </div>
       <div id="bar-top">
-        <form id="form-login" class="form-top">
-          아이디 :
-          <input id="input-id" type="text" autocomplete="off">
-          비밀번호 :
-          <input id="input-password" type="password" autocomplete="off"/>
-          <button id="button-login" type="submit">로그인</button>
-          <button id="button-create-account" type="button">회원가입</button>
-        </form>
-        <form id="form-logout" class="form-top" style="display: none;">
+        <% if(session) { %>
+          <form id="form-logout" class="form-top" action="/auth" method="get">
             <div id="form-comment" style="float: left; margin: 2.5px 10px 5px 0px;">
-              안녕하세요 어쩍ㄵ쩌거구 님!
+              안녕하세요 <%= session.nickname %> 님!
             </div>
-          <button id="button-logout" type="submit">로그아웃</button>
-        </form>
+            <button id="button-logout" type="submit">로그아웃</button>
+            <button id="button-mypage" type="button">마이페이지</button>
+          </form>
+
+          <form id="form-login" style="display: none;">
+            <input id="input-id">
+            <input id="input-password"/>
+            <button id="button-login"></button>
+            <button id="button-create-account"></button>
+          </form>
+        <% } else { %>
+          <form id="form-logout" style="display: none;">
+            <div id="form-comment"></div>
+            <button id="button-logout"></button>
+            <button id="button-mypage"></button>
+          </form>
+          
+          <form id="form-login" class="form-top" action="/auth" method="post">
+            아이디 :
+            <input id="input-id" name="id" type="text" autocomplete="off">
+            비밀번호 :
+            <input id="input-password" name="password" type="password" autocomplete="off"/>
+            <button id="button-login" type="submit">로그인</button>
+            <button id="button-create-account" type="button">회원가입</button>
+          </form>
+        <% } %>
       </div>
-      <!--  -->
-      <div id="box-content01">
-        <div id="box-index">
-          <a href="https://finance.naver.com/" target="_blank">
-            <div id="daily-index-box">
-              <h2>네이버 증권<br><br><br>바로가기</h2><br>
-            </div>
-          </a>
-          <a href="https://www.fmkorea.com/stock" target="_blank">
-            <div id="daily-index-box">
-              <h2>에펨코리아<br>주식 게시판<br><br>바로가기</h2>
-            </div>
-          </a>
-          <a href="https://gall.dcinside.com/board/lists/?id=bitcoins" target="_blank">
-            <div id="daily-index-box">
-              <h2>디시인사이드<br>비트코인 갤러리<br><br>바로가기</h2>
-            </div>
-          </a>
-          <a href="https://gall.dcinside.com/board/lists/?id=neostock" target="_blank">
-            <div id="daily-index-box">
-              <h2>디시인사이드<br>주식 갤러리<br><br>바로가기</h2>
-            </div>
-          </a>
-        </div>
-      </div>
-      <div id="box-content02">
-        <div class="uk-margin-small" uk-slideshow="min-height: 450; animation: slide; autoplay: true; autoplay-interval: 4000; pause-on-hover: true;">
-          <ul class="uk-slideshow-items">
-              <li>
-                <div class="uk-section uk-section-large uk-section-secondary">
-                  <div class="uk-container">
-                      <h3>Section Large</h3>
-                      <div class="uk-grid-match uk-child-width-1-3@m" uk-grid>
-                          <div>
-                              <p>게시판 생성 예정</p>
-                          </div>
-                          <div>
-                              <p>게시판 생성 예정</p>
-                          </div>
-                          <div>
-                              <p>게시판 생성 예정</p>
-                          </div>
-                      </div>
-                  </div>
-                </div>
-              </li>
-          </ul>
-          <ul class="uk-slideshow-nav uk-dotnav uk-flex-center uk-margin"></ul>
-        </div>
-        <div class="uk-margin-small" uk-slideshow="animation: slide; autoplay: true; autoplay-interval: 5000; pause-on-hover: true;">
-          <ul class="uk-slideshow-items" id="form-article">
-          </ul>
-          <ul class="uk-slideshow-nav uk-dotnav uk-flex-center uk-margin"></ul>
-        </div>
-      </div>
+      <header>
+        header
+      </header>
+      <nav>
+        nav
+      </nav>
+      <section>
+        <article id="article-board">
+          <div id="article-title">
+            개미굴 게시판
+          </div>
+          <button id="create-button">글쓰기</button>
+          <table id="article-content">
+            <tr id="board-top">
+              <th id="title" class="align-center">제목</th>
+              <th id="author" class="align-center">글쓴이</th>
+              <th id="date" class="align-center">날짜</th>
+              <th id="views" class="align-center">조회</th>
+              <th id="hits" class="align-center">추천</th>
+            </tr>
+            <% board_list.forEach(article => { %>
+              <tr>
+                  <td id="article_id" style="display: none;"><%=article.id%></td> 
+                  <td id="title" class="align-left"><%=article.title%></td>
+                  <td id="author" class="align-left"><%=article.author%></td>
+                  <td id="date" class="align-center"><%=article.date%></td>
+                  <td id="views" class="align-center"><%=article.view%></td>
+                  <td id="hits" class="align-center"><%=article.hits%></td>
+              </tr>
+            <% }); %>
+          </table>
+        </article>
+        <article id="article-news">
+          <div class="uk-height-medium" uk-slideshow="animation: slide; autoplay: true; autoplay-interval: 5000; pause-on-hover: true;">
+            <ul class="uk-slideshow-items" id="form-article">
+            </ul>
+          </div>
+        </article>
+        <aside id="aside01">
+          aside01 - 광고영역
+        </aside>
+        <aside id="aside02">
+          aside02 - 광고영역
+        </aside>
+      </section>
+      <footer>
+        footer
+      </footer>
     </div>
   </body>
+  <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-latest.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/js/uikit.min.js"></script>

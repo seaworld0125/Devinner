@@ -21,9 +21,10 @@ const inputPassword = document.getElementById('input-password');
 const accountPage = document.getElementById('button-create-account');
 
 // sector02 logout area 
-const logoutForm = document.getElementById('form-logout');
-const commentForm = document.getElementById('form-comment');
-const logoutButton = document.getElementById('button-logout');
+// const logoutForm = document.getElementById('form-logout');
+const mypageButton = document.getElementById('button-mypage');
+// const commentForm = document.getElementById('form-comment');
+// const logoutButton = document.getElementById('button-logout');
 
 // sector02 under area
 const articleForm = document.getElementById('form-article');
@@ -78,10 +79,10 @@ getIp().then((result) => {
   });
 })();
 
-let setNickname = (nick_name) => {
-  document.getElementById('nick_name').textContent = nick_name;
-  titleBox.innerHTML = `안녕하세요 <b>${nick_name}</b> 님`;      
-};
+// let setNickname = (nick_name) => {
+//   document.getElementById('nick_name').textContent = nick_name;
+//   titleBox.innerHTML = `안녕하세요 <b>${nick_name}</b> 님`;      
+// };
 
 let appendMsg = (msg, align) => {
   let item = document.createElement('li');
@@ -103,31 +104,15 @@ msgForm.addEventListener('submit', (e) => {
   }
 });
 
-var isLogin = false;
-var nickName;
+var isLogin = true;
+loginForm.onsubmit = () => {loginSpaceCheck()};
 
-loginForm.addEventListener('submit', (e) => {
-  e.preventDefault();
+function loginSpaceCheck() {
   if(inputId.value && inputPassword.value){
-    let account = {id : inputId.value, password : inputPassword.value};
-    socket.emit(CHECK_ACCOUNT, account, (nick_name) => {
-        if(nick_name){
-          nickName = nick_name;
-          alert(nick_name + ' 님 환영합니다.');
-          setNickname(nick_name);
-          socket.emit(SET_NICKNAME, nick_name);
-          loginForm.style.display='none';
-          logoutForm.style.display='block';
-          isLogin = true;
-        }
-        else{
-          alert('로그인 실패');
-        }
-      });
-    inputId.value = '';
-    inputPassword.value = '';
+    return true;
   }
-});
+  return false;
+} 
 
 changeButton.addEventListener('click', (e) => {
   e.preventDefault();
@@ -167,22 +152,25 @@ accountPage.addEventListener('click', (e) =>{
 });
 
 // 로그아웃 // 세션 삭제도 추가해야함
-logoutButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  location.href = '/';
-});
+// logoutButton.addEventListener('click', (e) => {
+//   e.preventDefault();
+//   location.href = '/';
+// });
 
 createButton.addEventListener('click', (e) => {
   e.preventDefault();
-  if(isLogin) {
-    // document.domain = "localhost";
-    window.name = "parentPage";
+  window.name = "parentPage";
 
-    child_window = window.open("/article", "childPage", "_blank");
-    child_window.document.getElementById("author").value = nickName;
-  }
-  else
-    alert('로그인 또는 회원가입을 하면 사용할 수 있습니다.');
+  child_window = window.open("/article", "글 쓰기", "height=800");
+  child_window.document.getElementById("author").value = nickName;
+});
+
+mypageButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  // window.name = "parentPage";
+
+  // child_window = window.open("/article", "마이페이지", "height=800");
+  // child_window.document.getElementById("author").value = nickName;
 });
 
 socket.on(CONNECTED, (count) => {
