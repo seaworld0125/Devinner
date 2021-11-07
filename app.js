@@ -20,7 +20,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 // Router
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes/main');
 const authRouter = require('./routes/auth');
 const accountPageRouter = require('./routes/sign_up');
 const articleRouter = require('./routes/article');

@@ -1,13 +1,11 @@
 # ignore all files in the build/ directory
 build/
 
-#
-module_secret.js
-
+#config
 db.js
 news-api.js
 session.js
 
+#dir
 trash/
-
 db/

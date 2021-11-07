@@ -31,10 +31,10 @@ router.get('/', (req, res) => {
 
         if(req.session.auth) {
             session = req.session;
-            res.render('index', {'board_list' : board_list, 'session' : session});
+            res.render('main', {'board_list' : board_list, 'session' : session});
         }
         else {
-            res.render('index', {'board_list' : board_list, 'session' : session});
+            res.render('main', {'board_list' : board_list, 'session' : session});
         }
     })
     .catch((error) => {
