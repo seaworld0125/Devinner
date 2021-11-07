@@ -108,25 +108,7 @@ io.on('connection', (socket) => {
         console.log('msg :' + msg);
         socket.broadcast.emit(eventName.CHAT_MSG, msg);
     });
-    socket.on(eventName.CHECK_USERNAME, (username, returnUnique) => {
-        // use Prepared statement
-        DB.execute(
-            dbQuery.CHECK_USERNAME,
-            [username],
-            function(err, results, fields) {
-                console.log(results);
-                if(results[0]){
-                    console.log("Id 중복");
-                    returnUnique(false);
-                }
-                else{
-                    console.log("Id 중복아님");
-                    returnUnique(true);
-                }
-            }   
-        );
-    });
-    socket.on(eventName.CHECK_IP, (ip, returnUnique) => {
+    socket.on(eventName.CHECK_IP, (ip, returnUnique) => {// 이건 회원가입페이지 접속 라우팅 부분에서 해결
         console.log('ip :' + ip);
         ip = INET.aton(ip);
         DB.execute(
@@ -145,32 +127,7 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(eventName.CHECK_NICKNAME, (data, returnUnique) => {
-        console.log('input nickname :' + data.new);
-        DB.execute(
-            dbQuery.CHECK_NICKNAME,
-            [data.new],
-            function(err, results, fields) {
-                console.log(results);
-                if(results[0]){
-                    console.log("별명 중복");
-                    returnUnique(false);
-                }
-                else{
-                    console.log("별명 중복아님");
-                    DB.execute(
-                        dbQuery.SET_NICKNAME, 
-                        [data.new, data.old],
-                        function(err, results, fields) {
-                            console.log("별명 변경완료");
-                        }
-                    )
-                    returnUnique(true);
-                }
-            }   
-        );
-    });
-    socket.on(eventName.CHECK_BAN_LIST, (ip) => {
+    socket.on(eventName.CHECK_BAN_LIST, (ip) => { // 이것도 최초 접속했을 때 확인 // 벤이면 벤 페이지 렌더링하기
         console.log('ip :' + ip);
         let aton = INET.aton(ip);
         console.log('aton :' + aton);
@@ -190,27 +147,7 @@ io.on('connection', (socket) => {
             }
         );
     });
-    socket.on(eventName.CREATE_ACCOUNT, (account) => {
-        console.log('create account');
-        console.log('id :' + account.id);
-        console.log('password :' + account.password);
-        console.log('nickname :' + account.nickname);
-
-        account.ip = INET.aton(account.ip);
-        console.log('aton ip :' + account.ip);
-
-        DB.execute(
-            dbQuery.CREATE_ACCOUNT,
-            [0, account.id, account.password, account.nickname, account.ip],
-            function(err, results, fields) {
-                if(err){
-                    console.log(err);
-                }
-                console.log("계정 생성 성공");
-            }   
-        );
-    });
-    socket.on(eventName.GET_NEWS, (returnNews) => {
+    socket.on(eventName.GET_NEWS, (returnNews) => {// 이것도 최초 접속 라우터에서 ㄱㄱ
         returnNews(daily_kospi_news);
     });
 });

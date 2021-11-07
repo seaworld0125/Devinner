@@ -1,7 +1,7 @@
 module.exports = {
     aton : function(ip) {
         // split into octets
-        var a = ip.split('.');
+        var a = (ip||'').split('.');
         var buffer = new ArrayBuffer(4);
         var dv = new DataView(buffer);
         for(let i = 0; i < 4; i++){

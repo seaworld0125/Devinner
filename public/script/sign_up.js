@@ -47,7 +47,6 @@ $("#username").on("propertychange change keyup paste input", function() {
     }
     old_username = currentVal;
     let length_ = old_username.length;
-    console.log(length_);
     if(length_ == 0){
         $("label[for='username']").text('아이디');
         username_length_check = false;
@@ -69,7 +68,6 @@ $("#password").on("propertychange change keyup paste input", function() {
     }
     old_password = currentVal;
     let length_ = old_password.length;
-    console.log(length_);
     if(length_ == 0){
         $("label[for='password']").text('비밀번호');
         password_check = false;
@@ -91,7 +89,6 @@ $("#nickname").on("propertychange change keyup paste input", function() {
     }
     old_nickname = currentVal;
     let length_ = old_nickname.length;
-    console.log(length_);
     if(length_ == 0){
         $("label[for='nickname']").text('닉네임');
         nickname_length_check = false;
@@ -106,34 +103,21 @@ $("#nickname").on("propertychange change keyup paste input", function() {
     }
 });
 
-// check Id length
+// check Id unique
 button01.addEventListener('click', (e) => {
     e.preventDefault();
     if(username_length_check){
         let username_ = username.value;
-        // socket.emit(CHECK_USERNAME, username_, (unique) => {
-        //     if(unique){
-        //         console.log("입력한 별명 :", username_);
-        //         alert(username_ + ' 은 사용가능한 ID입니다.');
-        //         username_check = true;
-        //     }
-        //     else{
-        //         alert(username_ + '은 이미 존재하는 ID입니다.');
-        //         username_check = false;
-        //     }
-        // });
         $.ajax({
             type: "GET",
             url: "/signup/id",
             data: {"id" : username_},
-            // dataType: "json",
             success: (result) => {
-                console.log(result);
-                if(result.unique == true) {
+                if(result) {
                     alert(username_ + ' 은 사용가능한 ID입니다.');
                     username_check = true;
                 }
-                else if(result.unique == false) {
+                else {
                     alert(username_ + '은 이미 존재하는 ID입니다.');
                     username_check = false;
                 }
@@ -143,22 +127,26 @@ button01.addEventListener('click', (e) => {
     else alert('아이디 길이를 다시 확인해주세요');
 });
 
-// check Nickname length
+// check Nickname unique
 button02.addEventListener('click', (e) => {
     e.preventDefault();
     if(nickname_length_check){
         let nickname_ = nickname.value;
-        socket.emit(CHECK_NICKNAME, nickname_, (unique) => {
-            if(unique){
-                console.log("입력한 별명 :", nickname_);
-                alert(nickname_ + ' 은 사용가능한 별명입니다.');
-                nickname_check = true;
+        $.ajax({
+            type: "GET",
+            url: "/signup/nickname",
+            data: {"nickname" : nickname_},
+            success: (result) => {
+                if(result) {
+                    alert(nickname_ + ' 은 사용가능한 별명입니다.');
+                    nickname_check = true;
+                }
+                else {
+                    alert(nickname_ + '은 이미 존재하는 별명입니다.');
+                    nickname_check = false;
+                }
             }
-            else{
-                alert(nickname_ + '은 이미 존재하는 별명입니다.');
-                nickname_check = false;
-            }
-        });
+        });  
     }
     else alert('닉네임 길이를 다시 확인해주세요');              
 });
@@ -179,12 +167,24 @@ createAccountForm.addEventListener('submit', (e) => {
     let nickname_ = nickname.value;
 
     // Send Account Information & Redirect to Home Screen
-    let account = {id : username_, 
-                password : password_, 
-                nickname : nickname_, 
-                ip : ip};
-    socket.emit(CREATE_ACCOUNT, account);
-    alert('회원가입을 환영합니다!');
-    location.href = '/';
+    let account = {"id" : username_, 
+                "password" : password_, 
+                "nickname" : nickname_, 
+                "ip" : ip};
+    $.ajax({
+        type: "POST",
+        url: "/signup",
+        data: account,
+        success: (result) => {
+            if(result) {
+                alert('회원가입을 환영합니다!');
+                location.href = '/';
+            }
+            else {
+                alert('회원가입 실패 : 서버 에러(' + result + ')');
+                location.href = '/';
+            }
+        }
+    });
 });
     
