@@ -7,18 +7,4 @@
 2. must set up a MySQL server to work with and set up ```DB``` and ```Table```
 
 
-TABLES
-
-account
-
-![image](https://user-images.githubusercontent.com/75168305/128642113-6545cd6f-c0bd-40ed-ac83-8ff04e8d3a37.png)
-
-ban_list
-
-![image](https://user-images.githubusercontent.com/75168305/128642154-96adb524-f19d-495e-97c2-6f61615d275c.png)
-
-
-3. Run ```npm start``` in command on app.js path
-
-
-4. access ```localhost:3000``` on the web to view the app
+3. You must create a db.js news-api.js file in the conf folder. Please refer to the db-sample.js and the news-api-sample.js files.
