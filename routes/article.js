@@ -36,7 +36,7 @@ router.get('/', (req, res) => {
         res.render('article', {session : req.session});
     }
     else {
-        res.render('login-error', {});
+        res.render('login_error', {});
     }
 });
 
@@ -65,7 +65,7 @@ router.post('/', (req, res) => {
     .catch((error) => {
         console.log(error);
         res.status(error.status || 500);
-        res.render('error');
+        res.render('error', {'error' : error.status});
     });
 });
   

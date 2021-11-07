@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const mysql = require("mysql2");
+const { error } = require('winston');
 const pool = require("../db/db2");
 
 var dbQuery = require('../Helpers/query');
@@ -38,8 +39,8 @@ router.post('/', (req, res) => {
             req.session.save((err) => {
                 if(err) {
                     console.log(err);
-                    res.status(error.status || 500);
-                    res.render('error');
+                    res.status(err.status || 500);
+                    res.render('error', {"error" : err.status});
                 }
                 else {
                     console.log("로그인 성공");
@@ -61,8 +62,8 @@ router.get('/', (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.log(err);
-            res.status(error.status || 500);
-            res.render('error');
+            res.status(err.status || 500);
+            res.render('error', {"error" : err.status});
         }
         else {
             res.statusCode = 302;

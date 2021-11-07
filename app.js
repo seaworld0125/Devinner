@@ -1,8 +1,8 @@
 // express, server
-const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
-const ejs = require("ejs");
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const ejs = require('ejs');
 
 const app = express();
 const port = 3000;
@@ -11,7 +11,7 @@ app.set('port', port);
 const httpServer = http.createServer(app);
 const io = new Server(httpServer);
 
-const session = require("express-session");
+const session = require('express-session');
 const request = require('request');
 
 var createError = require('http-errors');
@@ -33,7 +33,7 @@ const INET = require('./Helpers/inet.js');
 // configuration
 const news_config = require('./conf/news-api.js');
 
-const mysql = require("mysql2");
+const mysql = require('mysql2');
 const dbOptions = require('./db/db');
 const DB = mysql.createConnection(dbOptions);
 
@@ -76,7 +76,7 @@ app.use(function(err, req, res, next) {
     // render the error page
     console.log(err);
     res.status(err.status || 500);
-    res.render('error', {'err' : err.status});
+    res.render('error', {'error' : err.status});
 });
 
 var daily_kospi_news = new Array();
@@ -103,7 +103,7 @@ io.on('connection', (socket) => {
     });
     socket.on(eventName.CHAT_MSG, (msg) => {
         msg = socket.nickname + ' : ' + msg;
-        console.log("msg :" + msg);
+        console.log('msg :' + msg);
         socket.broadcast.emit(eventName.CHAT_MSG, msg);
     });
     socket.on(eventName.CHECK_USERNAME, (username, returnUnique) => {
@@ -169,7 +169,7 @@ io.on('connection', (socket) => {
         );
     });
     socket.on(eventName.CHECK_BAN_LIST, (ip) => {
-        console.log("ip :" + ip);
+        console.log('ip :' + ip);
         let aton = INET.aton(ip);
         console.log('aton :' + aton);
         DB.execute(
