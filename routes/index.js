@@ -3,7 +3,7 @@ var router = express.Router();
 const mysql = require("mysql2");
 const pool = require("../db/db2");
 
-var dbQuery = require('../Helpers/query-string');
+var dbQuery = require('../Helpers/query');
 
 async function getBoardList(getQuery) {
     let connection = await pool.getConnection();

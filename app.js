@@ -22,45 +22,46 @@ var logger = require('morgan');
 // Router
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
-const accountPageRouter = require('./routes/account-page');
+const accountPageRouter = require('./routes/sign_up');
 const articleRouter = require('./routes/article');
 
-const eventName = require('./Helpers/event-name');
-const dbQuery = require('./Helpers/query-string');
+// hellper
+const eventName = require('./Helpers/event');
+const dbQuery = require('./Helpers/query');
 const INET = require('./Helpers/inet.js');
 
-// api connection
+// configuration
 const news_config = require('./conf/news-api.js');
 
 const mysql = require("mysql2");
-const options = require('./db/db');
-const DB = mysql.createConnection(options);
+const dbOptions = require('./db/db');
+const DB = mysql.createConnection(dbOptions);
+
 const sessionStore = require('./db/session-db');
+const sessionOption = require('./conf/session');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session({
-    key: "antstock_session_key_",
-    secret: "antstock_cookie_secret_",
+    key: sessionOption.key,
+    secret: sessionOption.secret,
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
 }));
 
+// set view engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
+// router
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/account', accountPageRouter);
 app.use('/article', articleRouter);
-
-// app.get('/test', (req, res) => {
-//     res.render('test', {'user' : 'tae'});
-// })
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -91,9 +92,6 @@ request(news_config.kospi_option, function (error, response) {
         });
     });
 });
-
-const clientManager = require('./Helpers/client-manager');
-let manager = new clientManager();
 
 io.on('connection', (socket) => {
     manager.addClientNum();
@@ -166,29 +164,6 @@ io.on('connection', (socket) => {
                         }
                     )
                     returnUnique(true);
-                }
-            }   
-        );
-    });
-    socket.on(eventName.CHECK_ACCOUNT, (account, returnData) => {
-        console.log(account);
-        console.log('id :' + account.id);
-        console.log('password :' + account.password);
-
-        DB.execute(
-            dbQuery.CHECK_ACCOUNT,
-            [account.id],
-            function(err, results, fields) {
-                console.log(results);
-                if(results[0]){
-                    if(account.password == results[0].password){
-                        console.log("로그인 성공");
-                        returnData(results[0].nickname);
-                    }
-                }
-                else{
-                    console.log("로그인 실패");
-                    returnData(null);
                 }
             }   
         );
