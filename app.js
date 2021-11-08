@@ -1,50 +1,47 @@
-// express, server
-const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
-const ejs = require('ejs');
 
-const app = express();
-const port = 3000;
-app.set('port', port);
+const express       = require('express');
+const app           = express();
+const http          = require('http');
+const { Server }    = require('socket.io');
+const httpServer    = http.createServer(app);
+const io            = new Server(httpServer);
+const port          = 3000;
 
-const httpServer = http.createServer(app);
-const io = new Server(httpServer);
-
-const session = require('express-session');
-const request = require('request');
-
-var createError = require('http-errors');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const request       = require('request');
+const session       = require('express-session');
+const cookieParser  = require('cookie-parser');
+const path          = require('path');
+const logger        = require('morgan');
+const createError   = require('http-errors');
 
 // Router
-const indexRouter = require('./routes/main');
-const authRouter = require('./routes/auth');
+const indexRouter   = require('./routes/main');
+const authRouter    = require('./routes/auth');
 const signUpPageRouter = require('./routes/sign_up');
 const articleRouter = require('./routes/article');
 
 // hellper
-const eventName = require('./Helpers/event');
-const dbQuery = require('./Helpers/query');
-const INET = require('./Helpers/inet.js');
+const eventName     = require('./Helpers/event');
+const dbQuery       = require('./Helpers/query');
+const INET          = require('./Helpers/inet.js');
 
 // configuration
-const news_config = require('./conf/news-api.js');
+const news_config   = require('./conf/news-api.js');
 
-const mysql = require('mysql2');
-const dbOptions = require('./db/db');
-const DB = mysql.createConnection(dbOptions);
+const mysql         = require('mysql2');
+const dbOptions     = require('./db/db');
+const DB            = mysql.createConnection(dbOptions);
 
-const sessionStore = require('./db/session-db');
+const sessionStore  = require('./db/session-db');
 const sessionOption = require('./conf/session');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(session({
+app
+.set('port', port)
+.use(logger('dev'))
+.use(express.json())
+.use(express.urlencoded({ extended: true }))
+.use(cookieParser())
+.use(session({
     key: sessionOption.key,
     secret: sessionOption.secret,
     store: sessionStore,
@@ -52,23 +49,22 @@ app.use(session({
     saveUninitialized: false,
 }));
 
-// set view engine
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
+app
+.set('views', path.join(__dirname, 'views'))
+.set('view engine', 'ejs')
+.use(express.static(path.join(__dirname, 'public')));
 
-// router
-app.use('/', indexRouter);
-app.use('/auth', authRouter);
-app.use('/signup', signUpPageRouter);
-app.use('/article', articleRouter);
+app
+.use('/', indexRouter)
+.use('/auth', authRouter)
+.use('/signup', signUpPageRouter)
+.use('/article', articleRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app
+.use(function(req, res, next) {
     next(createError(404));
-});
-// error handler
-app.use(function(err, req, res, next) {
+})
+.use(function(err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -80,7 +76,7 @@ app.use(function(err, req, res, next) {
 });
 
 var daily_kospi_news = new Array();
-request(news_config.kospi_option, function (error, response) {
+request(news_config.kospi_option, function (error, response) { // 이것도 메인 라우터에서 ㄱㄱ
     if (error) throw new Error(error);
     let arr = JSON.parse(response.body);
     Object.values(arr)[4].forEach(element => {
@@ -92,7 +88,6 @@ request(news_config.kospi_option, function (error, response) {
         });
     });
 });
-
 var manager = require('./Helpers/client_manager');
 
 io.on('connection', (socket) => {
@@ -104,7 +99,7 @@ io.on('connection', (socket) => {
         io.emit(eventName.UPDATE_CLIENTNUM, manager.getClientNum());
     });
     socket.on(eventName.CHAT_MSG, (msg) => {
-        msg = socket.nickname + ' : ' + msg;
+        
         console.log('msg :' + msg);
         socket.broadcast.emit(eventName.CHAT_MSG, msg);
     });
@@ -127,7 +122,7 @@ io.on('connection', (socket) => {
             }   
         );
     });
-    socket.on(eventName.CHECK_BAN_LIST, (ip) => { // 이것도 최초 접속했을 때 확인 // 벤이면 벤 페이지 렌더링하기
+    socket.on(eventName.CHECK_BAN_LIST, (ip, returnResult) => { // 이것도 최초 접속했을 때 확인 // 벤이면 벤 페이지 렌더링하기
         console.log('ip :' + ip);
         let aton = INET.aton(ip);
         console.log('aton :' + aton);
@@ -139,18 +134,19 @@ io.on('connection', (socket) => {
                 console.log('check ban list :' + results[0]);
                 if(results[0]) {
                     console.log('user ban!' + ip);
-                    socket.disconnect();
+                    returnResult(true);
                 }
                 else {
                     console.log("normal user");
+                    returnResult(false);
                 }
             }
         );
     });
-    socket.on(eventName.GET_NEWS, (returnNews) => {// 이것도 최초 접속 라우터에서 ㄱㄱ
+    socket.on(eventName.GET_NEWS, (returnNews) => {// 이것도 메인 라우터에서 ㄱㄱ
         returnNews(daily_kospi_news);
     });
 });
 
-// bin/www 에서 사용된 app 모듈
-module.exports = {server : httpServer, port : port};
+// bin/www 에서 사용될 app 모듈
+module.exports = {"server" : httpServer, "port" : port};

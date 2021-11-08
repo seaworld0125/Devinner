@@ -9,8 +9,4 @@ module.exports = {
     NEW_BOARD : 'INSERT INTO board VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?)',
     NEW_CONTENT : 'INSERT INTO content VALUE(?, ?)',
     GET_BOARD_LIST : "SELECT * FROM board WHERE if_delete = 'N'",
-    
 };
-
-// NEW_BOARD : id, group_id, title, author, date, view, if_delete
-// NEW_CONTENT : id, content

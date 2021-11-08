@@ -51,8 +51,14 @@ function getIp(){
     });
   });
 };
-getIp().then((result) => {
-    socket.emit(CHECK_BAN_LIST, result);
+getIp().then((ip) => {
+  ip_address = ip;
+  socket.emit(CHECK_BAN_LIST, ip, (result) => {
+      if(result) {
+        alert("사이트로부터 벤 되었습니다.");
+        window.close();
+      }
+  });
 });
 
 // 뉴스 추가 // 이부분도 라우터가 처리할 것
@@ -83,9 +89,11 @@ let appendMsg = (msg, align) => {
   let item = document.createElement('li');
   if(align == 'right')
   {
-    item.style.textAlign="right";
+    item.style.textAlign = align;
   }
   item.textContent = msg;
+  item.setAttribute("data-ip", ip_address);
+
   messages.appendChild(item);
   msgBox.scrollTo(0, msgBox.scrollHeight);
 };
@@ -99,7 +107,7 @@ msgForm.addEventListener('submit', (e) => {
   }
 });
 
-var isLogin = true;
+var isLogin = false;
 loginForm.onsubmit = () => {loginSpaceCheck()};
 
 function loginSpaceCheck() {

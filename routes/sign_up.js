@@ -1,10 +1,10 @@
-var express = require('express');
-var router = express.Router();
-const mysql = require("mysql2");
-const pool = require("../db/db2");
+const express   = require('express');
+const router    = express.Router();
+const mysql     = require("mysql2");
+const pool      = require("../db/db2");
 
-var dbQuery = require('../Helpers/query');
-const INET = require('../Helpers/inet');
+const dbQuery   = require('../Helpers/query');
+const INET      = require('../Helpers/inet');
 
 async function checkUnique(checkQuery) {
     let connection = await pool.getConnection();
