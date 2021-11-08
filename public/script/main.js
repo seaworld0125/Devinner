@@ -85,68 +85,93 @@ getIp().then((ip) => {
   });
 })();
 
-let appendMsg = (msg, align) => {
-  let item = document.createElement('li');
-  if(align == 'right')
-  {
-    item.style.textAlign = align;
-  }
-  item.textContent = msg;
-  item.setAttribute("data-ip", ip_address);
+getRandomColor = function(_isAlpha) {
+  let r = getRand(0, 255),
+  g = getRand(0, 255),
+  b = getRand(0, 255),
+  a = getRand(0, 10) / 10;
+
+  let rgb = _isAlpha ? 'rgba' : 'rgb';
+  rgb += '(' + r + ',' + g + ',' + b;
+  rgb += _isAlpha ? ',' + a + ')' : ')';
+
+  return rgb;
+
+  // Return random number from in to max
+  function getRand(min, max) {
+    if (min >= max) return false;
+    return ~~(Math.random() * (max - min + 1)) + min;
+  };
+};
+let chat_color = getRandomColor();
+
+let appendMsg = (data) => {
+  let item = document.createElement("li");
+  data.name = (data.name || "개미");
+  item.innerHTML = `<span style='color: ${data.color}'>${data.name}</span>: ${data.msg}`;
+
+  let item_child = document.createElement("div");
+  item_child.style.display = "none";
+  // ip 데이터 어떡하지~
+  item_child.setAttribute("data-ip", data.ip);
+  item.appendChild(item_child);
 
   messages.appendChild(item);
+  // 스크롤 기능 추가해야함
   msgBox.scrollTo(0, msgBox.scrollHeight);
 };
 
 msgForm.addEventListener('submit', (e) => {
   e.preventDefault();
   if(inputMsg.value){
-    socket.emit(CHAT_MSG, inputMsg.value);
-    appendMsg(inputMsg.value, 'right');
+    let data = {"msg": inputMsg.value, "name": $("nick_name").val(), "ip": ip_address, "color": chat_color};
+    socket.emit(CHAT_MSG, data);
+    appendMsg(data);
     inputMsg.value = ''; //input value reset
   }
 });
 
-var isLogin = false;
-loginForm.onsubmit = () => {loginSpaceCheck()};
+loginForm.onsubmit = () => {return loginSpaceCheck()};
 
 function loginSpaceCheck() {
   if(inputId.value && inputPassword.value){
     return true;
   }
+  alert("아이디와 비밀번호를 입력하세요!");
   return false;
 } 
 
+// var isLogin = false;
 changeButton.addEventListener('click', (e) => {
   e.preventDefault();
-  if(isLogin){
-    var exp = /개미/;
-    let old_name = document.getElementById('nick_name').textContent;
-    let nick_name = prompt('사용할 별명을 입력해주세요. (개미는 사용할 수 없는 단어입니다) (8자리)');
-    if(nick_name) {
-      if(!exp.test(nick_name)){
-        socket.emit(CHECK_NICKNAME, {new :nick_name, old: old_name}, (unique) => {
-          if(unique){
-            alert(nick_name + ' 으로 설정되었습니다.');
-            setNickname(nick_name);
-          }
-          else{
-            alert(nick_name + '은 이미 존재하는 별명입니다.');
-            changeButton.click();
-          }
-        });
-      }
-      else{
-        alert('개미는 사용할 수 없는 단어입니다');
-      }
-    }
-    else{
-      alert('별명을 입력하세요.');
-    }
-  }
-  else {
-    alert('로그인 또는 회원가입을 하면 사용할 수 있습니다.');
-  }
+  // if(isLogin){
+  //   var exp = /개미/;
+  //   let old_name = document.getElementById('nick_name').textContent;
+  //   let nick_name = prompt('사용할 별명을 입력해주세요. (개미는 사용할 수 없는 단어입니다) (8자리)');
+  //   if(nick_name) {
+  //     if(!exp.test(nick_name)){
+  //       socket.emit(CHECK_NICKNAME, {new :nick_name, old: old_name}, (unique) => {
+  //         if(unique){
+  //           alert(nick_name + ' 으로 설정되었습니다.');
+  //           setNickname(nick_name);
+  //         }
+  //         else{
+  //           alert(nick_name + '은 이미 존재하는 별명입니다.');
+  //           changeButton.click();
+  //         }
+  //       });
+  //     }
+  //     else{
+  //       alert('개미는 사용할 수 없는 단어입니다');
+  //     }
+  //   }
+  //   else{
+  //     alert('별명을 입력하세요.');
+  //   }
+  // }
+  // else {
+  //   alert('로그인 또는 회원가입을 하면 사용할 수 있습니다.');
+  // }
 });
 
 signUpPage.addEventListener('click', (e) =>{
@@ -179,8 +204,8 @@ socket.on(UPDATE_CLIENTNUM, (count) => {
   countBox.textContent = "접속자 수 : " + count;
 });
 
-socket.on(CHAT_MSG, (msg) => {
-  appendMsg(msg, 'left');
+socket.on(CHAT_MSG, (data) => {
+  appendMsg(data);
 });
 
 socket.on(GET_ALERT, (msg) => {

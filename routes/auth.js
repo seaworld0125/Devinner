@@ -27,7 +27,6 @@ router.post('/', (req, res) => {
     let password = req.body.password;
 
     let checkQeury = mysql.format(dbQuery.CHECK_ACCOUNT, [id]);
-    // console.log(checkQeury);
 
     checkAccount(checkQeury).then((result) => {
         if(result && result.password == password) {

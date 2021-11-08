@@ -98,10 +98,8 @@ io.on('connection', (socket) => {
         manager.subClientNum();
         io.emit(eventName.UPDATE_CLIENTNUM, manager.getClientNum());
     });
-    socket.on(eventName.CHAT_MSG, (msg) => {
-        
-        console.log('msg :' + msg);
-        socket.broadcast.emit(eventName.CHAT_MSG, msg);
+    socket.on(eventName.CHAT_MSG, (data) => {
+        socket.broadcast.emit(eventName.CHAT_MSG, data);
     });
     socket.on(eventName.CHECK_IP, (ip, returnUnique) => {// 이건 회원가입페이지 접속 라우팅 부분에서 해결
         console.log('ip :' + ip);
