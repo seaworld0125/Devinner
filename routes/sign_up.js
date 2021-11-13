@@ -1,7 +1,7 @@
 const express   = require('express');
 const router    = express.Router();
 const mysql     = require("mysql2");
-const pool      = require("../db/db2");
+const pool      = require("../db/db_pool_creater");
 
 const dbQuery   = require('../Helpers/query');
 const INET      = require('../Helpers/inet');
@@ -111,6 +111,20 @@ router.get('/nickname', (req, res) => {
             res.send(error);
         });
     }
+});
+
+router.post('/ip', (req, res) => {
+    let ip = INET.aton(req.body.ip);
+    let checkQuery = mysql.format(dbQuery.CHECK_IP, ip);
+    console.log(checkQuery);
+
+    checkUnique(checkQuery)
+    .then((result) => {
+        res.send(result);
+    })
+    .catch((error) => {
+        res.send(error);
+    });
 });
 
 module.exports = router;

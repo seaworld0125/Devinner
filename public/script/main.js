@@ -1,6 +1,6 @@
 // import { io } from "socket.io-client";
 // const socket = io();
-const socket = io.connect('http://121.127.175.142/', { transports: ['websocket'] });
+const socket = io.connect('localhost:3000', { transports: ['websocket'] });
 
 // sector01 under area
 const msgForm = document.getElementById('form-msg');
@@ -61,30 +61,6 @@ getIp().then((ip) => {
   });
 });
 
-// 뉴스 추가 // 이부분도 라우터가 처리할 것
-(function (){
-  socket.emit(GET_NEWS, (news) => {
-    for (let i = 0; i < news.length; i++) {
-      let title = news[i].title;
-      let link = news[i].link;
-      let description = news[i].description;
-      let item = document.createElement("li");
-      item.innerHTML = 
-        `<article class="uk-article">
-            <h1 class="uk-article-title">오늘 KOSPI 뉴스</h1>
-            <p class="uk-article-meta">${title}</p>
-            <p class="uk-text-lead" style="color: rgba(255, 255, 255, 0.61);">${description}</p>
-            <div class="uk-grid-small uk-child-width-auto" uk-grid>
-                <div>
-                    <a class="uk-button uk-button-text" href="${link}" target="_blank" style="font-weight: 900;">더 읽기</a>
-                </div>
-            </div>
-        </article>`
-      articleForm.appendChild(item);
-    }
-  });
-})();
-
 getRandomColor = function(_isAlpha) {
   let r = getRand(0, 255),
   g = getRand(0, 255),
@@ -124,7 +100,7 @@ let appendMsg = (data) => {
 msgForm.addEventListener('submit', (e) => {
   e.preventDefault();
   if(inputMsg.value){
-    let data = {"msg": inputMsg.value, "name": $("nick_name").val(), "ip": ip_address, "color": chat_color};
+    let data = {"msg": inputMsg.value, "name": $("#nick_name").text(), "ip": ip_address, "color": chat_color};
     socket.emit(CHAT_MSG, data);
     appendMsg(data);
     inputMsg.value = ''; //input value reset

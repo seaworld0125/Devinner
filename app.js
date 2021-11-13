@@ -26,13 +26,10 @@ const dbQuery       = require('./Helpers/query');
 const INET          = require('./Helpers/inet.js');
 
 // configuration
-const news_config   = require('./conf/news-api.js');
+const mysql     = require("mysql2");
+const pool      = require("./db/db_pool_creater");
 
-const mysql         = require('mysql2');
-const dbOptions     = require('./db/db');
-const DB            = mysql.createConnection(dbOptions);
-
-const sessionStore  = require('./db/session-db');
+const sessionStore  = require('./db/session_store_creater');
 const sessionOption = require('./conf/session');
 
 app
@@ -70,24 +67,12 @@ app
     res.locals.error = req.app.get('env') === 'development' ? err : {};
   
     // render the error page
-    console.log(err);
-    res.status(err.status || 500);
-    res.render('error', {'error' : err.status});
+    // console.log(err);
+    let status_ = err.status || 500;
+    res.status(status_);
+    res.render('error', {'error' : status_});
 });
 
-var daily_kospi_news = new Array();
-request(news_config.kospi_option, function (error, response) { // 이것도 메인 라우터에서 ㄱㄱ
-    if (error) throw new Error(error);
-    let arr = JSON.parse(response.body);
-    Object.values(arr)[4].forEach(element => {
-        let {title, link, description} = element;
-        daily_kospi_news.push({
-            title : title, 
-            link : link, 
-            description : description
-        });
-    });
-});
 var manager = require('./Helpers/client_manager');
 
 io.on('connection', (socket) => {
@@ -101,36 +86,18 @@ io.on('connection', (socket) => {
     socket.on(eventName.CHAT_MSG, (data) => {
         socket.broadcast.emit(eventName.CHAT_MSG, data);
     });
-    socket.on(eventName.CHECK_IP, (ip, returnUnique) => {// 이건 회원가입페이지 접속 라우팅 부분에서 해결
-        console.log('ip :' + ip);
-        ip = INET.aton(ip);
-        DB.execute(
-            dbQuery.CHECK_IP,
-            [ip],
-            function(err, results, fields) {
-                console.log(results);
-                if(results[0]){
-                    console.log("ip 중복");
-                    returnUnique(false);
-                }
-                else{
-                    console.log("ip 중복아님");
-                    returnUnique(true);
-                }
-            }   
-        );
-    });
-    socket.on(eventName.CHECK_BAN_LIST, (ip, returnResult) => { // 이것도 최초 접속했을 때 확인 // 벤이면 벤 페이지 렌더링하기
-        console.log('ip :' + ip);
+    socket.on(eventName.CHECK_BAN_LIST, (ip, returnResult) => {
         let aton = INET.aton(ip);
-        console.log('aton :' + aton);
-        DB.execute(
-            dbQuery.CHECK_BAN_LIST,
-            [aton], 
-            function(err, results, fields) {
-                if(err) console.log(err);
-                console.log('check ban list :' + results[0]);
-                if(results[0]) {
+        let checkQeury = mysql.format(dbQuery.CHECK_BAN_LIST, [aton]);
+
+        (async () => {
+            let connection = await pool.getConnection();
+            try {
+                await connection.beginTransaction();
+                let data = await connection.query(checkQeury);
+                connection.release();
+
+                if(data[0][0]) {
                     console.log('user ban!' + ip);
                     returnResult(true);
                 }
@@ -139,10 +106,12 @@ io.on('connection', (socket) => {
                     returnResult(false);
                 }
             }
-        );
-    });
-    socket.on(eventName.GET_NEWS, (returnNews) => {// 이것도 메인 라우터에서 ㄱㄱ
-        returnNews(daily_kospi_news);
+            catch (error) {
+                console.log(error);
+                connection.release();
+                returnResult(false);
+            }
+        })();
     });
 });
 

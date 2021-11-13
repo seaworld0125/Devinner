@@ -1,7 +1,7 @@
 const express   = require('express');
 const router    = express.Router();
 const mysql     = require("mysql2");
-const pool      = require("../db/db2");
+const pool      = require("../db/db_pool_creater");
 
 const dbQuery   = require('../Helpers/query');
 

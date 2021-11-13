@@ -23,17 +23,20 @@ let username_check = false;
 let nickname_check = false;
 let username_length_check = false;
 let nickname_length_check = false;
-let ip_check = false;
 
 // 소켓연결을 통해 ip 체크 요청
 var ip = "";
-$.getJSON('https://ipapi.co/json/', function(data){
-    ip =  data.ip;
-    ip_check = true;
-    socket.emit('check-ip', ip, (unique) => {
-        if(!unique){
-            alert('접속자 ip는 이미 계정이 있습니다');
-            location.href = '/';
+$.getJSON('https://ipapi.co/json/', function(result){
+    ip =  result.ip;
+    $.ajax({
+        type: "POST",
+        url: "/signup/ip",
+        data: {"ip" : ip},
+        success: (unique) => {
+            if(!unique) {
+                alert('접속자 ip는 이미 계정이 있습니다');
+                location.href = '/';
+            }
         }
     });
 });
