@@ -52,10 +52,10 @@ app
 .use(express.static(path.join(__dirname, 'public')));
 
 app
-.use('/', indexRouter)
-.use('/auth', authRouter)
+.use('/article', articleRouter)
 .use('/signup', signUpPageRouter)
-.use('/article', articleRouter);
+.use('/auth', authRouter)
+.use('/', indexRouter);
 
 app
 .use(function(req, res, next) {
@@ -97,14 +97,10 @@ io.on('connection', (socket) => {
                 let data = await connection.query(checkQeury);
                 connection.release();
 
-                if(data[0][0]) {
-                    console.log('user ban!' + ip);
+                if(data[0][0])
                     returnResult(true);
-                }
-                else {
-                    console.log("normal user");
+                else
                     returnResult(false);
-                }
             }
             catch (error) {
                 console.log(error);

@@ -2,6 +2,7 @@ const express       = require('express');
 const router        = express.Router();
 const pool          = require("../db/db_pool_creater");
 const dbQuery       = require("../Helpers/query");
+const mysql         = require("mysql2");
 
 const request       = require("request");
 const news_config   = require("../conf/news");
@@ -23,11 +24,11 @@ request(news_config.main_option, function (error, response) {
     });
 });
 
-async function getBoardList(getQuery) {
+async function getData(query) {
     let connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
-        let data = await connection.query(getQuery);
+        let data = await connection.query(query);
         connection.release();
 
         return Promise.resolve(data[0].reverse());    
@@ -42,8 +43,7 @@ async function getBoardList(getQuery) {
 
 /* GET home page. */
 router.get('/', (req, res) => {
-
-    getBoardList(dbQuery.GET_BOARD_LIST)
+    getData(dbQuery.GET_BOARD_LIST)
     .then((board_list) => {
         var session;
 
@@ -60,10 +60,6 @@ router.get('/', (req, res) => {
         res.status(error.status || 500);
         res.render("error");
     });
-});
-
-router.get('/:number/test', (req, res) => {
-    console.log(req.params.number);
 });
   
 module.exports = router;

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/article-content.css?after">
+</head>
+<body>
+    <div id="top-bar">
+        <div id="title">
+            <%-article.title%>
+        </div>
+        <div id="date">
+            <%-article.date%> / <%-article.time%>
+        </div>
+        <div id="content-id">
+            <%-article.id%>
+        </div>
+    </div>
+    <div id="under-bar">
+        <div id="author">
+            작성자 : <%-article.author%>
+        </div>
+        <div id="info">
+            조회수 <span style="color: whitesmoke;"><%-article.view%></span>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            추천수 <span style="color: whitesmoke;"><%-article.hits%></span>
+        </div>
+    </div>
+    <div id="content-box">
+        <div id="content">
+            <%-article.content%>
+        </div>
+    </div>
+    <div id="content-button-box">
+        <% if(user.auth) { %>
+            <button id="hit-button"><img src="" alt="">추천</button>
+            <button id="nohit-button"><img src="" alt="">비추천</button>
+            <!-- <% if(user.nickname === article.author) { %>
+                <button id="mod-button"><img src="" alt="">수정</button>
+            <% }%> -->
+        <% }%>
+    </div>
+    <div id="comment-list">
+        <% comments.forEach(comment => { %>
+            <div id="comment-box">
+                <div id="comment-id" style="display: none;"><%-comment.id%></div>
+                <div id="comment-author"><%-comment.author%></div>
+                <div id="comment">
+                    <%-comment.comment%>
+                </div>
+                <div id="comment-button-box">
+                    <% if(user.auth) { %>
+                        <button class="comment-box-inner-button" id="reply-comment-button" value="<%-comment.id%>">답글</button>
+                    <% }%>
+                    <% if(comment.author === user.nickname) { %>
+                        <button class="comment-box-inner-button" id="mod-comment-button">수정</button>
+                        <button class="comment-box-inner-button" id="delete-comment-button">삭제</button>
+                    <% } %>
+                </div>
+                <form action="/article/<%-article.id%>/reply" method="post" id="reply-form-<%-comment.id%>" class="reply-form" style="display: none;">
+                    <textarea name="reply" cols="30" rows="10">비방/욕설 자제</textarea>
+                    <input type="text" name="author" value="<%-user.nickname%>" style="display: none;">
+                    <input type="text" name="comment_id" value="<%-comment.id%>" style="display: none;">
+                    <button type="submit" id="submit-button">등록</button>
+                </form>
+                <% replies.forEach(reply => { %>
+                    <% if(reply.comment_id === comment.id) { %>
+                        <div id="reply-box">
+                            <div id="reply-id" style="display: none;"><%-reply.id%></div>
+                            <div id="reply-author">▹ <%-reply.author%></div>
+                            <div id="reply">
+                                <%-reply.reply%>
+                            </div>
+                            <div id="reply-button-box">
+                                <% if(reply.author === user.nickname) { %>
+                                    <button class="reply-box-inner-button" id="mod-reply-button">수정</button>
+                                    <button class="reply-box-inner-button" id="delete-reply-button">삭제</button>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                <% }); %>
+            </div>
+        <% }); %>
+        <% if(user.auth) { %>
+            <form action="/article/<%-article.id%>/comment" method="post" id="comment-form">
+                <textarea name="comment" cols="30" rows="10">비방/욕설 자제</textarea>
+                <input type="text" name="author" value="<%-user.nickname%>" style="display: none;">
+                <button type="submit" id="submit-button">등록</button>
+            </form>
+        <% }%>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/script/article_content.js"></script>
+</html>

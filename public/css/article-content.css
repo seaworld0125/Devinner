@@ -1,0 +1,221 @@
+body {
+    color: whitesmoke;
+    background-color: black;
+}
+#top-bar {
+    width: 700px;
+    height: 60px;
+    margin: 0 auto;
+    margin-top: 100px;
+    padding: 15px 10px 0px 10px;
+
+    border-top: 1px solid rgba(245, 222, 179, 0.4);
+}
+#content-id {
+    display: none;
+}
+#title {
+    width: calc(100% - 200px);
+    height: 100%;
+    overflow-y: scroll;
+
+    font-size: 20px;
+    float: left;
+}
+#date {
+    width: 162px;
+
+    color: rgba(245, 245, 245, 0.63);
+
+    float: right;
+}
+
+#under-bar {
+    width: 700px;
+    height: 22px;
+    margin: 0 auto;
+    padding: 10px 10px 10px 10px;
+
+    color: rgba(245, 245, 245, 0.63);
+
+    border-top: 1px solid rgba(245, 222, 179, 0.4);
+}
+#author {
+    float: left;
+}
+#info {
+    float: right;
+}
+
+#content-box {
+    width: 700px;
+    margin: 0 auto;
+    padding: 15px 10px 0px 10px;
+
+    border-top: 1px solid rgba(245, 222, 179, 0.4);
+}
+
+#content-button-box {
+    width: 700px;
+    margin: 0 auto;
+    margin-top: 200px;
+    padding: 15px 10px 25px 10px;
+
+    /* border-top: 1px solid rgba(245, 222, 179, 0.4); */
+}
+button {
+    /* color: black; */
+    font-size: small;
+    font-weight: 600;
+    
+    border-radius: 4px; 
+    
+    width: 65px; 
+    height: 27px;
+}
+#hit-button {
+    border: 3px solid rgb(99, 152, 168);
+    background-color: rgba(224, 224, 224, 0.911);
+    color: rgb(41, 77, 92);
+}
+#nohit-button {
+    border: 3px solid rgba(214, 54, 54, 0.795);
+    background-color: rgba(224, 224, 224, 0.911);
+
+    color: rgb(94, 28, 28);
+}
+#mod-button {
+    border: 3px solid rgb(99, 152, 168);
+    background-color: rgba(224, 224, 224, 0.911);
+    
+    color: rgb(0, 0, 0);
+
+    float: right;
+}
+
+#comment-list {
+    width: 700px;
+    margin: 0 auto;
+    padding: 15px 10px 0px 10px;
+
+    border-top: 1px solid rgba(245, 222, 179, 0.4);
+}
+#comment-box {
+    height: auto;
+    padding: 10px 0px 10px 15px;
+
+    color: rgba(245, 245, 245, 0.829);
+
+    border-top: 1px solid rgba(255, 244, 224, 0.192);
+}
+#reply-box {
+    height: auto;
+    margin: 10px 0px 10px 25px;
+
+    color: rgba(245, 245, 245, 0.829);
+
+    border-top: 1px solid rgba(255, 244, 224, 0.192);
+}
+#comment-author {
+    margin-bottom: 7px;
+}
+#comment-button-box {
+    width: 100%;
+    height: 23px;
+    margin-top: 8px;
+}
+#reply-button-box {
+    width: 100%;
+    height: 23px;
+    margin-top: 8px;
+}
+.comment-box-inner-button {
+    width: 40px;
+    height: 23px;
+    float: right;
+
+    margin-left: 2px;
+
+    background-color: black;
+    border: 1px solid rgba(0, 0, 0, 0);
+    color: rgba(245, 245, 245, 0.822)
+}
+.comment-box-inner-button:hover {
+    border: 1px solid rgba(141, 131, 131, 0.637);
+}
+.comment-box-inner-button:active {
+    border: 1px solid rgba(141, 131, 131, 0.637);
+    background-color: rgb(63, 63, 63);
+}
+
+.reply-box-inner-button {
+    width: 40px;
+    height: 23px;
+    float: right;
+
+    margin-left: 2px;
+
+    background-color: black;
+    border: 1px solid rgba(0, 0, 0, 0);
+    color: rgba(245, 245, 245, 0.822)
+}
+.reply-box-inner-button:hover {
+    border: 1px solid rgba(141, 131, 131, 0.637);
+}
+.reply-box-inner-button:active {
+    border: 1px solid rgba(141, 131, 131, 0.637);
+    background-color: rgb(63, 63, 63);
+}
+#comment-form > form {
+    margin-top: 50px;
+
+    margin-bottom: 100px;
+}
+#comment-form > textarea {
+    background-color: rgba(87, 87, 87, 0.637);
+    color: rgba(245, 245, 245, 0.815);
+    font-weight: 500;
+
+    width: 614px;
+    height: 70px;
+
+    resize: none;
+}
+#comment-form {
+    margin-top: 30px;
+
+    margin-bottom: 100px;
+}
+#comment-form > textarea {
+    background-color: rgba(87, 87, 87, 0.637);
+    color: rgba(245, 245, 245, 0.815);
+    font-weight: 500;
+
+    width: 614px;
+    height: 70px;
+
+    resize: none;
+}
+#comment-form > #submit-button {
+    width: 76px;
+    height: 76px;
+    float: right;
+}
+.reply-form {
+    margin: 20px 0px 20px 25px;
+}
+.reply-form > textarea {
+    background-color: rgba(87, 87, 87, 0.637);
+    color: rgba(245, 245, 245, 0.815);
+    font-weight: 500;
+
+    width: 590px;
+    height: 53px;
+
+    resize: none;
+}
+.reply-form > #submit-button {
+    width: 60px;
+    height: 60px;
+    float: right;
+}

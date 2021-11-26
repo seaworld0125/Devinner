@@ -172,6 +172,16 @@ mypageButton.addEventListener('click', (e) => {
   // child_window.document.getElementById("author").value = nickName;
 });
 
+// 부모에게 이벤트를 위임
+$(document).on("click", "#article_id", (e) => {
+  e.preventDefault();
+
+  window.name = "parentPage";
+
+  let status = "toolbar=no,scrollbars=yes,resizable=yes,status=no,menubar=no,width=800,height=800,top=0,left=0"; 
+  child_window = window.open(e.target.href, e.target.innerText, status);
+});
+
 socket.on(CONNECTED, (count) => {
   countBox.textContent = "접속자 수 : " + count;
 });

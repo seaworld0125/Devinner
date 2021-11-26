@@ -29,7 +29,7 @@
       </div>
       <div id="box-msg">
         <ul id="messages">
-          <li>채팅방에 오신 것을 환영합니다! (욕설/도배 ip 밴입니다.)</li>
+          <li>채팅방에 오신 것을 환영합니다! (욕설/도배 밴입니다.)</li>
         </ul>
       </div>
       <div id="box-send">
@@ -95,8 +95,8 @@
             </tr>
             <% board_list.forEach(article => { %>
               <tr>
-                  <td id="article_id" style="display: none;"><%=article.id%></td> 
-                  <td id="title" class="align-left"><%=article.title%></td>
+                  <!-- <td id="article_id" style="display: none;"><%=article.id%></td>  -->
+                  <td id="title" class="align-left"><a id="article_id" href="/article/<%=article.id%>"><%=article.title%></a></td>
                   <td id="author" class="align-left"><%=article.author%></td>
                   <td id="date" class="align-center"><%=article.date%></td>
                   <td id="views" class="align-center"><%=article.view%></td>
