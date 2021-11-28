@@ -36,11 +36,11 @@
     </div>
     <div id="content-button-box">
         <% if(user.auth) { %>
-            <button id="hit-button"><img src="" alt="">추천</button>
-            <button id="nohit-button"><img src="" alt="">비추천</button>
-            <!-- <% if(user.nickname === article.author) { %>
-                <button id="mod-button"><img src="" alt="">수정</button>
-            <% }%> -->
+            <button id="hit-button">추천</button>
+            <button id="nohit-button">비추천</button>
+            <% if(user.nickname === article.author) { %>
+                <button id="delete-button" value="/article/<%-article.id%>">삭제</button>
+            <% }%>
         <% }%>
     </div>
     <div id="comment-list">
@@ -56,12 +56,12 @@
                         <button class="comment-box-inner-button" id="reply-comment-button" value="<%-comment.id%>">답글</button>
                     <% }%>
                     <% if(comment.author === user.nickname) { %>
-                        <button class="comment-box-inner-button" id="mod-comment-button">수정</button>
-                        <button class="comment-box-inner-button" id="delete-comment-button">삭제</button>
+                        <button class="comment-box-inner-button" id="mod-comment-button" value="<%-comment.id%>">수정</button>
+                        <button class="comment-box-inner-button" id="delete-comment-button" value="/article/<%-comment.id%>/comment">삭제</button>
                     <% } %>
                 </div>
-                <form action="/article/<%-article.id%>/reply" method="post" id="reply-form-<%-comment.id%>" class="reply-form" style="display: none;">
-                    <textarea name="reply" cols="30" rows="10">비방/욕설 자제</textarea>
+                <form id="reply-form-<%-comment.id%>" class="reply-form" style="display: none;">
+                    <textarea name="reply" cols="30" rows="10"></textarea>
                     <input type="text" name="author" value="<%-user.nickname%>" style="display: none;">
                     <input type="text" name="comment_id" value="<%-comment.id%>" style="display: none;">
                     <button type="submit" id="submit-button">등록</button>
@@ -76,8 +76,7 @@
                             </div>
                             <div id="reply-button-box">
                                 <% if(reply.author === user.nickname) { %>
-                                    <button class="reply-box-inner-button" id="mod-reply-button">수정</button>
-                                    <button class="reply-box-inner-button" id="delete-reply-button">삭제</button>
+                                    <button class="reply-box-inner-button" id="delete-reply-button" value="/article/<%-reply.id%>/reply">삭제</button>
                                 <% } %>
                             </div>
                         </div>

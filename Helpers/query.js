@@ -12,7 +12,10 @@ module.exports = {
     GET_ARTICLE_INFO : 'SELECT content.id, title, author, view, hits, date, time, content FROM board INNER JOIN content ON board.id = content.id WHERE board.id = ?',
     UPDATE_VIEW : 'UPDATE board SET view = view + 1 WHERE id = ?',
     NEW_COMMENT : 'INSERT INTO comment VALUE(0, ?, ?, ?)',
-    GET_COMMENT : 'SELECT * FROM comment WHERE article_id = ?',
+    GET_COMMENT : "SELECT * FROM comment WHERE article_id = ? AND if_delete = 'N'",
     NEW_REPLY : 'insert into reply value(0, ?, ?, ?, ?)',
-    GET_REPLY : 'SELECT * FROM reply WHERE article_id = ?',
+    GET_REPLY : "SELECT * FROM reply WHERE article_id = ? AND if_delete = 'N'",
+    DELETE_ARTICLE : "UPDATE board SET if_delete = 'Y' WHERE id = ?", 
+    DELETE_COMMENT : "UPDATE comment SET if_delete = 'Y' WHERE id = ?",
+    DELETE_REPLY : "UPDATE reply SET if_delete = 'Y' WHERE id = ?" 
 };

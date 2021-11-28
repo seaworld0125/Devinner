@@ -219,4 +219,66 @@ router.post('/:number/reply', (req, res) => {
     }
 });
 
+// 댓글 또는 답글 또는 게시글 삭제
+router.delete('/:number', (req, res) => {
+    if(req.session.auth) {
+        let number = req.params.number;
+        let query = mysql.format(dbQuery.DELETE_ARTICLE, number);
+        updateData(query)
+        .then(() => {
+            res.statusCode = 302;
+            res.setHeader('Location', "/article" + req.path);
+            res.end();
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(error.status || 500);
+            res.render("error");
+        });
+    }
+    else {
+        res.render('login_error', {});
+    }
+});
+router.delete('/:number/comment', (req, res) => {
+    if(req.session.auth) {
+        let number = req.params.number;
+        let query = mysql.format(dbQuery.DELETE_COMMENT, number);
+        updateData(query)
+        .then(() => {
+            res.statusCode = 302;
+            res.setHeader('Location', "/article" + req.path);
+            res.end();
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(error.status || 500);
+            res.render("error");
+        });
+    }
+    else {
+        res.render('login_error', {});
+    }
+});
+router.delete('/:number/reply', (req, res) => {
+    if(req.session.auth) {
+        let number = req.params.number;
+        let query = mysql.format(dbQuery.DELETE_REPLY, number);
+        updateData(query)
+        .then(() => {
+            res.statusCode = 302;
+            res.setHeader('Location', "/article" + req.path);
+            res.end();
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(error.status || 500);
+            res.render("error");
+        });
+    }
+    else {
+        res.render('login_error', {});
+    }   
+});
+
 module.exports = router;

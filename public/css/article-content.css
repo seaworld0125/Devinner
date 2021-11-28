@@ -84,13 +84,23 @@ button {
 
     color: rgb(94, 28, 28);
 }
-#mod-button {
-    border: 3px solid rgb(99, 152, 168);
-    background-color: rgba(224, 224, 224, 0.911);
-    
-    color: rgb(0, 0, 0);
-
+#delete-button {
+    width: 40px;
+    height: 23px;
     float: right;
+
+    margin-left: 2px;
+
+    background-color: black;
+    border: 1px solid rgba(0, 0, 0, 0);
+    color: rgba(245, 245, 245, 0.822)
+}
+#delete-button:hover {
+    border: 1px solid rgba(141, 131, 131, 0.637);
+}
+#delete-button:active {
+    border: 1px solid rgba(141, 131, 131, 0.637);
+    background-color: rgb(63, 63, 63);
 }
 
 #comment-list {
