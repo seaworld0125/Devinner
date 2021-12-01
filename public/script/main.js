@@ -1,6 +1,6 @@
 // import { io } from "socket.io-client";
 // const socket = io();
-const socket = io.connect('localhost:3000', { transports: ['websocket'] });
+const socket = io.connect('121.127.175.142', { transports: ['websocket'] });
 
 // sector01 under area
 const msgForm = document.getElementById('form-msg');

@@ -168,30 +168,30 @@ router.post('/:number/comment', (req, res) => {
     }
 });
 // 댓글 수정
-router.put('/:number/comment', (req, res) => {
-    if(req.session.auth) {
-        let number = req.params.number;
-        let author = req.body.author;
-        let comment = req.body.comment;
+// router.put('/:number/comment', (req, res) => {
+//     if(req.session.auth) {
+//         let number = req.params.number;
+//         let author = req.body.author;
+//         let comment = req.body.comment;
 
-        var query = [mysql.format(dbQuery.NEW_COMMENT, [number, author, comment])];
+//         var query = [mysql.format(dbQuery.NEW_COMMENT, [number, author, comment])];
     
-        postData(query)
-        .then(() => {
-            res.statusCode = 302;
-            res.setHeader('Location', `/article/${number}`);
-            res.end();
-        })
-        .catch((error) => {
-            console.log(error);
-            res.status(error.status || 500);
-            res.render("error");
-        });
-    }
-    else {
-        res.render('login_error', {});
-    }
-});
+//         postData(query)
+//         .then(() => {
+//             res.statusCode = 302;
+//             res.setHeader('Location', `/article/${number}`);
+//             res.end();
+//         })
+//         .catch((error) => {
+//             console.log(error);
+//             res.status(error.status || 500);
+//             res.render("error");
+//         });
+//     }
+//     else {
+//         res.render('login_error', {});
+//     }
+// });
 // 답글 달기
 router.post('/:number/reply', (req, res) => {
     if(req.session.auth) {
@@ -205,7 +205,7 @@ router.post('/:number/reply', (req, res) => {
         postData(query)
         .then(() => {
             res.statusCode = 302;
-            res.setHeader('Location', `/article/${number}`);
+            res.redirect('back');
             res.end();
         })
         .catch((error) => {
@@ -226,8 +226,7 @@ router.delete('/:number', (req, res) => {
         let query = mysql.format(dbQuery.DELETE_ARTICLE, number);
         updateData(query)
         .then(() => {
-            res.statusCode = 302;
-            res.setHeader('Location', "/article" + req.path);
+            res.statusCode = 200;
             res.end();
         })
         .catch((error) => {
@@ -246,8 +245,7 @@ router.delete('/:number/comment', (req, res) => {
         let query = mysql.format(dbQuery.DELETE_COMMENT, number);
         updateData(query)
         .then(() => {
-            res.statusCode = 302;
-            res.setHeader('Location', "/article" + req.path);
+            res.statusCode = 200;
             res.end();
         })
         .catch((error) => {
@@ -266,8 +264,7 @@ router.delete('/:number/reply', (req, res) => {
         let query = mysql.format(dbQuery.DELETE_REPLY, number);
         updateData(query)
         .then(() => {
-            res.statusCode = 302;
-            res.setHeader('Location', "/article" + req.path);
+            res.statusCode = 200;
             res.end();
         })
         .catch((error) => {

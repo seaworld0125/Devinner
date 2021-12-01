@@ -60,7 +60,7 @@
                         <button class="comment-box-inner-button" id="delete-comment-button" value="/article/<%-comment.id%>/comment">삭제</button>
                     <% } %>
                 </div>
-                <form id="reply-form-<%-comment.id%>" class="reply-form" style="display: none;">
+                <form id="reply-form-<%-comment.id%>" class="reply-form" action="/article/<%-article.id%>/reply" style="display: none;">
                     <textarea name="reply" cols="30" rows="10"></textarea>
                     <input type="text" name="author" value="<%-user.nickname%>" style="display: none;">
                     <input type="text" name="comment_id" value="<%-comment.id%>" style="display: none;">
