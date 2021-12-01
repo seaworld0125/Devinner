@@ -1,3 +1,3 @@
-# socket.io-chat-app
+# It's my first project [ Realtime-chat-community ]
 
-## socket.io realtime chat app & Community
+## Used socket.io for real-time chat. And it has a community function.
