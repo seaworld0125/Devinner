@@ -3,7 +3,7 @@ const router    = express.Router();
 const mysql     = require("mysql2");
 const pool      = require("../db/db_pool_creater");
 
-const dbQuery   = require('../Helpers/query');
+const dbQuery   = require('../model/query');
 
 async function checkAccount(checkQeury) {
     let connection = await pool.getConnection();
