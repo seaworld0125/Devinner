@@ -1,3 +1,3 @@
 # It's my first project [ Realtime-chat-community ]
 
-### Used socket.io for real-time chat. And it has a community function.
+It has a community function and real-time chat function
