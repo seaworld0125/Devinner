@@ -1,4 +1,5 @@
-const MySQLStore = require("express-mysql-session")(session);
-const config = require('../conf/db');// db 설정 로드
+const session       = require('express-session');
+const MySQLStore    = require("express-mysql-session")(session);
+const config        = require('../conf/db');// db 설정 로드
 
 module.exports = new MySQLStore(config.dbOption);

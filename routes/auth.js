@@ -29,9 +29,11 @@ router.post('/', (req, res) => {
     let checkQeury = mysql.format(dbQuery.CHECK_ACCOUNT, [id]);
 
     checkAccount(checkQeury).then((result) => {
-        if(result && result.password == password) {
+        if(result && result.password == password) { // 비밀번호 대조 // 암호화 필요함
+            console.log(result);
             req.session.auth = true;
             req.session.nickname = result.nickname;
+            req.session.level = result.level;
 
             console.log(result.nickname);
             req.session.save((err) => {

@@ -24,7 +24,7 @@ request(news_config.main_option, function (error, response) {
     });
 });
 
-async function getData(query) {
+async function getBoardList(query) {
     let connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
@@ -43,7 +43,7 @@ async function getData(query) {
 
 /* GET home page. */
 router.get('/', (req, res) => {
-    getData(dbQuery.GET_BOARD_LIST)
+    getBoardList(dbQuery.GET_BOARD_LIST)
     .then((board_list) => {
         var session;
 

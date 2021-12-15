@@ -22,15 +22,16 @@ const articleRouter = require('./routes/article');
 
 // hellper
 const eventName     = require('./Helpers/event');
-const dbQuery       = require('./Helpers/query');
 const INET          = require('./Helpers/inet.js');
 
 // configuration
-const mysql     = require("mysql2");
-const pool      = require("./db/db_pool_creater");
-
-const sessionStore  = require('./db/session_store_creater');
+const mysql         = require("mysql2");
 const sessionOption = require('./conf/session');
+
+// model
+const dbQuery       = require('./model/query');
+const pool          = require("./model/db_pool_creater");
+const sessionStore  = require('./model/session_store_creater');
 
 app
 .set('port', port)

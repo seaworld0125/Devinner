@@ -10,11 +10,12 @@ const url_kospi = encodeURI(url_base + '코스피');
 const url_nasdaq = encodeURI(url_base + '나스닥');
 const url_it = encodeURI(url_base + '개발자');
 const url_coin = encodeURI(url_base + '코인');
+const url_job = encodeURI(url_base + '취업+채용');
 
 module.exports = {
     main_option: {  
         'method': 'GET',
-        'url': url_main,
+        'url': url_job,
         'headers': account
     },
     stock_option: {  

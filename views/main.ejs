@@ -15,14 +15,14 @@
     <div id="sector01">
       <div id="box-top">
         <% if(session) { %>
-          <button id="nick_name"><%= session.nickname %></button>
+          <button>Lv.<b id="level"><%= session.level %></b></button>
         <% } else { %>
           <button id="nick_name">개미</button>
         <% } %>
         <button id="button-change">닉네임 변경</button>
         <button id="box-count"></button>
         <% if(session) { %>
-          <div id="box-title">안녕하세요 <b><%= session.nickname %></b>님</div>
+          <div id="box-title">안녕하세요 <b id="nick_name"><%= session.nickname %></b>님</div>
           <% } else { %>
             <div id="box-title">안녕하세요 <b>개미</b>님</div>
         <% } %>
@@ -82,7 +82,7 @@
       <section>
         <article id="article-board">
           <div id="article-title">
-            개미굴 게시판
+            개발자 게시판
           </div>
           <button id="create-button">글쓰기</button>
           <table id="article-content">
@@ -110,7 +110,7 @@
             <ul class="uk-slideshow-items" id="form-article">
               <% news.forEach(article => { %>
                 <article class="uk-article uk-margin-remove">
-                  <h1 class="uk-article-title">오늘 메인 뉴스</h1>
+                  <h1 class="uk-article-title">오늘의 채용 뉴스</h1>
                   <p class="uk-article-meta"><%-article.title%></p>
                   <p class="uk-text-lead" style="color: rgba(255, 255, 255, 0.61);"><%-article.description%></p>
                   <a class="uk-button uk-button-text" href="<%=article.link%>" target="_blank" style="font-weight: 900;">더 읽기</a>

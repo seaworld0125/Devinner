@@ -1,8 +1,3 @@
-
-// const socket = io();
-// import { io } from "socket.io-client";
-const socket = io.connect('http://121.127.175.142/', { transports: ['websocket'] });
-
 // make account form area
 const username = document.getElementById('username');
 const password = document.getElementById('password');
@@ -24,21 +19,10 @@ let nickname_check = false;
 let username_length_check = false;
 let nickname_length_check = false;
 
-// 소켓연결을 통해 ip 체크 요청
+// ip
 var ip = "";
 $.getJSON('https://ipapi.co/json/', function(result){
     ip =  result.ip;
-    $.ajax({
-        type: "POST",
-        url: "/signup/ip",
-        data: {"ip" : ip},
-        success: (unique) => {
-            if(!unique) {
-                alert('접속자 ip는 이미 계정이 있습니다');
-                location.href = '/';
-            }
-        }
-    });
 });
 
 // Real-time Input Value Change Detection

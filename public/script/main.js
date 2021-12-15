@@ -1,6 +1,8 @@
-// import { io } from "socket.io-client";
-// const socket = io();
-const socket = io.connect('121.127.175.142', { transports: ['websocket'] });
+// 자취방
+// const socket = io.connect('121.127.175.142', { transports: ['websocket'] });
+
+// 수원 집
+const socket = io.connect('localhost:3000', { transports: ['websocket'] });
 
 // sector01 under area
 const msgForm = document.getElementById('form-msg');
@@ -42,8 +44,16 @@ const CHECK_BAN_LIST = 'check-ban-list';
 const GET_ALERT = 'get-alert';
 const GET_NEWS = 'get-news';
 
-// get ip adress
+// set parameter
 let ip_address = "";
+let nick_name = "";
+let level = "";
+let message_count = 0;
+let last_message;
+
+let stop_chat = false;
+let stop_chat_time;
+
 function getIp(){
   return new Promise((resolve, reject) => {
     $.getJSON('https://api.ipify.org?format=jsonp&callback=?', (data) => {
@@ -53,9 +63,12 @@ function getIp(){
 };
 getIp().then((ip) => {
   ip_address = ip;
+  nick_name = $('#nick_name').text();
+  level = $('#level').text();
+
   socket.emit(CHECK_BAN_LIST, ip, (result) => {
       if(result) {
-        alert("사이트로부터 벤 되었습니다.");
+        alert("사이트 이용이 정지되었습니다. 정지기간(* 일)");
         window.close();
       }
   });
@@ -81,16 +94,50 @@ getRandomColor = function(_isAlpha) {
 };
 let chat_color = getRandomColor();
 
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+function setCookie(name, value, options = {}) {
+
+  options = {
+    path: '/',
+    // 필요한 경우, 옵션 기본값을 설정할 수도 있습니다.
+    // httpOnly: true
+  };
+
+  if (options.expires instanceof Date) {
+    options.expires = options.expires.toUTCString();
+  }
+
+  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+  for (let optionKey in options) {
+    updatedCookie += "; " + optionKey;
+    let optionValue = options[optionKey];
+    if (optionValue !== true) {
+      updatedCookie += "=" + optionValue;
+    }
+  }
+  document.cookie = updatedCookie;
+}
+
+
+
+// ---------
+
 let appendMsg = (data) => {
   let item = document.createElement("li");
   data.name = (data.name || "개미");
   item.innerHTML = `<span style='color: ${data.color}'>${data.name}</span>: ${data.msg}`;
 
-  let item_child = document.createElement("div");
-  item_child.style.display = "none";
-  // ip 데이터 어떡하지~
-  item_child.setAttribute("data-ip", data.ip);
-  item.appendChild(item_child);
+  // let item_child = document.createElement("div");
+  // item_child.style.display = "none";
+  // // ip 데이터 어떡하지~
+  // item_child.setAttribute("data-ip", data.ip);
+  // item.appendChild(item_child);
 
   messages.appendChild(item);
   // 스크롤 기능 추가해야함
@@ -100,7 +147,32 @@ let appendMsg = (data) => {
 msgForm.addEventListener('submit', (e) => {
   e.preventDefault();
   if(inputMsg.value){
-    let data = {"msg": inputMsg.value, "name": $("#nick_name").text(), "ip": ip_address, "color": chat_color};
+    let chat_cookie = getCookie('stop_chat');
+    if(chat_cookie) {
+      let time = new Date();
+      let check_time = (time.getHours() * 3600) + (time.getMinutes() * 60) + time.getSeconds();
+    
+      if(check_time - chat_cookie <= 180) {
+        alert("채팅 도배로 인해 3분간 이용할 수 없습니다.");
+        return;
+      }
+    }
+    message_count++;
+    let time = new Date();
+    let message_time = (time.getHours() * 3600) + (time.getMinutes() * 60) + time.getSeconds();
+    
+    if(message_time - (last_message || message_time) <= 2) { // 메시지 간격이 2초 이하인데
+      if(message_count >= 5) { // 5개 이상 메시지를 보냈다
+        setCookie('stop_chat', message_time, {'max-age' : 180});
+        return;
+      }
+    }
+    else {
+      message_count = 0;
+    }
+    last_message = message_time;
+
+    let data = {"msg": inputMsg.value, "name": nick_name, "ip": ip_address, "color": chat_color};
     socket.emit(CHAT_MSG, data);
     appendMsg(data);
     inputMsg.value = ''; //input value reset
@@ -161,7 +233,6 @@ createButton.addEventListener('click', (e) => {
 
   let status = "toolbar=no,scrollbars=yes,resizable=yes,status=no,menubar=no,width=800,height=800,top=0,left=0"; 
   child_window = window.open("/article", "글 쓰기", status);
-  child_window.document.getElementById("author").value = nickName;
 });
 
 mypageButton.addEventListener('click', (e) => {

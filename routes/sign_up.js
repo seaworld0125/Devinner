@@ -5,6 +5,7 @@ const pool      = require("../model/db_pool_creater");
 
 const dbQuery   = require('../model/query');
 const INET      = require('../Helpers/inet');
+const { error } = require('winston');
 
 async function checkUnique(checkQuery) {
     let connection = await pool.getConnection();
@@ -13,8 +14,9 @@ async function checkUnique(checkQuery) {
         let data = await connection.query(checkQuery);
         connection.release();
 
-        if(data[0][0]) return Promise.resolve(false);
-        else return Promise.resolve(true);
+        // if(data[0][0]) return Promise.resolve(false);
+        // else return Promise.resolve(true);
+        return Promise.resolve(data[0][0]);
     }
     catch (error) {
         connection.release();
@@ -85,7 +87,7 @@ router.get('/id', (req, res) => {
 
         checkUnique(checkQuery)
         .then((result) => {
-            res.send(result);
+            res.send(result ? false : true);
         })
         .catch((error) => {
             res.send(error);
@@ -105,7 +107,7 @@ router.get('/nickname', (req, res) => {
 
         checkUnique(checkQuery)
         .then((result) => {
-            res.send(result);
+            res.send(result ? false : true);
         })
         .catch((error) => {
             res.send(error);
@@ -120,7 +122,7 @@ router.post('/ip', (req, res) => {
 
     checkUnique(checkQuery)
     .then((result) => {
-        res.send(result);
+        res.send(result ? false : true);
     })
     .catch((error) => {
         res.send(error);
