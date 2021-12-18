@@ -15,10 +15,14 @@ const logger        = require('morgan');
 const createError   = require('http-errors');
 
 // Router
-const indexRouter   = require('./routes/main');
-const authRouter    = require('./routes/auth');
+const indexRouter    = require('./routes/main');
+const authRouter     = require('./routes/auth');
 const signUpPageRouter = require('./routes/sign_up');
-const articleRouter = require('./routes/article');
+const articleRouter  = require('./routes/article');
+const activityRouter = require('./routes/activity');
+const roadmapRouter  = require('./routes/roadmap');
+const projectRouter  = require('./routes/project');
+const aboutRouter    = require('./routes/about');
 
 // hellper
 const eventName     = require('./Helpers/event');
@@ -53,10 +57,14 @@ app
 .use(express.static(path.join(__dirname, 'public')));
 
 app
+.use('/', indexRouter)
 .use('/article', articleRouter)
 .use('/signup', signUpPageRouter)
 .use('/auth', authRouter)
-.use('/', indexRouter);
+.use('/activity', activityRouter)
+.use('/roadmap', roadmapRouter)
+.use('/project', projectRouter)
+.use('/about', aboutRouter);
 
 app
 .use(function(req, res, next) {
@@ -66,7 +74,9 @@ app
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
-  
+    console.log(res.locals.message);
+    console.log(res.locals.error);
+
     // render the error page
     let status_ = err.status || 500;
     res.status(status_);

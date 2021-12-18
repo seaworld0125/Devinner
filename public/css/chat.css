@@ -1,0 +1,102 @@
+#sector01 {
+    width: var(--sector1-width);
+    height: 100%;
+    position: fixed; top: 0; right: 0;
+    background-color: rgb(27, 27, 27);
+} 
+#box-top{
+    width: var(--sector1-width);
+    height: 80px;
+    border-top-right-radius: 15px;
+
+    background-color: #5072A7;
+          
+    color: black;
+    position: fixed; 
+    top: 0; 
+    right: 0;
+}
+#box-top > button{
+    color: #fff; 
+    font-size: small;
+    font-weight: 500;
+  
+    background: #333; 
+    background-color: rgb(7, 22, 41);
+    
+    border: none; 
+    padding: 0 5px; 
+    border-radius: 3px; 
+    display: inline-block;
+}
+#box-msg{
+    width: var(--sector1-width);
+    height: calc(100% - (60px + 48px + 1.5rem));
+    position: fixed; 
+    top: 80px; 
+    right: 0;
+    overflow: scroll;
+}
+#box-send{
+    width: var(--sector1-width);
+    height: 3rem;
+    position: fixed; 
+    bottom: 0; 
+    right: 0;
+} 
+#box-title{
+    border: none; 
+    padding: 0.5rem 1rem;
+    margin: 0; 
+    outline: none; 
+    font-size: medium;
+}
+
+#input-msg { 
+    border: none; 
+    padding: 0 1rem; 
+    border-radius: 2rem; 
+    margin: 0.25rem; 
+    width: 80%; 
+}
+#input-msg:focus { 
+    outline: none; 
+}
+
+#form-msg {
+    padding: 0.25rem; 
+    display: flex; 
+    height: 3rem; 
+    box-sizing: border-box; 
+    backdrop-filter: blur(10px);
+}
+#form-msg > button { 
+    border: none; 
+    padding: 0 1rem; 
+    margin: 0.25rem; 
+    border-radius: 3px; 
+    outline: none; 
+    background-color: rgb(139, 189, 255);
+    color: black;
+    width: 20%;
+}
+  
+#messages { 
+    list-style-type: none; 
+    color: rgb(248, 248, 248);
+    margin: 0; 
+    padding: 0;
+}
+#messages > li { 
+    font-size: medium;
+    padding: 0.5rem 1rem; 
+}
+
+@media only screen and (max-width:991.98px) {
+    #sector02{
+      display: none;
+    }
+    #sector01, #box-top, #box-msg, #box-send{
+      width: 100%;
+    }
+}

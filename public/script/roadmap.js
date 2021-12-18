@@ -23,14 +23,7 @@ const inputPassword = document.getElementById('input-password');
 const signUpPage = document.getElementById('button-create-account');
 
 // sector02 logout area 
-// const logoutForm = document.getElementById('form-logout');
 const mypageButton = document.getElementById('button-mypage');
-// const commentForm = document.getElementById('form-comment');
-// const logoutButton = document.getElementById('button-logout');
-
-// sector02 under area
-const articleForm = document.getElementById('form-article');
-const createButton = document.getElementById('create-button');
 
 // socket.io Event naming
 const CONNECTED = 'connected';
@@ -104,7 +97,7 @@ getRandomColor = function(_isAlpha) {
     return ~~(Math.random() * (max - min + 1)) + min;
   };
 };
-let chat_color = getRandomColor();
+const chat_color = getRandomColor();
 
 function getCookie(name) {
   let matches = document.cookie.match(new RegExp(
@@ -116,7 +109,7 @@ function setCookie(name, value, options = {}) {
 
   options = {
     path: '/',
-    // 필요한 경우, 옵션 기본값을 설정할 수도 있습니다.
+    // 필요한 경우, 옵션 기본값을 설정가능
     // httpOnly: true
   };
 
@@ -239,30 +232,12 @@ signUpPage.addEventListener('click', (e) =>{
   location.href = '/signup';
 });
 
-createButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  window.name = "parentPage";
-
-  let status = "toolbar=no,scrollbars=yes,resizable=yes,status=no,menubar=no,width=800,height=800,top=0,left=0"; 
-  child_window = window.open("/article", "글 쓰기", status);
-});
-
 mypageButton.addEventListener('click', (e) => {
   e.preventDefault();
   // window.name = "parentPage";
 
   // child_window = window.open("/article", "마이페이지", "height=800");
   // child_window.document.getElementById("author").value = nickName;
-});
-
-// 부모에게 이벤트를 위임
-$(document).on("click", "#article_id", (e) => {
-  e.preventDefault();
-
-  window.name = "parentPage";
-
-  let status = "toolbar=no,scrollbars=yes,resizable=yes,status=no,menubar=no,width=800,height=800,top=0,left=0"; 
-  child_window = window.open(e.target.href, e.target.innerText, status);
 });
 
 socket.on(CONNECTED, (count) => {
@@ -279,4 +254,36 @@ socket.on(CHAT_MSG, (data) => {
 
 socket.on(GET_ALERT, (msg) => {
   alert(msg);
+});
+
+
+
+// guide function
+const guideMent = document.getElementById('guide');
+const guideBubble = document.getElementById('guide-bubble');
+
+guideMent.addEventListener('mouseover' || 'focus', (e) => {
+  guideBubble.style.display = 'block';
+});
+guideMent.addEventListener('mouseout' || 'blur', (e) => {
+  guideBubble.style.display = 'none';
+});
+
+guideBubble.addEventListener('mouseover' || 'focus', (e) => {
+  guideBubble.style.display = 'block';
+});
+guideBubble.addEventListener('mouseout' || 'blur', (e) => {
+  guideBubble.style.display = 'none';
+});
+
+// card pop-up function
+$('#board').on("click", "#card-img", (e) => {
+  e.preventDefault();
+
+  window.name = "parentPage";
+  let status = "toolbar=no,scrollbars=yes,resizable=yes,status=no,menubar=no,width=810,height=800,top=0,left=0"; 
+
+  console.log(e);
+
+  child_window = window.open(e.target.dataset.href, e.target.dataset.name, status);
 });

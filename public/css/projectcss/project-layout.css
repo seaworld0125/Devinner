@@ -1,0 +1,110 @@
+:root {
+    --width : 1100px;
+    
+    --header-height : 100px;
+
+    --section-height : 1700px;
+    
+    --article-width : 900px;
+
+    --article-news-height : 300px;
+    
+    --aside-width : 160px;
+    --aside-height : 500px;
+
+    --footer-height : 100px;
+}
+
+header {
+    /* border-color: darkgrey;
+    border-width: 1px;
+    border: solid; */
+
+    margin: 0 auto;
+    margin-top: 1px;
+    width: var(--width);
+    height: var(--header-height);
+
+    /* position: sticky;
+    top: 0; */
+}
+nav {
+    border-bottom: solid;
+    border-width: 1px;
+    border-color: rgba(169, 169, 169, 0.342);
+
+    margin: 0 auto;
+    margin-top: 1px;
+    width: var(--width);
+    height: 45px;
+
+    overflow-x: hidden;
+}
+section {
+    /* border-color: darkgrey;
+    border-width: 1px;
+    border: solid; */
+
+    margin: 0 auto;
+    margin-top: 1px;
+    position: relative;
+    z-index: -99;
+
+    width: var(--width);
+    height: var(--section-height);
+}
+#article-news {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    z-index: -90;
+
+    width: var(--article-width);
+    height: var(--article-news-height);
+}
+#board {
+    /* border-color: darkgrey;
+    border-width: 1px;
+    border: solid; */
+
+    position: absolute;
+    top: 10px;
+    left: 15px;
+
+    width: var(--article-width);
+    height: calc(var(--section-height) - 15px);
+
+    overflow-x: hidden;
+}
+#aside01 {
+    border-color: darkgrey;
+    border-width: 1px;
+    border: solid;
+
+    width: var(--aside-width);
+    height: var(--aside-height);
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+#aside02 {
+    border-color: darkgrey;
+    border-width: 1px;
+    border: solid;
+
+    width: var(--aside-width);
+    height: var(--aside-height);
+    position: absolute;
+    top: var(--aside-height);
+    right: 0px;
+}
+footer {
+    /* border-color: darkgrey;
+    border-width: 1px;
+    border: solid; */
+
+    margin: 0 auto;
+    margin-top: 1px;
+    width: var(--width);
+    height: var(--footer-height);
+}

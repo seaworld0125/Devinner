@@ -12,28 +12,33 @@
     --aside-width : 160px;
     --aside-height : 500px;
 
-    --footer-height : 200px;
+    --footer-height : 100px;
 }
 
 header {
-    border-color: darkgrey;
+    /* border-color: darkgrey;
     border-width: 1px;
-    border: solid;
+    border: solid; */
 
     margin: 0 auto;
     margin-top: 1px;
     width: var(--width);
     height: var(--header-height);
+
+    /* position: sticky;
+    top: 0; */
 }
 nav {
-    border-color: darkgrey;
+    border-bottom: solid;
     border-width: 1px;
-    border: solid;
+    border-color: rgba(169, 169, 169, 0.342);
 
     margin: 0 auto;
     margin-top: 1px;
     width: var(--width);
     height: 45px;
+
+    overflow-x: hidden;
 }
 section {
     /* border-color: darkgrey;
@@ -92,9 +97,9 @@ section {
     right: 0px;
 }
 footer {
-    border-color: darkgrey;
+    /* border-color: darkgrey;
     border-width: 1px;
-    border: solid;
+    border: solid; */
 
     margin: 0 auto;
     margin-top: 1px;

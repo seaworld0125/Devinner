@@ -46,11 +46,22 @@ article td {
     font-weight: 200;
     font-size: 15px;
 }
+#article_id {
+    color: rgba(255, 255, 255, 0.808);
+}
+#article_id:active {
+    color: rgba(255, 255, 255, 0.808);
+}
+#article_id:visited {
+    color: rgba(255, 255, 255, 0.808);
+}
 #article-title {
     font-size: large;
     font-weight: 600;
-    margin: 10px 0 10px 20px;
+    margin: 10px 0 10px 0px;
     float: left;
+
+    color: rgb(139, 189, 255, 0.7);
 }
 #create-button {
     background: #333; 
@@ -58,7 +69,7 @@ article td {
     font-size: small;
     font-weight: 600;
     margin: 10px 0px 10px 0px;
-    background-color: rgb(99, 152, 168);
+    background-color: rgb(139, 189, 255);
     
     border: none;
     border-radius: 3px; 

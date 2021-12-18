@@ -1,0 +1,33 @@
+body {
+    background-color: black;
+
+    width: 100%;
+    height: 100%;
+
+    color: cornsilk;
+}
+#title {
+    width: 100%;
+    height: auto;
+
+    background-color: rgba(230, 228, 223, 0.493);
+
+    color: black;
+    font-weight: 600;
+
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 8px;
+}
+#message {
+    width: 600px;
+    height: auto;
+
+    padding: 20px;
+    margin: 0 auto;
+}
+
+#return {
+    font-weight: 600;
+    text-align: right;
+}

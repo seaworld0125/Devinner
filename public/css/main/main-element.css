@@ -1,0 +1,107 @@
+html {
+    height: 100vh;
+    overflow: hidden;
+  }
+  body { 
+    width: auto;
+    height: 100%;
+    margin: 0px; 
+    z-index: -1000; 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+  }
+  
+  :root {
+    --sector1-width : 350px;
+  }
+  
+  #sector02 {
+    width: calc(100% - var(--sector1-width));
+    min-width: 592px;
+    height: 100%;
+    position: fixed; top: 0; left: 0;
+    background-color: black;
+    overflow-x: scroll;
+  }
+  
+  #bar-top{
+    width: 100%;
+    height: 30px;
+    padding-top: 5px;
+  }
+  #bar-top > .form-top{
+    width: auto;
+    height: 35px;
+    margin: 0 auto;
+    padding-right: 18px;
+    
+    font-size: small;
+    color: honeydew;
+  
+    float: right;
+  }
+  #bar-top button{
+    margin: 0px 3px;
+  
+    background: #333; 
+    color: black;
+    font-weight: 900;
+    background-color: rgb(139, 189, 255);
+    
+    border: none; 
+    padding: 0 5px; 
+    border-radius: 3px; 
+  
+    display: inline-block;
+  }
+  
+  #input-id{
+    margin: 0 3px;
+  
+    border: none; 
+    padding: 0 5px; 
+    border-radius: 3px; 
+   
+    width: 110px; 
+    height: 18px;
+  }
+  #input-id:focus { 
+    outline: none; 
+  }
+  #input-password{
+    margin: 0 3px;
+  
+    border: none; 
+    padding: 0 5px; 
+    border-radius: 3px; 
+    
+    width: 110px; 
+    height: 18px;
+  }
+  #input-password:focus {
+    outline: none; 
+  }
+  
+  #nav-button {
+    padding: 10.5px 0 10.5px 16px;
+    display: inline-block;
+  
+    color: rgb(206, 207, 201);
+  }
+  #nav-button:hover {
+    color: rgb(139, 189, 255);
+    text-decoration: none;
+  }
+  
+  @media only screen and (max-width:575.98px) {
+  }
+  @media only screen and (max-width:991.98px) {
+    #sector02{
+      display: none;
+    }
+    #sector01, #box-top, #box-msg, #box-send{
+      width: 100%;
+    }
+  }
+  @media only screen and (max-width:1199.98px) {
+  /* 데스크탑 */
+  }

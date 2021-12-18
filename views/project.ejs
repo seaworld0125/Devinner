@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="shortcut icon" href="/img/site_logo.ico">
-    <link rel="stylesheet" href="/css/main/main-layout.css?after">
-    <link rel="stylesheet" href="/css/main/main-element.css?after">
-    <link rel="stylesheet" href="/css/main/main-board.css?after">
+    <link rel="stylesheet" href="/css/projectcss/project-layout.css?after">
+    <link rel="stylesheet" href="/css/projectcss/project-element.css?after">
+    <link rel="stylesheet" href="/css/projectcss/project-card.css?after">
     <link rel="stylesheet" href="/css/chat.css?after">
-    <link rel="stylesheet" href="/css/fontstyle.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/css/uikit.min.css" />
+    <link rel="stylesheet" href="/css/fontstyle.css">
     <title>Devinner</title>
   </head>
   <body>
@@ -87,44 +87,21 @@
         <a href="/about" id="nav-button">About</a>
       </nav>
       <section>
-        <article id="article-board">
-          <div id="article-title">
-            개발자 게시판
+        <article id="board">
+          <div id="guide">
+            <b>대외활동 꼭 해야하나요 <img src="/img/icon-question.png" alt="" style="width: 20px;"></b>
           </div>
-          <button id="create-button">글쓰기</button>
-          <table id="article-content">
-            <tr id="board-top">
-              <th id="title" class="align-center">제목</th>
-              <th id="author" class="align-center">글쓴이</th>
-              <th id="date" class="align-center">날짜</th>
-              <th id="views" class="align-center">조회</th>
-              <th id="hits" class="align-center">추천</th>
-            </tr>
-            <% board_list.forEach(article => { %>
-              <tr>
-                  <!-- <td id="article_id" style="display: none;"><%=article.id%></td>  -->
-                  <td id="title" class="align-left"><a id="article_id" href="/article/<%=article.id%>"><%=article.title%></a></td>
-                  <td id="author" class="align-left"><%=article.author%></td>
-                  <td id="date" class="align-center"><%=article.date%></td>
-                  <td id="views" class="align-center"><%=article.view%></td>
-                  <td id="hits" class="align-center"><%=article.hits%></td>
-              </tr>
-            <% }); %>
-          </table>
-        </article>
-        <article id="article-news">
-          <div class="uk-height-medium" uk-slideshow="animation: slide; autoplay: true; autoplay-interval: 5000; pause-on-hover: true;">
-            <ul class="uk-slideshow-items" id="form-article">
-              <% news.forEach(article => { %>
-                <article class="uk-article uk-margin-remove">
-                  <h1 class="uk-article-title">오늘의 채용 뉴스</h1>
-                  <p class="uk-article-meta"><%-article.title%></p>
-                  <p class="uk-text-lead" style="color: rgba(255, 255, 255, 0.61);"><%-article.description%></p>
-                  <a class="uk-button uk-button-text" href="<%=article.link%>" target="_blank" style="font-weight: 900;">더 읽기</a>
-                </article>
-              <% }); %>
-            </ul>
+          <div id="guide-bubble">
+            만약 프로그래밍을 접한지 얼마 안 된 초보 개발자라면,<br>
+            한 번쯤은 꼭 도전해 보라고 추천하고 싶어요.<br>
+            개발자의 장점은 혼자서 원하는 모든 걸 만들 수 있지만<br>
+            모든 걸 하기 위해서 많은 걸 배워야 하는 만큼,<br>
+            자신의 전문성을 기르기 위한 시간이 부족할 수도 있어요.<br>
+            그리고 다른 분야의 개발자들과 협업하는 경험도<br>
+            아무 때나 할 수 있는 흔한 경험이 아니라고 생각해요.<br>
+            기회가 된다면 꼭 도전해 보세요!😎
           </div>
+          <div id="message-box">준비 중입니다!</div>
         </article>
         <aside id="aside01">
           aside01 - 광고영역
@@ -142,5 +119,5 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-latest.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/js/uikit.min.js"></script>
-  <script src="/script/main.js"></script>
+  <script src="/script/project.js"></script>
 </html>
