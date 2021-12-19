@@ -1,6 +1,9 @@
-let commentList = document.getElementById("comment-list");
+const commentList = document.getElementById("comment-list");
+const contentButtonBox = document.getElementById("content-button-box");
 
-let articleDeleteButton = document.getElementById("delete-button");
+let prev_event; 
+let prev_event_id;
+let put_url;
 
 commentList.addEventListener("click", function(e) {
     let buttonName = e.target.innerText;
@@ -8,17 +11,19 @@ commentList.addEventListener("click", function(e) {
     if(buttonName === "답글" || buttonName === "수정") {
         let brotherNode = e.target.parentNode.parentNode.childNodes;
         let replyForm = document.getElementById("reply-form-" + e.target.value);
-        let childNode = replyForm.childNodes;
+        let childNodes = replyForm.childNodes;
 
         if(buttonName === "답글") {
-            childNode[1].innerText = "비방/욕설 자제";
-            replyForm.method = "post";
+            childNodes[1].innerText = "비방/욕설 자제";
         }
-        // else if(buttonName === "수정") {
-        //     childNode[1].innerText = brotherNode[5].innerText;
-        //     replyForm.method = "put";
-        //     replyForm.action = "/article/" + e.target.value + "/comment";
-        // }
+        else if(buttonName === "수정") {
+            childNodes[1].innerText = brotherNode[5].innerText;
+
+            prev_event = buttonName;
+            prev_event_id = e.target.value;
+            put_url = "/article/" + e.target.value + "/comment";
+        }
+
         if(replyForm.style.display === "none") {
             closeAllReplyForm();
             replyForm.style.display = "block";
@@ -28,14 +33,25 @@ commentList.addEventListener("click", function(e) {
             replyForm.style.display = "block";
         }
     }
-    else if(buttonName === "삭제"){
+    else if(buttonName === "삭제") {
         deleteMethod(e.target.value, true);
+    }
+    else if(buttonName === "등록" && prev_event === "수정") {
+        e.preventDefault();
+
+        let textarea = document.getElementById("textarea-" + prev_event_id);
+        putMethod(put_url, textarea.value);
     }
 });
 
-articleDeleteButton.addEventListener('click', function(e) {
-    deleteMethod(e.target.value, false);
-})
+contentButtonBox.addEventListener("click", function(e) {
+    let buttonName = e.target.innerText;
+    console.log(buttonName);
+
+    if(buttonName === "삭제") {
+        deleteMethod(e.target.value, false);
+    }
+});
 
 function closeAllReplyForm() {
     let allReplyForm = document.getElementsByClassName("reply-form");
@@ -57,10 +73,19 @@ function deleteMethod(reqUrl, ifReload) {
         }).done((response) => {
             if(ifReload)
                 window.location.reload(true);
-            else {
-                opener.location.reload(true);
+            else
                 window.close();
-            }
         });
     }
+}
+
+function putMethod(reqUrl, comment) {
+    $.ajax({
+        url : reqUrl,
+        method : "PUT",
+        dataType : "text",
+        data : {"data" : comment},
+    }).done((response) => {
+        window.location.reload(true);
+    });
 }

@@ -229,3 +229,9 @@ button {
     height: 60px;
     float: right;
 }
+
+#comment-regist {
+    width: 700px;
+    margin: 0 auto;
+    padding: 15px 10px 0px 10px;
+}
