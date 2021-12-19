@@ -1,66 +1,10 @@
 const express   = require('express');
 const router    = express.Router();
 const mysql     = require("mysql2");
+
 const pool      = require("../model/db_pool_creater");
-
 const dbQuery   = require('../model/query');
-
-async function postData(query) {
-    let connection = await pool.getConnection();
-    try {
-        await connection.beginTransaction();
-        for(let element of query)
-            await connection.query(element);
-
-        await connection.commit();
-        connection.release();
-
-        return Promise.resolve();
-    } 
-    catch (error) {
-        await connection.rollback();
-        connection.release();
-        
-        return Promise.reject(new Error(error));
-    }
-}
-async function updateData(query) {
-    let connection = await pool.getConnection();
-    try {
-        await connection.beginTransaction();
-        await connection.query(query);
-        await connection.commit();
-        connection.release();
-
-        return Promise.resolve();    
-    } 
-    catch (error) {
-        await connection.rollback();
-        connection.release();
-
-        return Promise.reject(new Error(error));
-    }
-}
-async function getData(query) {
-    let connection = await pool.getConnection();
-    try {
-        await connection.beginTransaction();
-        let data = [];
-        for(let element of query) {
-            let tmp = await connection.query(element);
-            data.push(tmp[0]);
-        }
-        connection.release();
-
-        return Promise.resolve(data);    
-    } 
-    catch (error) {
-        console.log(error);
-        connection.release();
-
-        return Promise.reject(new Error(error));
-    }
-}
+const transaction = require('../model/article');
 
 function fillZero(width, data){
     let str = data.toString();
@@ -77,7 +21,7 @@ router.get('/', (req, res) => {
     }
 });
 
-// 게시글 POST
+// 게시글 작성
 router.post('/', (req, res) => {
     if(req.session.auth) {
         let today = new Date();
@@ -92,7 +36,7 @@ router.post('/', (req, res) => {
 
         let queries = [board_query, content_query];
     
-        postData(queries)
+        transaction.postData(queries, pool)
         .then(() => {
             res.statusCode = 302;
             res.setHeader('Location', '/');
@@ -116,9 +60,9 @@ router.get('/:number', (req, res) => {
                     mysql.format(dbQuery.GET_COMMENT, req.params.number), 
                     mysql.format(dbQuery.GET_REPLY, req.params.number)];
 
-    updateData(updateQuery)
+    transaction.updateData(updateQuery, pool)
     .then(() => {
-        getData(getQuery)
+        transaction.getData(getQuery, pool)
         .then((data) => {
             let article = data[0][0];
             let comments = data[1];
@@ -151,7 +95,7 @@ router.post('/:number/comment', (req, res) => {
 
         var query = [mysql.format(dbQuery.NEW_COMMENT, [number, author, comment])];
     
-        postData(query)
+        transaction.postData(query, pool)
         .then(() => {
             res.statusCode = 302;
             res.setHeader('Location', `/article/${number}`);
@@ -192,6 +136,7 @@ router.post('/:number/comment', (req, res) => {
 //         res.render('login_error', {});
 //     }
 // });
+
 // 답글 달기
 router.post('/:number/reply', (req, res) => {
     if(req.session.auth) {
@@ -202,7 +147,7 @@ router.post('/:number/reply', (req, res) => {
 
         var query = [mysql.format(dbQuery.NEW_REPLY, [number, comment_id, author, reply])];
     
-        postData(query)
+        transaction.postData(query, pool)
         .then(() => {
             res.statusCode = 302;
             res.redirect('back');
@@ -219,12 +164,12 @@ router.post('/:number/reply', (req, res) => {
     }
 });
 
-// 댓글 또는 답글 또는 게시글 삭제
+// 게시글 삭제
 router.delete('/:number', (req, res) => {
     if(req.session.auth) {
         let number = req.params.number;
         let query = mysql.format(dbQuery.DELETE_ARTICLE, number);
-        updateData(query)
+        transaction.updateData(query, pool)
         .then(() => {
             res.statusCode = 200;
             res.end();
@@ -239,11 +184,13 @@ router.delete('/:number', (req, res) => {
         res.render('login_error', {});
     }
 });
+
+// 댓글 삭제
 router.delete('/:number/comment', (req, res) => {
     if(req.session.auth) {
         let number = req.params.number;
         let query = mysql.format(dbQuery.DELETE_COMMENT, number);
-        updateData(query)
+        transaction.updateData(query, pool)
         .then(() => {
             res.statusCode = 200;
             res.end();
@@ -258,11 +205,13 @@ router.delete('/:number/comment', (req, res) => {
         res.render('login_error', {});
     }
 });
+
+// 답글 삭제
 router.delete('/:number/reply', (req, res) => {
     if(req.session.auth) {
         let number = req.params.number;
         let query = mysql.format(dbQuery.DELETE_REPLY, number);
-        updateData(query)
+        transaction.updateData(query, pool)
         .then(() => {
             res.statusCode = 200;
             res.end();

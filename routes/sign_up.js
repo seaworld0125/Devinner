@@ -14,12 +14,11 @@ async function checkUnique(checkQuery) {
         let data = await connection.query(checkQuery);
         connection.release();
 
-        // if(data[0][0]) return Promise.resolve(false);
-        // else return Promise.resolve(true);
         return Promise.resolve(data[0][0]);
     }
     catch (error) {
         connection.release();
+
         return Promise.reject(new Error(error));
     }
 }
@@ -37,6 +36,7 @@ async function makeAccount(makeQuery) {
     catch (error) {
         await connection.rollback();
         connection.release();
+        
         return Promise.reject(new Error(error));
     }
 }
