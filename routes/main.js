@@ -1,10 +1,11 @@
 const express       = require('express');
 const router        = express.Router();
+const request       = require("request");
+
 const pool          = require("../model/db_pool_creater");
 const dbQuery       = require("../model/query");
-const mysql         = require("mysql2");
+const transaction   = require("../model/main");
 
-const request       = require("request");
 const news_config   = require("../conf/news");
 
 var main_news = new Array();
@@ -24,36 +25,11 @@ request(news_config.main_option, function (error, response) {
     });
 });
 
-async function getBoardList(query) {
-    let connection = await pool.getConnection();
-    try {
-        await connection.beginTransaction();
-        let data = await connection.query(query);
-        connection.release();
-
-        return Promise.resolve(data[0].reverse());    
-    } 
-    catch (error) {
-        console.log(error);
-        connection.release();
-
-        return Promise.reject(new Error(error));
-    }
-}
-
 /* GET home page. */
 router.get('/', (req, res) => {
-    getBoardList(dbQuery.GET_BOARD_LIST)
+    transaction.getBoardList(dbQuery.GET_BOARD_LIST, pool)
     .then((board_list) => {
-        var session;
-
-        if(req.session.auth) {
-            session = req.session;
-            res.render("main", {"board_list" : board_list, "session" : session, "news" : main_news});
-        }
-        else {
-            res.render("main", {"board_list" : board_list, "session" : session, "news" : main_news});
-        }
+        res.render("main", {"board_list" : board_list, "session" : (req.session.auth ? req.session : undefined), "news" : main_news});
     })
     .catch((error) => {
         console.log(error);

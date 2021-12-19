@@ -83,7 +83,7 @@ app
     res.render('error', {'error' : status_});
 });
 
-var manager = require('./Helpers/client_manager');
+const manager = require('./Helpers/client_manager');
 
 io.on('connection', (socket) => {
     manager.addClientNum();
