@@ -4,6 +4,7 @@ const mysql     = require("mysql2");
 const pool      = require("../model/db_pool_creater");
 
 const dbQuery   = require('../model/query');
+const hashModule = require('../Helpers/hash_module');
 
 async function checkAccount(checkQeury) {
     let connection = await pool.getConnection();
@@ -28,25 +29,29 @@ router.post('/', (req, res) => {
 
     let checkQeury = mysql.format(dbQuery.CHECK_ACCOUNT, [id]);
 
-    checkAccount(checkQeury).then((result) => {
-        if(result && result.password == password) { // 비밀번호 대조 // 암호화 필요함
-            req.session.auth = true;
-            req.session.nickname = result.nickname;
-            req.session.level = result.level;
-
-            req.session.save((err) => {
-                if(err) {
-                    console.log(err);
-                    res.status(err.status || 500);
-                    res.render('error', {"error" : err.status});
-                }
-                else {
-                    console.log("로그인 성공");
-                    res.statusCode = 302;
-                    res.setHeader('Location', '/');
-                    res.end();
-                }
-            });
+    checkAccount(checkQeury)
+    .then(async (result) => {
+        if(result) {
+            let hashedPassword = await hashModule.makeHashedPassword(result.salt, password);
+            if(hashedPassword === result.password) {
+                req.session.auth = true;
+                req.session.nickname = result.nickname;
+                req.session.level = result.level;
+    
+                req.session.save((err) => {
+                    if(err) {
+                        console.log(err);
+                        res.status(err.status || 500);
+                        res.render('error', {"error" : err.status});
+                    }
+                    else {
+                        console.log("로그인 성공");
+                        res.statusCode = 302;
+                        res.setHeader('Location', '/');
+                        res.end();
+                    }
+                });
+            }
         } 
         else{
             res.statusCode = 302;

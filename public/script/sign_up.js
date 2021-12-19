@@ -4,23 +4,20 @@ const password = document.getElementById('password');
 const nickname = document.getElementById('nickname');
 const button01 = document.getElementById('button01');
 const button02 = document.getElementById('button02');
+const github = document.getElementById('github');
+
 const createAccountForm = document.getElementById('form-new-account');
 
-// socket.io Event naming
-const CHECK_USERNAME = 'check-username';
-const CHECK_NICKNAME = 'check-nickname';
-const CREATE_ACCOUNT = 'create-account';
-const SET_NICKNAME = 'set-nickname';
-
 // account check values
-let password_check = false;
 let username_check = false;
 let nickname_check = false;
+let password_user_check = false;
+let password_length_check = false;
 let username_length_check = false;
 let nickname_length_check = false;
 
-// ip
-var ip = "";
+// get ip
+let ip = "";
 $.getJSON('https://ipapi.co/json/', function(result){
     ip =  result.ip;
 });
@@ -57,15 +54,27 @@ $("#password").on("propertychange change keyup paste input", function() {
     let length_ = old_password.length;
     if(length_ == 0){
         $("label[for='password']").text('비밀번호');
-        password_check = false;
+        password_length_check = false;
     }
     else if(length_ < 6 || length_ > 20){
         $("label[for='password']").text('6글자 이상 20글자 이하입니다.');
-        password_check = false;
+        password_length_check = false;
     }
     else if(length_ > 5 && length_ < 21){
         $("label[for='password']").text('적당한 길이네요!');
-        password_check = true;
+        password_length_check = true;
+    }
+});
+$("#password-check").on("propertychange change keyup paste input", function() {
+    var currentVal = $(this).val();
+
+    if(currentVal === password.value && currentVal.length > 0) {
+        $("label[for='password-check']").text('비밀번호가 일치합니다');
+        password_user_check = true;
+    }
+    else {
+        $("label[for='password-check']").text('비밀번호가 일치하지 않습니다');
+        password_user_check = false;
     }
 });
 var old_nickname = "";      
@@ -143,7 +152,8 @@ createAccountForm.addEventListener('submit', (e) => {
     e.preventDefault();
     // check new account
     if(!username_length_check) {alert('아이디 길이를 확인해주세요'); return;}
-    if(!password_check) {alert('비밀번호를 확인해주세요'); return;}
+    if(!password_length_check) {alert('비밀번호를 확인해주세요'); return;}
+    if(!password_user_check) {alert('비밀번호가 일치하지 않습니다'); return;}
     if(!nickname_length_check) {alert('닉네임 길이를 확인해주세요'); return;}
     if(!username_check) {alert('아이디 중복을 확인해주세요'); return;}
     if(!nickname_check) {alert('닉네임 중복을 확인해주세요'); return;}
@@ -152,12 +162,14 @@ createAccountForm.addEventListener('submit', (e) => {
     let username_ = username.value;
     let password_ = password.value;
     let nickname_ = nickname.value;
+    let github_ = github.value;
 
     // Send Account Information & Redirect to Home Screen
     let account = {"id" : username_, 
                 "password" : password_, 
                 "nickname" : nickname_, 
-                "ip" : ip};
+                "ip" : ip,
+                "github" : github_};
     $.ajax({
         type: "POST",
         url: "/signup",

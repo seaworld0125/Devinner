@@ -7,6 +7,8 @@ const dbQuery   = require('../model/query');
 const INET      = require('../Helpers/inet');
 const { error } = require('winston');
 
+const hashModule = require('../Helpers/hash_module');
+
 async function checkUnique(checkQuery) {
     let connection = await pool.getConnection();
     try {
@@ -50,29 +52,34 @@ router.get('/', (req, res) => {
     }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     if(req.session.auth) {
         res.render('login_error', {});
+        return;
     }
-    else {
-        let id = req.body.id;
-        let password = req.body.password;
-        let nickname = req.body.nickname;
-        let ip = INET.aton(req.body.ip);
-        
-        let values = [0, id, password, nickname, ip];
-        let makeQuery = mysql.format(dbQuery.CREATE_ACCOUNT, values);
 
-        console.log(makeQuery);
+    let id = req.body.id;
+    let password = req.body.password;
+    let nickname = req.body.nickname;
+    let ip = INET.aton(req.body.ip);
+    let github = req.body.github;
 
-        makeAccount(makeQuery)
-        .then((result) => {
-            res.send(result);
-        })
-        .catch((error) => {
-            res.send(error);
-        });
-    }
+    let salt = await hashModule.makeSalt();
+    let hashedPassword = await hashModule.makeHashedPassword(salt, password);
+    console.log("salt :" + salt);
+
+    let values = [0, id, hashedPassword, salt, nickname, ip, github];
+    let makeQuery = mysql.format(dbQuery.CREATE_ACCOUNT, values);
+
+    console.log(makeQuery);
+
+    makeAccount(makeQuery)
+    .then((result) => {
+        res.send(result);
+    })
+    .catch((error) => {
+        res.send(error);
+    });
 });
 
 router.get('/id', (req, res) => {
