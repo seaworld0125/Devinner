@@ -7,12 +7,10 @@ const httpServer    = http.createServer(app);
 const io            = new Server(httpServer);
 const port          = 3000;
 
-const request       = require('request');
 const session       = require('express-session');
 const cookieParser  = require('cookie-parser');
 const path          = require('path');
 const logger        = require('morgan');
-const createError   = require('http-errors');
 
 // Router
 const indexRouter    = require('./routes/main');
@@ -23,6 +21,7 @@ const activityRouter = require('./routes/activity');
 const roadmapRouter  = require('./routes/roadmap');
 const projectRouter  = require('./routes/project');
 const aboutRouter    = require('./routes/about');
+const errorRouter    = require('./routes/error');
 
 // hellper
 const eventName     = require('./Helpers/event');
@@ -64,11 +63,12 @@ app
 .use('/activity', activityRouter)
 .use('/roadmap', roadmapRouter)
 .use('/project', projectRouter)
-.use('/about', aboutRouter);
+.use('/about', aboutRouter)
+.use('/error', errorRouter);
 
 app
 .use(function(req, res, next) {
-    next(createError(404));
+    res.redirect('/error/' + (err.status || 404));
 })
 .use(function(err, req, res, next) {
     // set locals, only providing error in development
@@ -78,12 +78,11 @@ app
     console.log(res.locals.error);
 
     // render the error page
-    let status_ = err.status || 500;
-    res.status(status_);
-    res.render('error', {'error' : status_});
+    res.redirect('/error/' + (err.status || 500));
 });
 
 const manager = require('./Helpers/client_manager');
+const { error } = require('console');
 
 io.on('connection', (socket) => {
     manager.addClientNum();
@@ -96,28 +95,25 @@ io.on('connection', (socket) => {
     socket.on(eventName.CHAT_MSG, (data) => {
         socket.broadcast.emit(eventName.CHAT_MSG, data);
     });
-    socket.on(eventName.CHECK_BAN_LIST, (ip, returnResult) => {
+    socket.on(eventName.CHECK_BAN_LIST, async (ip, returnResult) => {
         let aton = INET.aton(ip);
         let checkQeury = mysql.format(dbQuery.CHECK_BAN_LIST, [aton]);
 
-        (async () => {
-            let connection = await pool.getConnection();
-            try {
-                await connection.beginTransaction();
-                let data = await connection.query(checkQeury);
-                connection.release();
+        let connection = await pool.getConnection();
+        try {
+            await connection.beginTransaction();
+            let data = await connection.query(checkQeury);
+            connection.release();
 
-                if(data[0][0])
-                    returnResult(true);
-                else
-                    returnResult(false);
-            }
-            catch (error) {
-                console.log(error);
-                connection.release();
+            if(data[0][0])
+                returnResult(true);
+            else
                 returnResult(false);
-            }
-        })();
+        }
+        catch (error) {
+            connection.release();
+            returnResult(false);
+        }
     });
 });
 
