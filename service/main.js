@@ -1,5 +1,7 @@
+const pool = require('../model/db_pool_creater');
+
 module.exports = {
-    getBoardList : async function(query, pool) {
+    getData : async function(query) {
         let connection = await pool.getConnection();
         try {
             await connection.beginTransaction();

@@ -1,11 +1,11 @@
+const pool = require('../model/db_pool_creater');
+
 module.exports = {
-    postData : async function(query, pool) {
+    postData : async function(query_) {
         let connection = await pool.getConnection();
         try {
             await connection.beginTransaction();
-            for(let element of query)
-                await connection.query(element);
-    
+            await connection.query(query_);
             await connection.commit();
             connection.release();
     
@@ -18,11 +18,11 @@ module.exports = {
             return Promise.reject(new Error(error));
         }
     },
-    updateData : async function(query, pool) {
+    updateData : async function(query_) {
         let connection = await pool.getConnection();
         try {
             await connection.beginTransaction();
-            await connection.query(query);
+            await connection.query(query_);
             await connection.commit();
             connection.release();
     
@@ -35,23 +35,18 @@ module.exports = {
             return Promise.reject(new Error(error));
         }
     },
-    getData : async function(query, pool) {
+    getData : async function(query_) {
         let connection = await pool.getConnection();
         try {
             await connection.beginTransaction();
-            let data = [];
-            for(let element of query) {
-                let tmp = await connection.query(element);
-                data.push(tmp[0]);
-            }
+            let data = await connection.query(query_);
             connection.release();
-    
-            return Promise.resolve(data);    
+
+            return Promise.resolve(data[0]);    
         } 
         catch (error) {
-            console.log(error);
             connection.release();
-    
+
             return Promise.reject(new Error(error));
         }
     }

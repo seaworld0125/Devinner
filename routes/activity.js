@@ -1,9 +1,7 @@
 const express       = require('express');
 const router        = express.Router();
+const controller    = require('../controller/activity');
 
-/* GET home page. */
-router.get('/', (req, res) => {
-    res.render("activity", {"session" : (req.session.auth ? req.session : undefined)});
-});
+router.get('/', controller.getActivityPage);
   
 module.exports = router;

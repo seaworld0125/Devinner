@@ -1,9 +1,7 @@
 const express       = require('express');
 const router        = express.Router();
+const controller    = require('../controller/project');
 
-/* GET home page. */
-router.get('/', (req, res) => {
-    res.render("project", {"session" : (req.session.auth ? req.session : undefined)});
-});
+router.get('/', controller.getProjectPage);
   
 module.exports = router;
