@@ -6,7 +6,7 @@ const button01 = document.getElementById('button01');
 const button02 = document.getElementById('button02');
 const github = document.getElementById('github');
 
-const createAccountForm = document.getElementById('form-new-account');
+const submitButton = document.getElementById('submit-button');
 
 // account check values
 let username_check = false;
@@ -147,10 +147,9 @@ button02.addEventListener('click', (e) => {
     else alert('닉네임 길이를 다시 확인해주세요');              
 });
 
-// create new account & redirect
-createAccountForm.addEventListener('submit', (e) => {
+submitButton.addEventListener('click', (e) => {
     e.preventDefault();
-    // check new account
+    // check input
     if(!username_length_check) {alert('아이디 길이를 확인해주세요'); return;}
     if(!password_length_check) {alert('비밀번호를 확인해주세요'); return;}
     if(!password_user_check) {alert('비밀번호가 일치하지 않습니다'); return;}
@@ -158,32 +157,8 @@ createAccountForm.addEventListener('submit', (e) => {
     if(!username_check) {alert('아이디 중복을 확인해주세요'); return;}
     if(!nickname_check) {alert('닉네임 중복을 확인해주세요'); return;}
     
-    // get users input
-    let username_ = username.value;
-    let password_ = password.value;
-    let nickname_ = nickname.value;
-    let github_ = github.value;
+    document.getElementById('ip').value = ip;
 
-    // Send Account Information & Redirect to Home Screen
-    let account = {"id" : username_, 
-                "password" : password_, 
-                "nickname" : nickname_, 
-                "ip" : ip,
-                "github" : github_};
-    $.ajax({
-        type: "POST",
-        url: "/signup",
-        data: account,
-        success: (result) => {
-            if(result) {
-                alert('회원가입을 환영합니다!');
-                location.href = '/';
-            }
-            else {
-                alert('회원가입 실패 : 서버 에러(' + result + ')');
-                location.href = '/';
-            }
-        }
-    });
+    document.createForm.submit();
 });
     

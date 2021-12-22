@@ -1,7 +1,7 @@
 #card {
     width: 860px;
     height: 280px;
-    margin-left: 18px;
+    margin: 0 auto;
     margin-bottom: 13px;
 
     border-radius: 15px;
@@ -19,7 +19,7 @@
 #guide {
     width: 195px;
     height: auto;
-    margin-bottom: 30px;
+    margin: 10px 0 30px 0;
     
     color: rgb(77, 153, 204);
 }
@@ -30,8 +30,8 @@
     border-radius: 12px;
 
     position: absolute;
-    top: 2px;
-    left: 96px;
+    top: 62px;
+    left: 120px;
     z-index: 999;
 
     background-color: rgba(243, 211, 170, 0.938);

@@ -16,63 +16,46 @@
 }
 
 header {
-    /* border-color: darkgrey;
-    border-width: 1px;
-    border: solid; */
-
     margin: 0 auto;
     margin-top: 1px;
     width: var(--width);
     height: var(--header-height);
-
-    /* position: sticky;
-    top: 0; */
 }
 nav {
     border-bottom: solid;
     border-width: 1px;
     border-color: rgba(169, 169, 169, 0.342);
-
-    margin: 0 auto;
-    margin-top: 1px;
+    
     width: var(--width);
     height: 45px;
-
-    overflow-x: hidden;
-}
-section {
-    /* border-color: darkgrey;
-    border-width: 1px;
-    border: solid; */
 
     margin: 0 auto;
     margin-top: 1px;
     position: relative;
-    z-index: -99;
-
+    overflow-x: hidden;
+}
+section {
     width: var(--width);
     height: var(--section-height);
+
+    padding: 0 20px 0 20px;
+    margin: 0 auto;
+    margin-top: 1px;
+    position: relative;
 }
 #article-news {
-    position: absolute;
-    top: 10px;
-    left: 15px;
-    z-index: -90;
-
     width: var(--article-width);
     height: var(--article-news-height);
+    margin-top: 10px;
+
+    position: relative;
 }
 #article-board {
-    /* border-color: darkgrey;
-    border-width: 1px;
-    border: solid; */
-
-    position: absolute;
-    top: calc(var(--article-news-height) + 10px);
-    left: 15px;
-
     width: var(--article-width);
     height: calc(var(--section-height) - var(--article-news-height) - 10px);
+    
+    position: relative;
+    z-index: 99;
 }
 #aside01 {
     border-color: darkgrey;
@@ -82,8 +65,8 @@ section {
     width: var(--aside-width);
     height: var(--aside-height);
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 50px;
+    right: 20px;
 }
 #aside02 {
     border-color: darkgrey;
@@ -93,14 +76,10 @@ section {
     width: var(--aside-width);
     height: var(--aside-height);
     position: absolute;
-    top: var(--aside-height);
-    right: 0px;
+    top: calc(var(--aside-height) + 50px);
+    right: 20px;
 }
 footer {
-    /* border-color: darkgrey;
-    border-width: 1px;
-    border: solid; */
-
     margin: 0 auto;
     margin-top: 1px;
     width: var(--width);

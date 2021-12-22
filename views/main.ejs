@@ -78,14 +78,28 @@
           </form>
         <% } %>
       </div>
-      <nav>
-        <a href="/" id="nav-button">개발자 게시판</a>
-        <a href="/activity" id="nav-button">대외활동 모음</a>
-        <a href="/roadmap" id="nav-button">개발자 로드맵</a>
-        <a href="/project" id="nav-button">Best 사이드 프로젝트</a>
-        <a href="/about" id="nav-button">About</a>
-      </nav>
       <section>
+        <nav>
+          <a href="/" id="nav-button">개발자 게시판</a>
+          <a href="/activity" id="nav-button">대외활동 모음</a>
+          <a href="/roadmap" id="nav-button">개발자 로드맵</a>
+          <a href="/project" id="nav-button">Best 사이드 프로젝트</a>
+          <a href="/about" id="nav-button">About</a>
+        </nav>
+        <article id="article-news">
+          <div class="uk-height-medium" uk-slideshow="animation: slide; autoplay: true; autoplay-interval: 5000; pause-on-hover: true;">
+            <ul class="uk-slideshow-items" id="form-article">
+              <% news.forEach(article => { %>
+                <article class="uk-article uk-margin-remove">
+                  <h1 class="uk-article-title">오늘의 채용 뉴스</h1>
+                  <p class="uk-article-meta"><%-article.title%></p>
+                  <p class="uk-text-lead" style="color: rgba(255, 255, 255, 0.61);"><%-article.description%></p>
+                  <a class="uk-button uk-button-text" href="<%=article.link%>" target="_blank" style="font-weight: 900;">더 읽기</a>
+                </article>
+              <% }); %>
+            </ul>
+          </div>
+        </article>
         <article id="article-board">
           <div id="article-title">
             개발자 게시판
@@ -101,7 +115,6 @@
             </tr>
             <% board_list.forEach(article => { %>
               <tr>
-                  <!-- <td id="article_id" style="display: none;"><%=article.id%></td>  -->
                   <td id="title" class="align-left"><a id="article_id" href="/article/<%=article.id%>"><%=article.title%></a></td>
                   <td id="author" class="align-left"><%=article.author%></td>
                   <td id="date" class="align-center"><%=article.date%></td>
@@ -110,20 +123,6 @@
               </tr>
             <% }); %>
           </table>
-        </article>
-        <article id="article-news">
-          <div class="uk-height-medium" uk-slideshow="animation: slide; autoplay: true; autoplay-interval: 5000; pause-on-hover: true;">
-            <ul class="uk-slideshow-items" id="form-article">
-              <% news.forEach(article => { %>
-                <article class="uk-article uk-margin-remove">
-                  <h1 class="uk-article-title">오늘의 채용 뉴스</h1>
-                  <p class="uk-article-meta"><%-article.title%></p>
-                  <p class="uk-text-lead" style="color: rgba(255, 255, 255, 0.61);"><%-article.description%></p>
-                  <a class="uk-button uk-button-text" href="<%=article.link%>" target="_blank" style="font-weight: 900;">더 읽기</a>
-                </article>
-              <% }); %>
-            </ul>
-          </div>
         </article>
         <aside id="aside01">
           aside01 - 광고영역

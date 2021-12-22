@@ -20,19 +20,21 @@ html {
     height: 100%;
     position: fixed; top: 0; left: 0;
     background-color: black;
+    
     overflow-x: scroll;
   }
   
   #bar-top{
-    width: 100%;
+    width: 1100px;
     height: 30px;
     padding-top: 5px;
+
+    margin: 0 auto;
   }
   #bar-top > .form-top{
     width: auto;
     height: 35px;
     margin: 0 auto;
-    padding-right: 18px;
     
     font-size: small;
     color: honeydew;
@@ -82,7 +84,7 @@ html {
   }
   
   #nav-button {
-    padding: 10.5px 0 10.5px 16px;
+    margin-right: 15px;
     display: inline-block;
   
     color: rgb(206, 207, 201);
