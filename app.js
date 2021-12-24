@@ -22,6 +22,8 @@ const roadmapRouter  = require('./routes/roadmap');
 const projectRouter  = require('./routes/project');
 const aboutRouter    = require('./routes/about');
 const errorRouter    = require('./routes/error');
+const usersRouter    = require('./routes/users');
+const uploadRouter   = require('./routes/upload');
 
 // hellper
 const eventName     = require('./Helpers/event');
@@ -40,7 +42,7 @@ app
 .set('port', port)
 .use(logger('dev'))
 .use(express.json())
-.use(express.urlencoded({ extended: true }))
+.use(express.urlencoded({ extended: true, limit: '5mb'}))
 .use(cookieParser())
 .use(session({
     key: sessionOption.key,
@@ -64,11 +66,13 @@ app
 .use('/roadmap', roadmapRouter)
 .use('/project', projectRouter)
 .use('/about', aboutRouter)
-.use('/error', errorRouter);
+.use('/error', errorRouter)
+.use('/users', usersRouter)
+.use('/upload', uploadRouter);
 
 app
 .use(function(req, res, next) {
-    res.redirect('/error/' + (err.status || 404));
+    res.redirect('/error/' + 404);
 })
 .use(function(err, req, res, next) {
     // set locals, only providing error in development
