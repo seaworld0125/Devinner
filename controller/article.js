@@ -23,7 +23,7 @@ module.exports = {
         let param = [0, 1, req.body.title, req.body.author, 0, 0, 'N', date, time];
         let board_query = mysql.format(dbQuery.NEW_ARTICLE, param);
     
-        param = [0, req.body.content];
+        param = [0, req.body.editordata];
         let content_query = mysql.format(dbQuery.NEW_CONTENT, param);
 
         try {

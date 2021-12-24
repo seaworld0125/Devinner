@@ -26,7 +26,7 @@ module.exports = {
         try {
             await service.postData(query);
 
-            return res.status(200).redirect('/');
+            return res.status(303).redirect('/');
         } 
         catch(error) {
             next(error);
