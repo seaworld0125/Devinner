@@ -9,11 +9,15 @@ module.exports = {
     GET_ARTICLE_INFO : 'SELECT content.id, title, author, view, hits, date, time, content FROM board INNER JOIN content ON board.id = content.id WHERE board.id = ?',
     GET_COMMENT : "SELECT * FROM comment WHERE article_id = ? AND if_delete = 'N'",
     GET_REPLY : "SELECT * FROM reply WHERE article_id = ? AND if_delete = 'N'",
+    GET_GITHUB_ID : "SELECT github FROM account WHERE nickname = ?",
+    GET_PROJECTS : "SELECT * FROM projects",
+    GET_USER_PROJECTS : "SELECT * FROM projects WHERE author = ?",
     
     NEW_ARTICLE : 'INSERT INTO board VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?)',
     NEW_CONTENT : 'INSERT INTO content VALUE(?, ?)',
     NEW_COMMENT : "INSERT INTO comment VALUE(0, ?, ?, ?, 'N')",
-    NEW_REPLY : "insert into reply value(0, ?, ?, ?, ?, 'N')",
+    NEW_REPLY : "INSERT INTO reply VALUE(0, ?, ?, ?, ?, 'N')",
+    NEW_PROJECT : "INSERT INTO projects VALUE(0, ?, ?, ?, ?, ?, ?)",
     
     CREATE_ACCOUNT : 'INSERT INTO account VALUE(?, ?, ?, ?, ?, ?, ?, 1, 0)',
     
