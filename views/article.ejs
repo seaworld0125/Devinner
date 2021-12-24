@@ -4,19 +4,21 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
         <link rel="stylesheet" href="/css/article.css?after">
         <link rel="stylesheet" href="/css/fontstyle.css">
         <title>글쓰기 창</title>
     </head>
     <body>
-        <div id="top-box">
-            ...
-        </div>
         <div id="content-box">
             <form name="form" action="/article" method="post" autocomplete="off">
                 작성자 : <input type="text" name="author" id="author" value="<%-author%>" readonly/><br>
                 제목 <input type="text" name="title" id="title" maxlength="30" />
-                내용 <textarea name="content" id="content" cols="30" rows="10" wrap="physical">비방/욕설 주의해주세요</textarea>
+                <textarea id="summernote" name="editordata">
+                    비방/욕설 주의해주세요 / 이미지는 개당 5mb까지 업로드 가능합니다.
+                </textarea>
                 <input type="submit" id="post-button"></input>
             </form>
         </div>

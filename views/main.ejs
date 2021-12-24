@@ -78,12 +78,27 @@
           </form>
         <% } %>
       </div>
+      <section id="user-tab">
+        <div id="profile">
+          <img id="profile-img" src="" alt="">
+        </div>
+        <div id="introduction">
+          <!-- name, blog, bio -->
+          <b><div id="profile-name"></div></b>
+          <b><div><a id="profile-blog" href="" target="_blank"></a></div></b>
+          <b><div><a id="profile-github" href="" target="_blank"></a></div></b>
+          <b><div id="profile-bio"></div></b>
+        </div>
+        <div id="project-list">
+          <b><div id="project-list-ment"></div></b>
+        </div>
+      </section>
       <section>
         <nav>
           <a href="/" id="nav-button">개발자 게시판</a>
+          <a href="/project" id="nav-button">사이드 프로젝트</a>
           <a href="/activity" id="nav-button">대외활동 모음</a>
           <a href="/roadmap" id="nav-button">개발자 로드맵</a>
-          <a href="/project" id="nav-button">Best 사이드 프로젝트</a>
           <a href="/about" id="nav-button">About</a>
         </nav>
         <article id="article-news">
@@ -91,7 +106,7 @@
             <ul class="uk-slideshow-items" id="form-article">
               <% news.forEach(article => { %>
                 <article class="uk-article uk-margin-remove">
-                  <h1 class="uk-article-title">오늘의 채용 뉴스</h1>
+                  <h1 class="uk-article-title">오늘의 개발자 뉴스</h1>
                   <p class="uk-article-meta"><%-article.title%></p>
                   <p class="uk-text-lead" style="color: rgba(255, 255, 255, 0.61);"><%-article.description%></p>
                   <a class="uk-button uk-button-text" href="<%=article.link%>" target="_blank" style="font-weight: 900;">더 읽기</a>
@@ -116,7 +131,7 @@
             <% board_list.forEach(article => { %>
               <tr>
                   <td id="title" class="align-left"><a id="article_id" href="/article/<%=article.id%>"><%=article.title%></a></td>
-                  <td id="author" class="align-left"><%=article.author%></td>
+                  <td id="author" class="align-left"><a id="article_author"><%=article.author%></a></td>
                   <td id="date" class="align-center"><%=article.date%></td>
                   <td id="views" class="align-center"><%=article.view%></td>
                   <td id="hits" class="align-center"><%=article.hits%></td>
