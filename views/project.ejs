@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="/css/projectcss/project-layout.css?after">
     <link rel="stylesheet" href="/css/projectcss/project-element.css?after">
     <link rel="stylesheet" href="/css/projectcss/project-card.css?after">
+    <link rel="stylesheet" href="/css/projectcss/bob.css?after">
     <link rel="stylesheet" href="/css/chat.css?after">
+    <link rel="stylesheet" href="/css/fontstyle.css?after">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.7.2/dist/css/uikit.min.css" />
-    <link rel="stylesheet" href="/css/fontstyle.css">
     <title>Devinner</title>
   </head>
   <body>
@@ -78,12 +79,26 @@
           </form>
         <% } %>
       </div>
+      <section id="user-tab">
+        <div id="profile">
+          <img id="profile-img" src="" alt="">
+        </div>
+        <div id="introduction">
+          <b><div id="profile-name"></div></b>
+          <b><div><a id="profile-blog" href="" target="_blank"></a></div></b>
+          <b><div><a id="profile-github" href="" target="_blank"></a></div></b>
+          <b><div id="profile-bio"></div></b>
+        </div>
+        <div id="project-list">
+          <b><div id="project-list-ment"></div></b>
+        </div>
+      </section>
       <section>
         <nav>
           <a href="/" id="nav-button">개발자 게시판</a>
+          <a href="/project" id="nav-button">사이드 프로젝트</a>
           <a href="/activity" id="nav-button">대외활동 모음</a>
           <a href="/roadmap" id="nav-button">개발자 로드맵</a>
-          <a href="/project" id="nav-button">Best 사이드 프로젝트</a>
           <a href="/about" id="nav-button">About</a>
         </nav>
         <article id="board">
@@ -91,9 +106,34 @@
             <b>사이드 프로젝트란 <img src="/img/icon-question.png" alt="" style="width: 20px;"></b>
           </div>
           <div id="guide-bubble">
-            준비 중
+            사이드 프로젝트는 프로젝트 중에서도 소규모, 비공식, 개인적인 성격을 가지는 프로젝트를 말합니다. 
+            수익이나 성과보다 가치나 실험에 중심을 둔 목표를 이루려고 할 때 
+            자연스럽게 사이드 프로젝트가 되는 경우가 많습니다. 
+            사이드 프로젝트 참여자는 가치를 바탕으로 한 이해와 
+            작지만 긴밀한 협력을 추구하는 경향을 보입니다. 
+            이런 활동은 남는 시간을 쓰는게 아니라 가치를 위해 시간을 낸다는 점에서 
+            여가활동과 다르며 노동의 성격을 더 많이 갖습니다.<br>
+            <a href="https://medium.com/@gogoj2/%EC%82%AC%EC%9D%B4%EB%93%9C-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-side-project-%EC%9D%98-%EC%A0%95%EC%9D%98-b64665339792" target="_blank">사이드 프로젝트 정의 출저</a><br><br>
+            <b>사이드 프로젝트를 이곳에 소개하실 분은 아래에 추가하기를 눌러주세요!
+            프로젝트 대표 이미지와 소개 글, repository 주소를 작성해서 등록하실 수 있습니다. 
+            대표 이미지는 한 장만 등록할 수 있고 필수입니다! <br>보기 좋게 작성하면 사람들이 더 관심 가질 수도?!</b>
           </div>
-          <div id="message-box">준비 중입니다!</div>
+          <div id="plus-button">
+            <a><b>내 프로젝트도 추가하기</b></a>
+          </div>
+          <% projects.forEach(project => { %>
+            <div id="project-card" class="link bob-on-hover">
+                <a href="https://github.com/<%-project.github_id%>/<%-project.repository%>" target="_blank">
+                  <div id="img-box">
+                    <img id="project-card-img" src="<%-project.img%>" alt="">
+                  </div>
+                  <div id="project-card-title"><%-project.title%></div> 
+                  <div id="project-card-desc"><%-project.description%></div>
+                </a>
+                <a id="project-card-author-anchor" href=""><div id="project-card-author">개발자 <%-project.author%></div></a>
+                <iframe id="project-card-star" src="https://ghbtns.com/github-btn.html?user=<%-project.github_id%>&repo=<%-project.repository%>&type=star&count=true" frameborder="0" scrolling="0" width="80" height="32" title="GitHub"></iframe>
+            </div>
+          <% }); %>
         </article>
         <aside id="aside01">
           aside01 - 광고영역

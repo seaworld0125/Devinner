@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+        <link rel="stylesheet" href="/css/projectcss/upload_project.css?after">
+        <link rel="stylesheet" href="/css/fontstyle.css?after">
+        <title>프로젝트 등록</title>
+    </head>
+    <body>
+        <div id="content-box">
+            <form name="form" action="/upload/project" method="post" autocomplete="off" enctype="multipart/form-data" >
+                작성자<input type="text" name="author" id="author" class="tag" value="<%-author%>" readonly/><br>
+                <% if(github) { %>
+                    깃허브 아이디 <input type="text" name="github" id="github" class="tag" value="<%-github%>" readonly/><br>
+                <% } else { %>
+                    깃허브 아이디 <input type="text" name="github" id="github" class="tag" readonly/><br>
+                <% }%>
+                github 저장소 이름(정확하게) <button id="github-repo-check" class="button">check</button><input type="text" name="repos" id="repos" class="tag" maxlength="30" />
+                제목 <input type="text" name="title" id="title" class="tag" maxlength="30" />
+                설명
+                <textarea id="description" name="description" rows="10" cols="30">
+                    프로젝트에 대해서 소개하고 싶은 말 (간략하게)
+                </textarea>
+                대표 이미지 
+                <input type="file" name="file" id="file">
+                <input type="submit" id="post-button"></input>
+            </form>
+        </div>
+    </body>
+    <script src="/script/upload_project.js"></script>
+</html>
