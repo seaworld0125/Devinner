@@ -36,7 +36,6 @@ nav {
 }
 section {
     width: var(--width);
-    height: var(--section-height);
 
     padding: 0 20px 0 20px;
     margin: 0 auto;
@@ -52,10 +51,28 @@ section {
 }
 #article-board {
     width: var(--article-width);
-    height: calc(var(--section-height) - var(--article-news-height) - 10px);
+    min-height: calc(var(--section-height) - var(--article-news-height) - 10px);
     
     position: relative;
     z-index: 99;
+}
+#user-tab {
+    background-color: whitesmoke;
+
+    width: 330px;
+    height: 100%;
+    padding: 20px 35px 0px 35px;
+    margin: 0 auto;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    z-index: 999;
+    display: none;
+    background-color: rgb(27, 27, 27);
+
+    overflow-y: scroll;
 }
 #aside01 {
     border-color: darkgrey;

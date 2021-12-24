@@ -8,27 +8,17 @@ body {
     width: 700px;
     height: auto;
 
-    margin: 0 auto;
-}
-#author {
-    width: auto;
-    height: auto;
-    background-color: rgb(0, 0, 0);
-    border: none;
-
-    margin: 10px 0;
-
-    font-size: medium;
-    color: rgb(255, 254, 247);
+    margin: 50px auto 0 auto;
 }
 #author:hover {
     outline: none;
     color: rgb(82, 205, 221);
 }
-#author:focus {
+#github:hover {
     outline: none;
+    color: rgb(82, 205, 221);
 }
-#title {
+.tag {
     width: 100%;
     height: auto;
     background-color: rgb(39, 39, 39);
@@ -39,11 +29,38 @@ body {
     font-size: medium;
     color: rgb(255, 254, 247);
 }
-#title:focus {
+.tag:focus {
     outline: none;
 }
-.note-editable {
+.button {
+    display: inline-block;
+    margin: 0 0 0 10px;
+
+    border-radius: 5px;
+    border: none;
+
+    background-color: rgb(252, 82, 82);
+}
+
+
+#description {
+    width: 100%;
+    max-height: 100px;
+    min-height: 100px;
+    background-color: rgb(46, 46, 46);
+    border: none;
+
+    margin: 10px 0;
+
+    overflow-y: scroll;
+
+    resize: vertical;
+
+    font-size: large;
+    font-weight: 300;
     color: rgb(255, 254, 247);
+
+    display: block;
 }
 
 #post-button {
@@ -52,7 +69,7 @@ body {
     font-size: small;
     font-weight: 600;
     margin: 10px 0px 10px 0px;
-    background-color: rgb(99, 152, 168);
+    background-color: rgb(131, 196, 216);
     
     border: none;
     border-radius: 3px; 

@@ -36,24 +36,34 @@ nav {
 }
 section {
     width: var(--width);
-    height: var(--section-height);
 
     padding: 0 20px 0 20px;
     margin: 0 auto;
     margin-top: 1px;
     position: relative;
-    z-index: -99;
-}
-#article-news {
-    width: var(--article-width);
-    height: var(--article-news-height);
-    margin-top: 10px;
 }
 #board {
     width: var(--article-width);
-    height: calc(var(--section-height) - 15px);
+    min-height: calc(var(--section-height) - 15px);
 
     overflow-x: hidden;
+}
+#user-tab {
+    background-color: whitesmoke;
+    overflow-y: scroll;
+
+    width: 330px;
+    height: 100%;
+    padding: 20px 35px 0px 35px;
+    margin: 0 auto;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    z-index: 99;
+    display: none;
+    background-color: rgb(27, 27, 27);
 }
 #aside01 {
     border-color: darkgrey;
@@ -79,7 +89,7 @@ section {
 }
 footer {
     margin: 0 auto;
-    margin-top: 1px;
+    margin-top: 100px;
     width: var(--width);
     height: var(--footer-height);
 }

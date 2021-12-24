@@ -73,8 +73,10 @@ function deleteMethod(reqUrl, ifReload) {
         }).done((response) => {
             if(ifReload)
                 window.location.reload(true);
-            else
+            else{
+                opener.location.reload();
                 window.close();
+            }
         });
     }
 }
