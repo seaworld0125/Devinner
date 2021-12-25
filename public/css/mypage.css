@@ -1,0 +1,33 @@
+body {
+    padding: 50px 20px 50px 20px;
+
+    color: rgb(255, 245, 245);
+    background-color: black;
+}
+button {
+    border-radius: 10px;
+
+    background-color: rgba(208, 248, 255, 0.911);
+    display: inline-block;
+
+    font-weight: 600;
+}
+#title {
+    color: wheat;
+    margin: 30px 0 10px 10px;
+    font-size: 20px;
+}
+table {
+    margin: 10px 0 50px 0;
+}
+tr {
+    border: 1px solid rgba(245, 245, 245, 0.288);
+}
+td {
+    padding: 5px 10px 5px 10px;
+}
+th {
+    color: rgb(253, 243, 223);
+    text-align: left;
+    padding: 5px 10px 5px 10px;
+}

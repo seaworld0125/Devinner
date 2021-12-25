@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/mypage.css">
+    <title>마이페이지</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>레벨</td>
+            <td><%-user.level%></td>
+        </tr>
+        <tr>
+            <td>exp</td>
+            <td><%-user.exp%></td>
+        </tr>
+        <tr>
+            <td>닉네임</td>
+            <td><%-user.nickname%></td>
+            <td><button id="nickname-button">닉네임 등록/수정</button></td>
+        </tr>
+        <tr>
+            <td>깃허브 아이디</td>
+            <td>                
+                <% if(user.github_id) { %>
+                    <%-user.github_id%>
+                <% } %>
+            </td>
+            <td><button id="github-button">깃허브 아이디 등록/수정</button></td>
+        </tr>
+    </table>
+    <div id="title">
+        등록한 프로젝트 목록
+    </div>
+    <form action="">
+        <table>
+            <tr>
+                <th class="bottom-line">저장소 이름</th>
+                <th class="bottom-line">프로젝트 제목</th>
+                <th class="bottom-line">프로젝트 설명</th>
+                <th class="bottom-line">삭제</th>
+            </tr>
+            <% projects.forEach(project => { %>
+                <tr>
+                    <td><%-project.repository%></td>
+                    <td><%-project.title%></td>
+                    <td><%-project.description%></td>
+                    <td><input type="checkbox" name="projectId" value="<%-project.id%>"></td>
+                </tr>
+            <% }); %>
+        </table>
+        <button type="submit" style="margin-left: 10px;">체크한 프로젝트 삭제</button>
+    </form>
+</body>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/script/mypage.js"></script>
+</html>
