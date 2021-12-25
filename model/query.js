@@ -9,9 +9,10 @@ module.exports = {
     GET_ARTICLE_INFO : 'SELECT content.id, title, author, view, hits, date, time, content FROM board INNER JOIN content ON board.id = content.id WHERE board.id = ?',
     GET_COMMENT : "SELECT * FROM comment WHERE article_id = ? AND if_delete = 'N'",
     GET_REPLY : "SELECT * FROM reply WHERE article_id = ? AND if_delete = 'N'",
-    GET_GITHUB_ID : "SELECT github FROM account WHERE nickname = ?",
-    GET_PROJECTS : "SELECT * FROM projects",
-    GET_USER_PROJECTS : "SELECT * FROM projects WHERE author = ?",
+    GET_GITHUB_ID : "SELECT github_id FROM account WHERE nickname = ?",
+    GET_PROJECTS : "SELECT * FROM projects WHERE if_delete = 'N'",
+    GET_USER_INFO : "SELECT * FROM account WHERE nickname = ?",
+    GET_USER_PROJECTS : "SELECT * FROM projects WHERE author = ? AND if_delete = 'N'",
     
     NEW_ARTICLE : 'INSERT INTO board VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?)',
     NEW_CONTENT : 'INSERT INTO content VALUE(?, ?)',
@@ -23,6 +24,11 @@ module.exports = {
     
     UPDATE_VIEW : 'UPDATE board SET view = view + 1 WHERE id = ?',
     UPDATE_COMMENT : "UPDATE comment SET comment = ? WHERE id = ?",
+    UPDATE_NICKNAME : "UPDATE account SET nickname = ? WHERE nickname = ?",
+    UPDATE_BOARD_AUTHOR : "UPDATE board SET author = ? WHERE author = ?",
+    UPDATE_PROJECT_AUTHOR : "UPDATE projects SET author = ? WHERE author = ?",
+    UPDATE_GITHUB_ID : "UPDATE account SET github_id = ? WHERE nickname = ?",
+    UPDATE_PROJECT_GITHUB_ID : "UPDATE projects SET github_id = ? WHERE github_id = ?",
     
     DELETE_ARTICLE : "UPDATE board SET if_delete = 'Y' WHERE id = ?", 
     DELETE_COMMENT : "UPDATE comment SET if_delete = 'Y' WHERE id = ?",
