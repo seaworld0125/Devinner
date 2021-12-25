@@ -67,7 +67,7 @@ getIp().then((ip) => {
 (() => {
     nick_name = $('#nick_name').text();
     level = Number($('#level').text());
-    console.log(level);
+
     if(level == 0) level_name = '404';
     else if(level <= 5) level_name = '입문자';
     else if(level <= 10) level_name = '초보자';
@@ -102,7 +102,6 @@ function setCookie(name, value, options) {
             updatedCookie += "=" + optionValue;
         }
     }
-    console.log(updatedCookie);
     document.cookie = updatedCookie;
 }
 
@@ -125,7 +124,6 @@ msgForm.addEventListener('submit', (e) => {
         if(chat_cookie) {
             let time = new Date();
             let check_time = (time.getHours() * 3600) + (time.getMinutes() * 60) + time.getSeconds();
-            console.log(check_time);
     
             alert("채팅 도배로 인해 3분간 이용할 수 없습니다.");
             return;
@@ -133,7 +131,6 @@ msgForm.addEventListener('submit', (e) => {
         message_count++;
         let time = new Date();
         let message_time = (time.getHours() * 3600) + (time.getMinutes() * 60) + time.getSeconds();
-        console.log('message time :' + message_time);
     
         if(message_time - (last_message || message_time) <= 2) {
 

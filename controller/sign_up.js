@@ -42,15 +42,16 @@ module.exports = {
         try {
             let result = await service.getData(query);    
 
-            return res.send(result ? false : true).end();
+            return res.status(200).send(result ? false : true).end();
         } 
         catch(error) {
-            return res.send(error);
+            return res.status(500).send(undefined);
         }
     },
     checkNickname : async (req, res) => {
-        if(req.session.auth)
+        if(req.session.auth) {
             return res.status(200).render('login_error');
+        }
 
         let nickname = req.query.nickname;
         let query = mysql.format(dbQuery.CHECK_NICKNAME, nickname);
@@ -58,10 +59,10 @@ module.exports = {
         try {
             let result = await service.getData(query);    
 
-            return res.send(result ? false : true).end();
+            return res.status(200).send(result ? false : true).end();
         } 
         catch(error) {
-            return res.send(error);
+            return res.status(500).send(undefined);
         }
     },
 };

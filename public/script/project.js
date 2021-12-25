@@ -61,13 +61,13 @@ function getGithubId(nickname) {
   return new Promise((resolve, reject) => {
     $.ajax({
       type: "GET",
-      url: "/users/" + nickname,
+      url: "/users/github/" + nickname,
       success: (result) => {
           if(result.error) {
             reject(result.error);
           }
-          else if(result.github) {
-            getGithubInfo("https://api.github.com/users/" + result.github)
+          else if(result.github_id) {
+            getGithubInfo("https://api.github.com/users/" + result.github_id)
             .then((result) => {
               resolve(result);
             });
@@ -94,6 +94,10 @@ $(document).on("click", "#project-card-author-anchor", (e) => {
         profileBlog.innerText = 'Blog';
         profileBlog.href = result.blog;
       }
+      else {
+        profileBlog.innerText = '';
+        profileBlog.href = '';
+      }
       if(result.html_url) {
         profileGithub.innerText = 'Github';
         profileGithub.href = result.html_url;
@@ -105,7 +109,6 @@ $(document).on("click", "#project-card-author-anchor", (e) => {
       profileName.innerText = '';
       profileBlog.innerText = '';
       profileGithub.innerText = '';
-      profileBio.innerText = '마이페이지에서 등록할 수 있어요';
     }
     project_list_ment.innerText = '프로젝트 목록';
 

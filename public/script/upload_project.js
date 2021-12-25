@@ -51,12 +51,10 @@ checkButton.addEventListener('click', (e) => {
                 alert('저장소 이름을 다시 확인해주세요');
                 return;
             }
-            else {
-                alert('저장소가 확인되었습니다');
-                checkButton.style.backgroundColor = 'rgb(82, 205, 221)';
-                repos.readOnly = true;
-                check_repos = true;
-            }
+            alert('저장소가 확인되었습니다');
+            checkButton.style.backgroundColor = 'rgb(82, 205, 221)';
+            repos.readOnly = true;
+            check_repos = true;
         }
     });
 });
