@@ -91,3 +91,24 @@ function putMethod(reqUrl, comment) {
         window.location.reload(true);
     });
 }
+
+const hitButton = document.getElementById('hit-button');
+const hitCountTop = document.getElementById('hit-count-top');
+const hitCountBottom = document.getElementById('hit-count-bottom');
+
+hitButton.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    $.ajax({
+        url : e.target.value,
+        method : "GET",
+    }).done((response) => {
+        if(response) {
+            hitCountTop.innerText = Number(hitCountTop.innerText) + 1;
+            hitCountBottom.innerText = Number(hitCountBottom.innerText) + 1;
+        }
+        else{
+            alert('이미 추천했습니다');
+        }
+    });
+});

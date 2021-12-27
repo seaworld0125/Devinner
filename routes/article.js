@@ -29,4 +29,7 @@ router.delete('/:number/comment', controller.deleteComment);
 // 답글 삭제
 router.delete('/:number/reply', controller.deleteReply);
 
+// 추천
+router.get('/:number/recommend', controller.recommend);
+
 module.exports = router;

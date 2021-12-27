@@ -27,7 +27,7 @@
         <div id="info">
             조회수 <span style="color: whitesmoke;"><%-article.view%></span>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            추천수 <span style="color: whitesmoke;"><%-article.hits%></span>
+            추천수 <span style="color: whitesmoke;" id="hit-count-top"><%-article.hits%></span>
         </div>
     </div>
     <div id="content-box">
@@ -37,8 +37,10 @@
     </div>
     <div id="content-button-box">
         <% if(user.auth) { %>
-            <button id="hit-button">추천</button>
-            <button id="nohit-button">비추천</button>
+            <div id="hit-button-box">
+                <span><button id="hit-button" value="/article/<%-article.id%>/recommend">추천</button></span>
+                <button id="hit-count-bottom"><%-article.hits%></button>
+            </div>
             <% if(user.nickname === article.author) { %>
                 <button id="delete-button" value="/article/<%-article.id%>">삭제</button>
             <% }%>

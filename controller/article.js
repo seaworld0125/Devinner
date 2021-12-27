@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const dbQuery   = require('../model/query');
 const fillZero  = require('../Helpers/fill_zero');
 const service   = require('../service/article');
+const { getData } = require('../service/article');
 
 module.exports = {
     getWritingPage : (req, res) => {
@@ -41,7 +42,7 @@ module.exports = {
         let replyQuery = mysql.format(dbQuery.GET_REPLY, req.params.number);
 
         try {
-            await service.updateData(updateQuery);
+            await service.postData(updateQuery);
             let article = await service.getData(articleInfoQuery);
             let comments = await service.getData(commentQuery);
             let replies = await service.getData(replyQuery);
@@ -57,7 +58,7 @@ module.exports = {
     },
     postComment : async (req, res, next) => {
         if(!req.session.auth)
-            return res.render('login_error', {}); 
+            return res.status(401).send(new Error('auth error'));
     
         let number = req.params.number;
         let author = req.body.author;
@@ -75,7 +76,7 @@ module.exports = {
     },
     modComment : async (req, res, next) => {
         if(!req.session.auth)
-            return res.render('login_error', {});
+            return res.status(401).send(new Error('auth error'));
     
         let comment_id = req.params.number;
         let comment = req.body.data.replace(/<[^>]+>/g, '');
@@ -92,7 +93,7 @@ module.exports = {
     },
     postReply : async (req, res, next) => {
         if(!req.session.auth)
-            return res.render('login_error', {});
+            return res.status(401).send(new Error('auth error'));
     
         let number = req.params.number;
         let comment_id = req.body.comment_id;
@@ -111,13 +112,13 @@ module.exports = {
     },
     deleteArticle : async (req, res, next) => {
         if(!req.session.auth)
-            return res.render('login_error', {});
+            return res.status(401).send(new Error('auth error'));
     
         let number = req.params.number;
         let query = mysql.format(dbQuery.DELETE_ARTICLE, number);
 
         try {
-            await service.updateData(query);
+            await service.postData(query);
 
             return res.status(200).end();
         }
@@ -127,13 +128,13 @@ module.exports = {
     },
     deleteComment : async (req, res, next) => {
         if(!req.session.auth)
-            return res.render('login_error', {});   
+            return res.status(401).send(new Error('auth error'));
     
         let number = req.params.number;
         let query = mysql.format(dbQuery.DELETE_COMMENT, number);
 
         try {
-            await service.updateData(query);
+            await service.postData(query);
 
             return res.status(200).end();
         }
@@ -143,15 +144,43 @@ module.exports = {
     },
     deleteReply : async (req, res, next) => {
         if(!req.session.auth)
-            return res.render('login_error', {});
+            return res.status(401).send(new Error('auth error'));
     
         let number = req.params.number;
         let query = mysql.format(dbQuery.DELETE_REPLY, number);
 
         try {
-            await service.updateData(query);
+            await service.postData(query);
 
             return res.status(200).end();
+        }
+        catch(error) {
+            next(error);
+        }
+    },
+    recommend : async (req, res, next) => {
+        if(!req.session.auth)
+            return res.status(401).send(new Error('auth error'));
+            
+        try {
+            // 추천이 가능한지 확인
+            let nickname = req.session.nickname;
+            let query = mysql.format(dbQuery.CHECK_RECOMMEND_NICKNAME, [nickname]);
+
+            let result = await service.getData(query);
+            if(result[0])
+                return res.status(200).send(false);
+
+            // 추천이 가능하면
+            let number = req.params.number;
+            // 추천 테이블에 닉네임 추가
+            query = mysql.format(dbQuery.ADD_RECOMMEND, [number, req.session.nickname]);
+            await service.postData(query);
+            // 게시글 추천수 수정
+            query = mysql.format(dbQuery.UPDATE_HITS, [number]);
+            await service.postData(query);
+
+            return res.status(200).send(true);
         }
         catch(error) {
             next(error);
