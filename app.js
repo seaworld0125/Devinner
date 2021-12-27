@@ -7,6 +7,7 @@ const httpServer    = http.createServer(app);
 const io            = new Server(httpServer);
 const port          = 3000;
 
+const helmet        = require('helmet');
 const session       = require('express-session');
 const cookieParser  = require('cookie-parser');
 const path          = require('path');
@@ -38,9 +39,38 @@ const dbQuery       = require('./model/query');
 const pool          = require("./model/db_pool_creater");
 const sessionStore  = require('./model/session_store_creater');
 
+// csp //Content Security Policy
+const cspOptions = {
+    directives: {
+        // 기본 옵션을 가져옵니다.
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+
+        // 스크립트
+        "script-src": ["'self'", "'unsafe-inline'", "*.jsdelivr.net", "*.jquery.com", "*.ipify.org"],
+  
+        // stylesheet
+        "style-src": ["'self'", "'unsafe-inline'", "*.jsdelivr.net"],
+
+        // 이미지
+        "img-src": ["'self'", "data:", "*.github.com", "*.githubusercontent.com", "github.com"],
+
+        // font
+        "font-src": ["'self'", "https:", "data:", "*.jsdelivr.net"],
+
+        // frame
+        "frame-src": ["'self'", "https:", "data:", "*.ghbtns.com"],
+
+        // connect
+        "connect-src": ["'self'", "https:", "*.github.com"],
+    }
+}
+
 app
 .set('port', port)
 .use(logger('dev'))
+.use(helmet({
+    contentSecurityPolicy: cspOptions,
+}))
 .use(express.json())
 .use(express.urlencoded({ extended: true, limit: '5mb'}))
 .use(cookieParser())
@@ -86,7 +116,6 @@ app
 });
 
 const manager = require('./Helpers/client_manager');
-const { error } = require('console');
 
 io.on('connection', (socket) => {
     manager.addClientNum();
