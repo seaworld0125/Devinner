@@ -25,6 +25,12 @@ tr {
 }
 td {
     padding: 5px 10px 5px 10px;
+
+    max-width: 380px;
+
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    white-space: nowrap;
 }
 th {
     color: rgb(253, 243, 223);

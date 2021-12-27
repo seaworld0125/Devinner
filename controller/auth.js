@@ -19,7 +19,7 @@ module.exports = {
                 req.session.auth = true;
                 req.session.nickname = result.nickname;
                 req.session.level = result.level;
-                req.session.github = result.github;
+                req.session.github = result.github_id;
     
                 req.session.save((err) => {
                     if(err) throw err;

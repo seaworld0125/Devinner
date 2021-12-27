@@ -4,7 +4,13 @@ const guideBubble = document.getElementById('guide-bubble');
 const plusButton = document.getElementById('plus-button');
 
 const status_ = "toolbar=no,scrollbars=yes,resizable=yes,status=no,menubar=no,width=800,height=500,top=0,left=0";
+const mypageButton = document.getElementById('button-mypage');
 
+mypageButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.name = "parentPage";
+  child_window = window.open("/users/mypage", "마이페이지", status_);
+});
 guideMent.addEventListener('mouseover' || 'focus', (e) => {
   guideBubble.style.display = 'block';
 });
@@ -109,6 +115,7 @@ $(document).on("click", "#project-card-author-anchor", (e) => {
       profileName.innerText = '';
       profileBlog.innerText = '';
       profileGithub.innerText = '';
+      profileBio.innerText = '';
     }
     project_list_ment.innerText = '프로젝트 목록';
 

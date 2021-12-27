@@ -30,7 +30,6 @@ buttonPost.addEventListener('click', (e) => {
 
 const githubId = document.getElementById('github');
 (() => {
-    console.log(githubId.value.length)
     if(githubId.value.length == 0) {
         alert('깃허브 아이디를 등록하면 이용 가능합니다.\n(마이페이지에서 등록 가능)');
         window.close();

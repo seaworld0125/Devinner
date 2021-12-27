@@ -10,10 +10,9 @@ module.exports = {
     uploadProjectPage : (req, res, next) => {
         let page = (req.session.auth ? 'upload_project' : 'login_error');
         let author = req.session.nickname;
-        let github = req.session.github;
-        let data = {'author' : author, 'github' : github};
-    
-        return res.status(200).render(page, data);
+        let github = (req.session.github ? req.session.github : '');
+
+        return res.status(200).render(page, {'author' : author, 'github' : github});
     },
     uploadProject : async (req, res, next) => {
         let author = req.body.author;

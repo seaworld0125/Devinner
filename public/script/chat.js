@@ -145,7 +145,7 @@ msgForm.addEventListener('submit', (e) => {
         }
         last_message = message_time;
     
-        let data = {"msg": inputMsg.value, "name": nick_name, "ip": ip_address, "color": chat_color};
+        let data = {"msg": inputMsg.value.replace(/<[^>]+>/g, ''), "name": nick_name, "ip": ip_address, "color": chat_color};
         socket.emit(CHAT_MSG, data);
         appendMsg(data);
 

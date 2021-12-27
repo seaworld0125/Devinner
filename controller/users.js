@@ -84,9 +84,6 @@ module.exports = {
             let query = mysql.format(dbQuery.UPDATE_GITHUB_ID, [req.params.github, req.session.nickname]);
             await service.putData(query);
 
-            query = mysql.format(dbQuery.UPDATE_PROJECT_GITHUB_ID, [req.params.github, req.session.github]);
-            await service.putData(query);
-
             req.session.github = req.params.github;
 
             return res.status(200).send(true);
