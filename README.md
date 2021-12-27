@@ -48,5 +48,5 @@ Express, javascript, HTML, CSS, MySQL
 ### 프로젝트 관리
 Notion
 
-### 지속적인 통합 및 배포 기술 (예정)
+### CI/CD (예정)
 Github, Github action, Jenkies, AWS, Docker
