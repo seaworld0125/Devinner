@@ -11,10 +11,8 @@ module.exports = {
         return res.status(200).render(page, author);
     },
     postArticle : async (req, res, next) => {
-        if(!req.session.auth) {
-            res.render('login_error', {});
-            return;
-        }   
+        if(!req.session.auth)
+            return res.render('login_error', {});
     
         let today = new Date();
         let date = today.getFullYear() + '-' + fillZero(2, today.getMonth()+1) + '-' + fillZero(2, today.getDate());
@@ -58,33 +56,29 @@ module.exports = {
         }
     },
     postComment : async (req, res, next) => {
-        if(!req.session.auth) {
-            res.render('login_error', {});
-            return;
-        }   
+        if(!req.session.auth)
+            return res.render('login_error', {}); 
     
         let number = req.params.number;
         let author = req.body.author;
-        let comment = req.body.comment;
+        let comment = req.body.comment.replace(/<[^>]+>/g, '');
         let query = mysql.format(dbQuery.NEW_COMMENT, [number, author, comment]);
 
         try {
             await service.postData(query);
 
-            return res.status(303).redirect('back');
+            return res.status(303).redirect('/article/' + number);
         }
         catch(error) {
             next(error);
         }
     },
     modComment : async (req, res, next) => {
-        if(!req.session.auth) {
-            res.render('login_error', {});
-            return;
-        }
+        if(!req.session.auth)
+            return res.render('login_error', {});
     
         let comment_id = req.params.number;
-        let comment = req.body.data;
+        let comment = req.body.data.replace(/<[^>]+>/g, '');
         let query = mysql.format(dbQuery.UPDATE_COMMENT, [comment, comment_id]);
 
         try {
@@ -97,31 +91,27 @@ module.exports = {
         }
     },
     postReply : async (req, res, next) => {
-        if(!req.session.auth) {
-            res.render('login_error', {});
-            return;
-        }   
+        if(!req.session.auth)
+            return res.render('login_error', {});
     
         let number = req.params.number;
         let comment_id = req.body.comment_id;
         let author = req.body.author;
-        let reply = req.body.reply;
+        let reply = req.body.reply.replace(/<[^>]+>/g, '');
         var query = mysql.format(dbQuery.NEW_REPLY, [number, comment_id, author, reply]);
 
         try {
             await service.postData(query);
 
-            return res.status(303).redirect('back');
+            return res.status(303).redirect('/article/' + number);
         }
         catch(error) {
             next(error);
         }
     },
     deleteArticle : async (req, res, next) => {
-        if(!req.session.auth) {
-            res.render('login_error', {});
-            return;
-        }   
+        if(!req.session.auth)
+            return res.render('login_error', {});
     
         let number = req.params.number;
         let query = mysql.format(dbQuery.DELETE_ARTICLE, number);
@@ -136,10 +126,8 @@ module.exports = {
         }
     },
     deleteComment : async (req, res, next) => {
-        if(!req.session.auth) {
-            res.render('login_error', {});
-            return;
-        }   
+        if(!req.session.auth)
+            return res.render('login_error', {});   
     
         let number = req.params.number;
         let query = mysql.format(dbQuery.DELETE_COMMENT, number);
@@ -154,10 +142,8 @@ module.exports = {
         }
     },
     deleteReply : async (req, res, next) => {
-        if(!req.session.auth) {
-            res.render('login_error', {});
-            return;
-        }   
+        if(!req.session.auth)
+            return res.render('login_error', {});
     
         let number = req.params.number;
         let query = mysql.format(dbQuery.DELETE_REPLY, number);
@@ -170,5 +156,5 @@ module.exports = {
         catch(error) {
             next(error);
         }
-    }
+    },
 }
