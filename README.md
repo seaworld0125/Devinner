@@ -49,4 +49,4 @@ Express, javascript, HTML, CSS, MySQL
 Notion
 
 ### CI/CD (예정)
-Github, Github action, Jenkins, AWS, Docker
+Github, Github action, AWS, Docker
