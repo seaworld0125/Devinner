@@ -52,4 +52,4 @@ Notion
 Github, Github action
 
 ### 배포
-AWS, Docker
+Docker, AWS
