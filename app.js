@@ -1,4 +1,3 @@
-
 const express       = require('express');
 const app           = express();
 const http          = require('http');
@@ -14,7 +13,7 @@ const path          = require('path');
 const logger        = require('morgan');
 
 // Router
-const indexRouter    = require('./routes/main');
+const mainRouter    = require('./routes/main');
 const authRouter     = require('./routes/auth');
 const signUpPageRouter = require('./routes/sign_up');
 const articleRouter  = require('./routes/article');
@@ -32,34 +31,35 @@ const INET          = require('./Helpers/inet.js');
 
 // configuration
 const mysql         = require("mysql2");
-const sessionOption = require('./conf/session');
+const dotenv        = require("dotenv");
 
 // model
 const dbQuery       = require('./model/query');
 const pool          = require("./model/db_pool_creater");
 const sessionStore  = require('./model/session_store_creater');
 
+dotenv.config({
+    path: path.resolve(
+        process.cwd(),
+        process.env.NODE_ENV === "production" ? ".env" : ".env.dev"
+    )
+});
+
 // csp //Content Security Policy
 const cspOptions = {
     directives: {
         // 기본 옵션을 가져옵니다.
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-
         // 스크립트
         "script-src": ["'self'", "'unsafe-inline'", "*.jsdelivr.net", "*.jquery.com", "*.ipify.org"],
-  
         // stylesheet
         "style-src": ["'self'", "'unsafe-inline'", "*.jsdelivr.net"],
-
         // 이미지
         "img-src": ["'self'", "data:", "*.github.com", "*.githubusercontent.com", "github.com"],
-
         // font
         "font-src": ["'self'", "https:", "data:", "*.jsdelivr.net"],
-
         // frame
         "frame-src": ["'self'", "https:", "data:", "*.ghbtns.com"],
-
         // connect
         "connect-src": ["'self'", "https:", "*.github.com"],
     }
@@ -75,11 +75,16 @@ app
 .use(express.urlencoded({ extended: true, limit: '5mb'}))
 .use(cookieParser())
 .use(session({
-    key: sessionOption.key,
-    secret: sessionOption.secret,
+    key : process.env.COOKIE_KEY,
+    secret : process.env.COOKIE_SECRET,
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
+    proxy: (process.env.NODE_ENV === 'production' ? true : false),
+    cookie: {
+        httpOnly: true,
+        secure: (process.env.NODE_ENV === 'production' ? true : false),
+    }
 }));
 
 app
@@ -88,7 +93,7 @@ app
 .use(express.static(path.join(__dirname, 'public')));
 
 app
-.use('/', indexRouter)
+.use('/', mainRouter)
 .use('/article', articleRouter)
 .use('/signup', signUpPageRouter)
 .use('/auth', authRouter)
@@ -107,7 +112,7 @@ app
 .use(function(err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+    res.locals.error = (process.env.NODE_ENV === 'development' ? err : {});
     console.log(res.locals.message);
     console.log(res.locals.error);
 

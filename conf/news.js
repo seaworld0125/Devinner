@@ -1,5 +1,5 @@
-const naver_id = 'KXvgDeQMNpKGEn1vIAZf';
-const naver_key = 'ddSPdTPcu0';
+const naver_id = process.env.NAVER_ID;
+const naver_key = process.env.NAVER_KEY;
 
 const account = {'X-Naver-Client-Id': naver_id, 'X-Naver-Client-Secret': naver_key};
 
@@ -8,14 +8,14 @@ const url_main = encodeURI(url_base + '주식');
 const url_stock = encodeURI(url_base + '코스피+나스닥');
 const url_kospi = encodeURI(url_base + '코스피');
 const url_nasdaq = encodeURI(url_base + '나스닥');
-const url_it = encodeURI(url_base + '개발자');
+const url_it = encodeURI(url_base + '개발자+개발+프로그래밍');
 const url_coin = encodeURI(url_base + '코인');
 const url_job = encodeURI(url_base + '취업+채용');
 
 module.exports = {
     main_option: {  
         'method': 'GET',
-        'url': url_job,
+        'url': url_it,
         'headers': account
     },
     stock_option: {  

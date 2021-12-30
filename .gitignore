@@ -2,7 +2,6 @@
 build/
 
 #config
-db.js
 news-api.js
 session.js
 
@@ -10,3 +9,6 @@ session.js
 trash/
 node_modules/
 upload/
+
+# dotenv environment variables file
+.env
