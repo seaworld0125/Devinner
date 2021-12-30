@@ -4,7 +4,7 @@
 
 ![site_logo03](https://user-images.githubusercontent.com/75168305/147461280-d53afeeb-3d2c-4c37-a8df-04c25ef0a1d8.png)
 
-홈페이지 바로가기 (배포 예정 21.12.31)
+[홈페이지 바로가기](devinner.co.kr) (배포 예정 21.12.31)
 
 # 목차
 - 서비스 소개
