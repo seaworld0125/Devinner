@@ -12,3 +12,4 @@ upload/
 
 # dotenv environment variables file
 .env
+.env.dev
