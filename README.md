@@ -51,5 +51,5 @@ Notion
 ### CI/CD (예정)
 Github, Github action
 
-### 배포
+### 배포 (예정)
 Docker, AWS
