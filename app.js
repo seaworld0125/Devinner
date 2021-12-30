@@ -31,19 +31,12 @@ const INET          = require('./Helpers/inet.js');
 
 // configuration
 const mysql         = require("mysql2");
-const dotenv        = require("dotenv");
+require('dotenv').config();
 
 // model
 const dbQuery       = require('./model/query');
 const pool          = require("./model/db_pool_creater");
 const sessionStore  = require('./model/session_store_creater');
-
-dotenv.config({
-    path: path.resolve(
-        process.cwd(),
-        process.env.NODE_ENV === "production" ? ".env" : ".env.dev"
-    )
-});
 
 // csp //Content Security Policy
 const cspOptions = {

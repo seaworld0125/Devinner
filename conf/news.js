@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const naver_id = process.env.NAVER_ID;
 const naver_key = process.env.NAVER_KEY;
 

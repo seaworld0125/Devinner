@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = {
     poolOption : {
         host: process.env.DB_HOST,
