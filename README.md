@@ -48,8 +48,8 @@ Express, javascript, HTML, CSS, MySQL
 ### 프로젝트 관리
 Notion
 
-### CI/CD
+### CI/CD (예정)
 Github, Github action
 
-### 배포 (예정)
-Docker, AWS
+### 배포
+AWS
