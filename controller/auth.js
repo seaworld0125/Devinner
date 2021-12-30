@@ -9,8 +9,12 @@ module.exports = {
         let password = req.body.password;
         let query = mysql.format(dbQuery.CHECK_ACCOUNT, [id]);
 
+	console.log(id + ', ' + password + ', ' + query);
+
         try {
             let result = await service.getData(query);
+
+	    console.log("result : " + result);
 
             if(!result) return res.status(303).redirect('back');
 

@@ -54,7 +54,7 @@ const cspOptions = {
         // frame
         "frame-src": ["'self'", "https:", "data:", "*.ghbtns.com"],
         // connect
-        "connect-src": ["'self'", "https:", "*.github.com"],
+        "connect-src": ["wss:", "ipapi.co", "*.github.com", "devinner.co.kr", "*.devinner.co.kr"],
     }
 }
 
@@ -73,11 +73,11 @@ app
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
-    proxy: (process.env.NODE_ENV === 'production' ? true : false),
-    cookie: {
-        httpOnly: true,
-        secure: (process.env.NODE_ENV === 'production' ? true : false),
-    }
+    //proxy: (process.env.NODE_ENV === 'production' ? true : false),
+    //cookie: {
+    //    httpOnly: true,
+    //    secure: (process.env.NODE_ENV === 'production' ? true : false),
+    //}
 }));
 
 app

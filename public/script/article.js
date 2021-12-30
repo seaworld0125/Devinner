@@ -40,7 +40,7 @@ $('#summernote').summernote({
     maxHeight: 550,                // 최대 높이
     focus: true,                    // 에디터 로딩후 포커스를 맞출지 여부
     lang: "ko-KR",					// 한글 설정
-    placeholder: '최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
+    placeholder: '비방/욕설 주의해주세요 / 이미지는 개당 5mb까지 업로드 가능합니다 / 최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
     toolbar: [
     ['style', ['style']],
     ['font', ['bold', 'italic', 'underline','strikethrough', 'clear']],

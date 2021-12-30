@@ -19,10 +19,12 @@ module.exports = {
         let date = today.getFullYear() + '-' + fillZero(2, today.getMonth()+1) + '-' + fillZero(2, today.getDate());
         let time = fillZero(2, today.getHours()) + ':' + fillZero(2, today.getMinutes()) + ':' + fillZero(2, today.getSeconds());
     
-        let param = [0, req.body.tab, req.body.title, req.body.author, 0, 0, 'N', date, time];
+	let title = req.body.title.replace(/<(\/script|script|div|\/div)([^>]*)>/gi,"");
+        let param = [0, req.body.tab, title, req.body.author, 0, 0, 'N', date, time];
         let board_query = mysql.format(dbQuery.NEW_ARTICLE, param);
     
-        param = [0, req.body.editordata];
+        let edit_data = req.body.editordata.replace(/<(\/script|script|\/div|div)([^>]*)>/gi,"");
+        param = [0, edit_data];
         let content_query = mysql.format(dbQuery.NEW_CONTENT, param);
 
         try {
@@ -61,8 +63,9 @@ module.exports = {
             return res.status(401).send(new Error('auth error'));
     
         let number = req.params.number;
-        let author = req.body.author;
-        let comment = req.body.comment.replace(/<[^>]+>/g, '');
+        let author = req.body.author.replace(/<[^>]+>/g, '');
+        if(req.body.comment.length === 0) return res.status(303).redirect('/article/' + number);
+	let comment = req.body.comment.replace(/<[^>]+>/g, '');
         let query = mysql.format(dbQuery.NEW_COMMENT, [number, author, comment]);
 
         try {
