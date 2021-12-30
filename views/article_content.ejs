@@ -41,7 +41,7 @@
                 <span><button id="hit-button" value="/article/<%-article.id%>/recommend">추천</button></span>
                 <button id="hit-count-bottom"><%-article.hits%></button>
             </div>
-            <% if(user.nickname === article.author) { %>
+            <% if(user.nickname === article.author || user.manager) { %>
                 <button id="delete-button" value="/article/<%-article.id%>">삭제</button>
             <% }%>
         <% }%>
@@ -58,7 +58,7 @@
                     <% if(user.auth) { %>
                         <button class="comment-box-inner-button" id="reply-comment-button" value="<%-comment.id%>">답글</button>
                     <% }%>
-                    <% if(comment.author === user.nickname) { %>
+                    <% if(comment.author === user.nickname || user.manager) { %>
                         <button class="comment-box-inner-button" id="mod-comment-button" value="<%-comment.id%>">수정</button>
                         <button class="comment-box-inner-button" id="delete-comment-button" value="/article/<%-comment.id%>/comment">삭제</button>
                     <% } %>
@@ -78,7 +78,7 @@
                                 <%-reply.reply%>
                             </div>
                             <div id="reply-button-box">
-                                <% if(reply.author === user.nickname) { %>
+                                <% if(reply.author === user.nickname || user.manager) { %>
                                     <button class="reply-box-inner-button" id="delete-reply-button" value="/article/<%-reply.id%>/reply">삭제</button>
                                 <% } %>
                             </div>
@@ -91,7 +91,7 @@
     <div id="comment-regist">
         <% if(user.auth) { %>
             <form action="/article/<%-article.id%>/comment" method="post" id="comment-form">
-                <textarea name="comment" cols="30" rows="10">비방/욕설 자제</textarea>
+                <textarea name="comment" cols="30" rows="10" placeholder="비방/욕설 자제"></textarea>
                 <input type="text" name="author" value="<%-user.nickname%>" style="display: none;">
                 <button type="submit" id="submit-button">등록</button>
             </form>
