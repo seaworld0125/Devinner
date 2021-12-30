@@ -96,6 +96,7 @@
       <section>
         <nav>
           <a href="/" id="nav-button">개발자 게시판</a>
+          <a href="" id="nav-button">개발 뉴스(준비 중)</a>
           <a href="/project" id="nav-button">사이드 프로젝트</a>
           <a href="/activity" id="nav-button">대외활동 모음</a>
           <a href="/roadmap" id="nav-button">개발자 로드맵</a>
@@ -122,6 +123,7 @@
           <button id="create-button">글쓰기</button>
           <table id="article-content">
             <tr id="board-top">
+              <th id="tab" class="align-center">탭</th>
               <th id="title" class="align-center">제목</th>
               <th id="author" class="align-center">글쓴이</th>
               <th id="date" class="align-center">날짜</th>
@@ -130,11 +132,22 @@
             </tr>
             <% board_list.forEach(article => { %>
               <tr>
-                  <td id="title" class="align-left"><a id="article_id" href="/article/<%=article.id%>"><%=article.title%></a></td>
-                  <td id="author" class="align-left"><a id="article_author"><%=article.author%></a></td>
-                  <td id="date" class="align-center"><%=article.date%></td>
-                  <td id="views" class="align-center"><%=article.view%></td>
-                  <td id="hits" class="align-center"><%=article.hits%></td>
+                  <td>
+                    <% if(article.group_id == 0) { %>
+                      <div id="tab" class="align-center overflow-hidden" style="color: rgb(214, 22, 22); font-weight: 600;">공지</div>
+                    <% } else if(article.group_id == 1) { %>
+                      <div id="tab" class="align-center overflow-hidden" style="color: rgba(59, 190, 42, 0.89); font-weight: 600;">질문</div>
+                    <% } else if(article.group_id == 2) { %>
+                      <div id="tab" class="align-center overflow-hidden" style="color: rgb(105, 22, 214); font-weight: 600;">개발</div>
+                    <% } else if(article.group_id == 3) { %>
+                      <div id="tab" class="align-center overflow-hidden">자유</div>
+                    <% } %>
+                  </td>
+                  <td><div id="title" class="align-center overflow-hidden"><a id="article_id" href="/article/<%=article.id%>"><%=article.title%></a></div></td>
+                  <td><div id="author" class="align-center overflow-hidden"><a id="article_author"><%=article.author%></a></div></td>
+                  <td id="date" class="align-center" style="font-size: small;"><%=article.date%></td>
+                  <td id="views" class="align-center"><div class="overflow-hidden" style="font-size: small;"><%=article.view%></div></td>
+                  <td id="hits" class="align-center"><div class="overflow-hidden" style="font-size: small;"><%=article.hits%></div></td>
               </tr>
             <% }); %>
           </table>

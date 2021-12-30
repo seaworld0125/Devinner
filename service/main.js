@@ -8,7 +8,7 @@ module.exports = {
             let data = await connection.query(query);
             connection.release();
     
-            return Promise.resolve(data[0].reverse());    
+            return Promise.resolve(data[0]);    
         } 
         catch (error) {
             console.log(error);
