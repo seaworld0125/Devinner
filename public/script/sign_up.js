@@ -30,23 +30,30 @@ $("#username").on("propertychange change keyup paste input", function() {
         return;
     }
     old_username = currentVal;
+
+    let pattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    if(pattern.test(currentVal)) {
+        $("label[for='username']").text('한글은 사용할 수 없습니다');
+        password_length_check = false;
+        return;
+    }
     let length_ = old_username.length;
     if(length_ == 0){
         $("label[for='username']").text('아이디');
         username_length_check = false;
     }
-    else if(length_ < 6 || length_ > 20){
-        $("label[for='username']").text('6글자 이상 20글자 이하입니다.');
+    else if(length_ < 6 || length_ > 15){
+        $("label[for='username']").text('6글자 이상 15글자 이하입니다.');
         username_length_check = false;
     }
-    else if(length_ > 5 && length_ < 21){
+    else if(length_ > 5 && length_ < 16){
         $("label[for='username']").text('적당한 길이네요!');
         username_length_check = true;
     }
 });      
 var old_password = "";      
 $("#password").on("propertychange change keyup paste input", function() {
-    var currentVal = $(this).val();
+    let currentVal = $(this).val();
     if(currentVal == old_password) {
         return;
     }
@@ -84,6 +91,13 @@ $("#nickname").on("propertychange change keyup paste input", function() {
         return;
     }
     old_nickname = currentVal;
+ 
+    let pattern = /[ㄱ-ㅎ|ㅏ-ㅣ]/;
+    if(pattern.test(currentVal)) {
+        $("label[for='nickname']").text('자음과 모음은 따로 사용할 수 없습니다');
+        nickname_length_check = false;
+        return;
+    }
     let length_ = old_nickname.length;
     if(length_ == 0){
         $("label[for='nickname']").text('닉네임');
@@ -120,7 +134,7 @@ button01.addEventListener('click', (e) => {
             }
         });   
     }
-    else alert('아이디 길이를 다시 확인해주세요');
+    else alert('아이디 조건을 다시 확인해주세요');
 });
 
 // check Nickname unique
@@ -144,13 +158,13 @@ button02.addEventListener('click', (e) => {
             }
         });  
     }
-    else alert('닉네임 길이를 다시 확인해주세요');              
+    else alert('닉네임 조건을 다시 확인해주세요');              
 });
 
 submitButton.addEventListener('click', (e) => {
     e.preventDefault();
     // check input
-    if(!username_length_check) {alert('아이디 길이를 확인해주세요'); return;}
+    if(!username_length_check) {alert('아이디 조건을 확인해주세요'); return;}
     if(!password_length_check) {alert('비밀번호를 확인해주세요'); return;}
     if(!password_user_check) {alert('비밀번호가 일치하지 않습니다'); return;}
     if(!nickname_length_check) {alert('닉네임 길이를 확인해주세요'); return;}

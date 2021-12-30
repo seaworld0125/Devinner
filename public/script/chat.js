@@ -12,8 +12,7 @@ const UPDATE_CLIENTNUM = 'update-clientNum';
 const CHAT_MSG = 'chat-message';
 const CHECK_BAN_LIST = 'check-ban-list';
 
-// const socket = io.connect('121.127.175.142', { transports: ['websocket'] });    // 자취방
-const socket = io.connect('localhost:3000', { transports: ['websocket'] });     // local
+const socket = io.connect('127.0.0.1:3000', { transports: ['websocket'] });     // local
 
 const chat_color = (function(_isAlpha) {
     let r = getRand(0, 255),

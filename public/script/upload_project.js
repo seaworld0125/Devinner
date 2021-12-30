@@ -9,6 +9,11 @@ let check_repos = false;
 buttonPost.addEventListener('click', (e) => {
     e.preventDefault();
 
+    let pattern = /[ㄱ-ㅎ|ㅏ-ㅣ]/;
+    if(pattern.test(title.value)) {
+        alert('정상적인 프로젝트 제목을 입력해주세요 !!😂');
+        return;
+    }
     if(title.value.length == 0) {
         alert('제목을 입력해주세요');
         return;
@@ -21,6 +26,7 @@ buttonPost.addEventListener('click', (e) => {
         alert('대표 이미지를 첨부해주세요');
         return;
     }
+    title.value = title.value.replace(/<[^>]+>/g, '');
     
     document.form.target = opener.window.name; // 타켓을 부모창으로 설정
     document.form.submit();
