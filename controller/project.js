@@ -6,7 +6,7 @@ module.exports = {
     getProjectPage : async (req, res, next) => {
         try {
             let projects = await service.getData(dbQuery.GET_PROJECTS);
-            res.status(200).render("project", {"session" : (req.session.auth ? req.session : undefined), "projects" : projects});
+            return res.status(200).render("project", {"session" : (req.session.auth ? req.session : undefined), "projects" : projects});
         }
         catch(error) {
             next(error);
@@ -16,7 +16,19 @@ module.exports = {
         try {
             let query = mysql.format(dbQuery.GET_USER_PROJECTS, [req.params.user]);
             let projects = await service.getData(query);
-            res.status(200).json(projects);
+            return res.status(200).json(projects);
+        }
+        catch(error) {
+            next(error);
+        }
+    },
+    deleteProject : async (req, res, next) => {
+        try {
+            for (let i = 0; i < req.body.list.length; i++) {
+                let query = mysql.format(dbQuery.DELETE_PROJECT, [Number(req.body.list[i])]);
+                await service.postData(query);
+            }
+            return res.status(200).end();
         }
         catch(error) {
             next(error);
