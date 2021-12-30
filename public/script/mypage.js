@@ -100,3 +100,29 @@ githubButton.addEventListener('click', async (e) => {
         alert(error);
     }
 });
+
+const submitButton = document.getElementById('submit-button');
+
+submitButton.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    let checkList = [];
+    let checkList_length = document.getElementsByName('projectId').length;
+
+    for (let i = 0; i < checkList_length; i++)
+        if(document.getElementsByName('projectId')[i].checked)
+            checkList.push(document.getElementsByName('projectId')[i].value);
+
+    if(confirm('정말 삭제하시겠습니까?')) {
+        $.ajax({
+            url : "/project",
+            method : "DELETE",
+            traditional : true,
+            data : {"list" : checkList}
+        }).done((response) => {
+            alert('삭제되었습니다');
+            window.opener.location.reload(true);
+            window.location.reload(true);
+        });
+    }
+});
