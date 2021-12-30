@@ -67,9 +67,11 @@ nicknameButton.addEventListener('click', async (e) => {
             return;
         }
         if(confirm(nickname + '은 사용가능한 별명입니다.\n사용하시겠습니까?')) {
-            await changeNickname(nickname);
-            alert('변경되었습니다');
-
+            if(await changeNickname(nickname))
+                alert('변경되었습니다');
+            else
+                alert('변경 불가');
+                
             window.opener.location.reload();
             location.reload();
         }

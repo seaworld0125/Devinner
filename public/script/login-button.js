@@ -8,8 +8,11 @@ loginForm.onsubmit = () => {return loginSpaceCheck()};
 
 function loginSpaceCheck() {
   if(inputId.value && inputPassword.value){
+    inputId.value = inputId.value.replace(/<[^>]+>/g, '');
+    inputPassword.value = inputPassword.value.replace(/<[^>]+>/g, '');
     return true;
   }
+
   alert("아이디와 비밀번호를 입력하세요!");
   return false;
 };

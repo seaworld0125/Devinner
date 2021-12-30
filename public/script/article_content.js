@@ -14,7 +14,8 @@ commentList.addEventListener("click", function(e) {
         let childNodes = replyForm.childNodes;
 
         if(buttonName === "답글") {
-            childNodes[1].innerText = "비방/욕설 자제";
+            childNodes[1].innerText = "";
+            childNodes[1].placeholder = "비방/욕설 자제";
         }
         else if(buttonName === "수정") {
             childNodes[1].innerText = brotherNode[5].innerText;
