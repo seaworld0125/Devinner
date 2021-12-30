@@ -5,16 +5,14 @@ const service    = require('../service/auth');
 
 module.exports = {
     login : async (req, res, next) => {
-        let id = req.body.id;
-        let password = req.body.password;
-        let query = mysql.format(dbQuery.CHECK_ACCOUNT, [id]);
+        if(!req.body.id || !req.body.password) return res.status(303).redirect('back');
 
-	console.log(id + ', ' + password + ', ' + query);
+        let id = req.body.id.replace(/<[^>]+>/g, '');
+        let password = req.body.password.replace(/<[^>]+>/g, '');
+        let query = mysql.format(dbQuery.CHECK_ACCOUNT, [id]);
 
         try {
             let result = await service.getData(query);
-
-	    console.log("result : " + result);
 
             if(!result) return res.status(303).redirect('back');
 
@@ -24,10 +22,10 @@ module.exports = {
                 req.session.nickname = result.nickname;
                 req.session.level = result.level;
                 req.session.github = result.github_id;
-    
+                req.session.manager = (result.manager === 'Y' ? true : false);
+
                 req.session.save((err) => {
                     if(err) throw err;
-                    
                     return res.status(303).redirect('back');
                 });
             }

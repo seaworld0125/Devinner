@@ -2,6 +2,7 @@ const mysql   = require('mysql2');
 const db = require('../conf/db');
 const dbQuery = require('../model/query');
 const service = require('../service/users');
+const sanitize_func = require('../Helpers/sanitize_func');
 
 module.exports = {
     getUserGithubId : async (req, res, next) => {
@@ -10,7 +11,6 @@ module.exports = {
 
         try {
             let data = await service.getData(query);
-            console.log(data[0]);
 
             return res.json(data[0]);
         }
@@ -20,7 +20,7 @@ module.exports = {
     },
     getMypage : async (req, res, next) => {
         if(!req.session.auth)
-            return res.status(200).render('login_error');
+            return res.status(403).render('login_error');
 
         let nickname = req.session.nickname;
         try {
@@ -33,29 +33,30 @@ module.exports = {
             return res.status(200).render('mypage', {'user' : info[0], 'projects' : projects});
         }
         catch(error) {
-            next(error);
+            return next(error);
         }
     },
     checkNickname : async (req, res) => {
         if(!req.session.auth) {
-            return res.status(200).render('login_error');
+            return res.status(403).render('login_error');
         }
 
-        let nickname = req.params.nickname;
-        let query = mysql.format(dbQuery.CHECK_NICKNAME, nickname);
-
+        let query = mysql.format(dbQuery.CHECK_NICKNAME, req.params.nickname);
         try {
             let result = await service.getData(query);
 
             return res.status(200).send(result.length ? false : true).end();
         } 
         catch(error) {
-            return res.status(500).send(error);
+            return next(error);
         }
     },
     changeNickname : async (req, res, next) => {
         if(!req.session.auth)
-            return res.status(200).render('login_error');
+            return res.status(403).render('login_error');
+
+        let new_nickname = sanitize_func.notAllowedAll(nickname);
+        if(!new_nickname) return res.status(400).send(false);
 
         let param = [req.params.nickname, req.session.nickname];
         try {
@@ -73,12 +74,12 @@ module.exports = {
             return res.status(200).send(true);
         }
         catch(error) {
-            return res.status(500).send(error);
+            return next(error);
         }
     },
     changeGithubId : async (req, res, next) => {
         if(!req.session.auth)
-            return res.status(200).render('login_error');
+            return res.status(403).render('login_error');
 
         try {
             let query = mysql.format(dbQuery.UPDATE_GITHUB_ID, [req.params.github, req.session.nickname]);
@@ -89,7 +90,7 @@ module.exports = {
             return res.status(200).send(true);
         }
         catch(error) {
-            return res.status(500).send(error);
+            return next(error);
         }
     },
 }

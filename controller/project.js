@@ -4,9 +4,12 @@ const mysql = require('mysql2');
 
 module.exports = {
     getProjectPage : async (req, res, next) => {
+        if(!req.session.auth)
+            return res.status(403).render('login_error', {});
+
         try {
             let projects = await service.getData(dbQuery.GET_PROJECTS);
-            return res.status(200).render("project", {"session" : (req.session.auth ? req.session : undefined), "projects" : projects});
+            return res.status(200).render("project", {"session" : req.session, "projects" : projects});
         }
         catch(error) {
             next(error);
@@ -25,7 +28,9 @@ module.exports = {
     deleteProject : async (req, res, next) => {
         try {
             for (let i = 0; i < req.body.list.length; i++) {
-                let query = mysql.format(dbQuery.DELETE_PROJECT, [Number(req.body.list[i])]);
+                let query = mysql.format(dbQuery.GET_USER_PROJECT_BY_ID, [Number(req.body.list[i])]);
+
+                query = mysql.format(dbQuery.DELETE_PROJECT, [Number(req.body.list[i])]);
                 await service.postData(query);
             }
             return res.status(200).end();

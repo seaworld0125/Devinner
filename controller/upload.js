@@ -1,32 +1,33 @@
 const mysql    = require("mysql2");
 const dbQuery  = require('../model/query');
 const service  = require('../service/upload');
+const sanitize_func = require('../Helpers/sanitize_func');
 
 module.exports = {
     uploadImage : (req, res, next) => {
-        let url_ = '/img/upload/' + req.file.filename;
-        res.json({url : url_});
+        let url = '/img/upload/' + sanitize_func.notAllowedAll(req.file.filename);
+        res.json({'url' : url});
     },
     uploadProjectPage : (req, res, next) => {
-        let page = (req.session.auth ? 'upload_project' : 'login_error');
-        let author = req.session.nickname;
-        let github = (req.session.github ? req.session.github : '');
+        if(!req.session.auth)
+            return res.status(403).render('login_error', {});
 
-        return res.status(200).render(page, {'author' : author, 'github' : github});
+        return res.status(200).render('upload_project', {'author' : req.session.nickname, 'github' : (req.session.github ? req.session.github : '')});
     },
     uploadProject : async (req, res, next) => {
-        let author = req.body.author;
-        let github = req.body.github;
-        let repos = req.body.repos;
-        let title = req.body.title;
-        let desc = req.body.description;
-        let img = '/img/upload/' + req.file.filename;
+
+        let author = sanitize_func.notAllowedAll(req.body.author);
+        let github = sanitize_func.notAllowedAll(req.body.github);
+        let repos = sanitize_func.notAllowedAll(req.body.repos);
+        let title = sanitize_func.notAllowedAll(req.body.title);
+        let desc = sanitize_func.notAllowedAll(req.body.description);
+        let img = '/img/upload/' + sanitize_func.notAllowedAll(req.file.filename);
+
+        if(!author || !github || !repos || !title || !desc) return res.status(303).redirect('/project');
 
         let query = mysql.format(dbQuery.NEW_PROJECT, [author, github, repos, title, desc, img]);
-
         try {
             await service.postData(query);
-            
             return res.status(303).redirect('/project');
         }
         catch(error) {

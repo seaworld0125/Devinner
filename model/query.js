@@ -7,13 +7,18 @@ module.exports = {
     CHECK_RECOMMEND_NICKNAME : 'SELECT * FROM recommend WHERE nickname = ?',
     
     GET_BOARD_LIST : "SELECT * FROM board WHERE if_delete = 'N'",
-    GET_ARTICLE_INFO : 'SELECT content.id, group_id, title, author, view, hits, date, time, content FROM board INNER JOIN content ON board.id = content.id WHERE board.id = ?',
-    GET_COMMENT : "SELECT * FROM comment WHERE article_id = ? AND if_delete = 'N'",
-    GET_REPLY : "SELECT * FROM reply WHERE article_id = ? AND if_delete = 'N'",
+    GET_ARTICLE_INFO : "SELECT content.id, group_id, title, author, view, hits, date, time, content FROM board INNER JOIN content ON board.id = content.id WHERE board.id = ? AND if_delete = 'N'",
+    GET_ARTICLE_COMMENT : "SELECT * FROM comment WHERE article_id = ? AND if_delete = 'N'",
+    GET_ARTICLE_REPLY : "SELECT * FROM reply WHERE article_id = ? AND if_delete = 'N'",
+
+    GET_COMMENT : "SELECT * FROM comment WHERE id = ? and if_delete = 'N'",
+    GET_REPLY : "SELECT * FROM reply WHERE id = ? and if_delete = 'N'",
+
     GET_GITHUB_ID : "SELECT github_id FROM account WHERE nickname = ?",
     GET_PROJECTS : "SELECT * FROM projects WHERE if_delete = 'N'",
     GET_USER_INFO : "SELECT * FROM account WHERE nickname = ?",
     GET_USER_PROJECTS : "SELECT * FROM projects WHERE author = ? AND if_delete = 'N'",
+    GET_USER_PROJECT_BY_ID : "SELECT * FROM projects WHERE id = ?",
     
     NEW_ARTICLE : 'INSERT INTO board VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?)',
     NEW_CONTENT : 'INSERT INTO content VALUE(?, ?)',
