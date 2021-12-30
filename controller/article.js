@@ -19,7 +19,7 @@ module.exports = {
         let date = today.getFullYear() + '-' + fillZero(2, today.getMonth()+1) + '-' + fillZero(2, today.getDate());
         let time = fillZero(2, today.getHours()) + ':' + fillZero(2, today.getMinutes()) + ':' + fillZero(2, today.getSeconds());
     
-        let param = [0, 1, req.body.title, req.body.author, 0, 0, 'N', date, time];
+        let param = [0, req.body.tab, req.body.title, req.body.author, 0, 0, 'N', date, time];
         let board_query = mysql.format(dbQuery.NEW_ARTICLE, param);
     
         param = [0, req.body.editordata];

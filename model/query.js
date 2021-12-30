@@ -7,7 +7,7 @@ module.exports = {
     CHECK_RECOMMEND_NICKNAME : 'SELECT * FROM recommend WHERE nickname = ?',
     
     GET_BOARD_LIST : "SELECT * FROM board WHERE if_delete = 'N'",
-    GET_ARTICLE_INFO : 'SELECT content.id, title, author, view, hits, date, time, content FROM board INNER JOIN content ON board.id = content.id WHERE board.id = ?',
+    GET_ARTICLE_INFO : 'SELECT content.id, group_id, title, author, view, hits, date, time, content FROM board INNER JOIN content ON board.id = content.id WHERE board.id = ?',
     GET_COMMENT : "SELECT * FROM comment WHERE article_id = ? AND if_delete = 'N'",
     GET_REPLY : "SELECT * FROM reply WHERE article_id = ? AND if_delete = 'N'",
     GET_GITHUB_ID : "SELECT github_id FROM account WHERE nickname = ?",
@@ -21,7 +21,7 @@ module.exports = {
     NEW_REPLY : "INSERT INTO reply VALUE(0, ?, ?, ?, ?, 'N')",
     NEW_PROJECT : "INSERT INTO projects VALUE(0, ?, ?, ?, ?, ?, ?, 'N')",
     
-    CREATE_ACCOUNT : 'INSERT INTO account VALUE(?, ?, ?, ?, ?, ?, ?, 1, 0)',
+    CREATE_ACCOUNT : "INSERT INTO account VALUE(?, ?, ?, ?, ?, ?, ?, 1, 0, 'N')",
     
     UPDATE_VIEW : 'UPDATE board SET view = view + 1 WHERE id = ?',
     UPDATE_COMMENT : "UPDATE comment SET comment = ? WHERE id = ?",
@@ -35,6 +35,7 @@ module.exports = {
     DELETE_ARTICLE : "UPDATE board SET if_delete = 'Y' WHERE id = ?", 
     DELETE_COMMENT : "UPDATE comment SET if_delete = 'Y' WHERE id = ?",
     DELETE_REPLY : "UPDATE reply SET if_delete = 'Y' WHERE id = ?",
+    DELETE_PROJECT : "UPDATE projects SET if_delete = 'Y' WHERE id = ?",
     
     SET_NICKNAME : 'UPDATE account SET nickname=? WHERE nickname=?',
 
