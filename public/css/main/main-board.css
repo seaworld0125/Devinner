@@ -2,8 +2,11 @@
     --article-width : 900px;
 }
 
+#tab {
+    width: 55px;
+}
 #title {
-    width: 490px;
+    width: 435px;
 }
 #author {
     width: 150px;
@@ -25,26 +28,31 @@
 }
 article table {
     border-collapse: collapse;
-
+    
     width: var(--article-width);
 }
 #board-top {
     border-top: 1px solid rgba(255, 255, 255, 0.219);
 }
-article tr {
+table tr {
     height: 30px;
 }
-article th {
+table th {
     background-color: rgba(134, 134, 134, 0.226);
     
     color: rgba(255, 255, 255, 0.808);
     font-weight: 100;
     border-bottom: 1px solid rgba(255, 255, 255, 0.219);
 }
-article td {
+table td {
     color: rgba(255, 255, 255, 0.685);
     font-weight: 200;
     font-size: 15px;
+}
+.overflow-hidden {
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    white-space: nowrap;
 }
 #article_id {
     color: rgba(255, 255, 255, 0.808);

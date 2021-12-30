@@ -45,6 +45,9 @@ body {
 .note-editable {
     color: rgb(255, 254, 247);
 }
+select {
+    margin-bottom: 10px;
+}
 
 #post-button {
     background: #333; 

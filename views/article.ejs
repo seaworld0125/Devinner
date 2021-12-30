@@ -16,6 +16,11 @@
             <form name="form" action="/article" method="post" autocomplete="off">
                 작성자 : <input type="text" name="author" id="author" value="<%-author%>" readonly/><br>
                 제목 <input type="text" name="title" id="title" maxlength="30" />
+                탭 <select name="tab" id="tab">
+                    <option value="1">질문</option>
+                    <option value="2">개발</option>
+                    <option value="3">자유</option>
+                </select>
                 <textarea id="summernote" name="editordata">
                     비방/욕설 주의해주세요 / 이미지는 개당 5mb까지 업로드 가능합니다.
                 </textarea>
