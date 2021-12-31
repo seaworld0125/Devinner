@@ -24,8 +24,6 @@ module.exports = {
         let author = sanitize_func.notAllowedAllHtml(req.body.author);
         let edit_data = sanitize_func.allowedDefaultHtml(req.body.editordata);
 
-        console.log(edit_data.length);
-        console.log(edit_data);
         if(!tab || (Number(tab) === 0 && !req.session.manager) || !title || !author || !edit_data) return res.status(303).redirect('/');
 
         let param = [0, tab, title, author, 0, 0, 'N', date, time];
