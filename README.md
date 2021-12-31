@@ -6,6 +6,8 @@
 
 [홈페이지 바로가기](devinner.co.kr) (배포 예정 21.12.31)
 
+[Devinner 개발 회고록 바로가기](https://velog.io/@seaworld0125/%EC%B4%88%EB%B3%B4-%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9D%98-1%EC%9D%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%ED%9A%8C%EA%B3%A0)
+
 # 목차
 - 서비스 소개
 - 사용 기술
