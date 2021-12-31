@@ -2,14 +2,14 @@ const mysql = require('mysql2');
 const dbQuery   = require('../model/query');
 const fillZero  = require('../Helpers/fill_zero');
 const service   = require('../service/article');
-const sanitize_func = require('../Helpers/sanitize_func');
+const sanitize_func = require('../Helpers/validator');
 
 module.exports = {
     getWritingPage : (req, res) => {
         if(!req.session.auth)
             return res.status(403).render('login_error', {});
     
-        return res.status(200).render('article', {'author' : req.session.nickname});
+        return res.status(200).render('article', {'author' : req.session.nickname, 'manager' : req.session.manager});
     },
     postArticle : async (req, res, next) => {
         if(!req.session.auth)
@@ -19,11 +19,13 @@ module.exports = {
         let date = today.getFullYear() + '-' + fillZero(2, today.getMonth()+1) + '-' + fillZero(2, today.getDate());
         let time = fillZero(2, today.getHours()) + ':' + fillZero(2, today.getMinutes()) + ':' + fillZero(2, today.getSeconds());
         
-        let title = sanitize_func.notAllowedAll(req.body.title);
-        let tab = sanitize_func.notAllowedAll(req.body.tab);
-        let author = sanitize_func.notAllowedAll(req.body.author);
-        let edit_data = sanitize_func.allowedDefault(req.body.editordata);
+        let title = sanitize_func.notAllowedAllHtml(req.body.title);
+        let tab = sanitize_func.notAllowedAllHtml(req.body.tab);
+        let author = sanitize_func.notAllowedAllHtml(req.body.author);
+        let edit_data = sanitize_func.allowedDefaultHtml(req.body.editordata);
 
+        console.log(edit_data.length);
+        console.log(edit_data);
         if(!tab || (Number(tab) === 0 && !req.session.manager) || !title || !author || !edit_data) return res.status(303).redirect('/');
 
         let param = [0, tab, title, author, 0, 0, 'N', date, time];
@@ -70,9 +72,9 @@ module.exports = {
         if(!req.session.auth)
             return res.status(401).send(new Error('auth error'));
 
-        let number = sanitize_func.notAllowedAll(req.params.number);
-        let author = sanitize_func.notAllowedAll(req.body.author);
-        let comment = sanitize_func.notAllowedAll(req.body.comment);
+        let number = sanitize_func.notAllowedAllHtml(req.params.number);
+        let author = sanitize_func.notAllowedAllHtml(req.body.author);
+        let comment = sanitize_func.notAllowedAllHtml(req.body.comment);
 
         if(!number || !author || !comment) return res.status(303).redirect('/article/' + number);
             
@@ -95,8 +97,8 @@ module.exports = {
         try {
             let query = mysql.format(dbQuery.GET_COMMENT, req.params.number);
             let comment = await service.getData(query);
-            let comment_id = sanitize_func.notAllowedAll(req.params.number);
-            let comment_body = sanitize_func.notAllowedAll(req.body.data);
+            let comment_id = sanitize_func.notAllowedAllHtml(req.params.number);
+            let comment_body = sanitize_func.notAllowedAllHtml(req.body.data);
 
             if(!comment[0] || comment[0].author !== req.session.nickname || !comment_id || !comment_body) return res.status(400).end();
 
@@ -112,10 +114,10 @@ module.exports = {
         if(!req.session.auth)
             return res.status(401).send(new Error('auth error'));
     
-        let number = sanitize_func.notAllowedAll(req.params.number);
-        let comment_id = sanitize_func.notAllowedAll(req.body.comment_id);
-        let author = sanitize_func.notAllowedAll(req.body.author);
-        let reply = sanitize_func.notAllowedAll(req.body.reply);
+        let number = sanitize_func.notAllowedAllHtml(req.params.number);
+        let comment_id = sanitize_func.notAllowedAllHtml(req.body.comment_id);
+        let author = sanitize_func.notAllowedAllHtml(req.body.author);
+        let reply = sanitize_func.notAllowedAllHtml(req.body.reply);
         
         if(!number || !comment_id || !author || !reply) return res.status(303).redirect('/article/' + number);    
             

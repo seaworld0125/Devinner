@@ -1,10 +1,10 @@
 const sanitizeHtml = require('sanitize-html');
 
 module.exports = {
-    notAllowedAll : (data) => {
+    notAllowedAllHtml : (data) => {
         return sanitizeHtml(data, {allowedTags:[], allowedAttributes:{}});
     },
-    allowedDefault : (data) => {
+    allowedDefaultHtml : (data) => {
         return sanitizeHtml(data);
     },
 };

@@ -3,7 +3,7 @@ const dbQuery    = require('../model/query');
 const INET       = require('../Helpers/inet');
 const hashModule = require('../Helpers/hash_module');
 const service    = require('../service/sign_up');
-const sanitize_func = require('../Helpers/sanitize_func');
+const sanitize_func = require('../Helpers/validator');
 
 module.exports = {
     getLoginPage : (req, res) => {
@@ -16,11 +16,11 @@ module.exports = {
         if(req.session.auth)
             return res.status(403).render('login_error');
     
-        let id = sanitize_func.notAllowedAll(req.body.username);
-        let password = sanitize_func.notAllowedAll(req.body.password);
-        let nickname = sanitize_func.notAllowedAll(req.body.nickname);
-        let ip = INET.aton(sanitize_func.notAllowedAll(req.body.ip));
-        let github = sanitize_func.notAllowedAll(req.body.github);
+        let id = sanitize_func.notAllowedAllHtml(req.body.username);
+        let password = sanitize_func.notAllowedAllHtml(req.body.password);
+        let nickname = sanitize_func.notAllowedAllHtml(req.body.nickname);
+        let ip = INET.aton(sanitize_func.notAllowedAllHtml(req.body.ip));
+        let github = sanitize_func.notAllowedAllHtml(req.body.github);
 
         if(!id || !password || !nickname || !ip) return res.status(303).redirect('/');    
     

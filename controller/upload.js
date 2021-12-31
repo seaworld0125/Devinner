@@ -1,11 +1,11 @@
 const mysql    = require("mysql2");
 const dbQuery  = require('../model/query');
 const service  = require('../service/upload');
-const sanitize_func = require('../Helpers/sanitize_func');
+const sanitize_func = require('../Helpers/validator');
 
 module.exports = {
     uploadImage : (req, res, next) => {
-        let url = '/img/upload/' + sanitize_func.notAllowedAll(req.file.filename);
+        let url = '/img/upload/' + sanitize_func.notAllowedAllHtml(req.file.filename);
         res.json({'url' : url});
     },
     uploadProjectPage : (req, res, next) => {
@@ -16,12 +16,12 @@ module.exports = {
     },
     uploadProject : async (req, res, next) => {
 
-        let author = sanitize_func.notAllowedAll(req.body.author);
-        let github = sanitize_func.notAllowedAll(req.body.github);
-        let repos = sanitize_func.notAllowedAll(req.body.repos);
-        let title = sanitize_func.notAllowedAll(req.body.title);
-        let desc = sanitize_func.notAllowedAll(req.body.description);
-        let img = '/img/upload/' + sanitize_func.notAllowedAll(req.file.filename);
+        let author = sanitize_func.notAllowedAllHtml(req.body.author);
+        let github = sanitize_func.notAllowedAllHtml(req.body.github);
+        let repos = sanitize_func.notAllowedAllHtml(req.body.repos);
+        let title = sanitize_func.notAllowedAllHtml(req.body.title);
+        let desc = sanitize_func.notAllowedAllHtml(req.body.description);
+        let img = '/img/upload/' + sanitize_func.notAllowedAllHtml(req.file.filename);
 
         if(!author || !github || !repos || !title || !desc) return res.status(303).redirect('/project');
 

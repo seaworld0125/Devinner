@@ -17,6 +17,9 @@
                 작성자 : <input type="text" name="author" id="author" value="<%-author%>" readonly/><br>
                 제목 <input type="text" name="title" id="title" maxlength="30" />
                 탭 <select name="tab" id="tab">
+                    <% if(manager) { %>
+                        <option value="0">공지</option>
+                    <% } %>
                     <option value="1">질문</option>
                     <option value="2">개발</option>
                     <option value="3">자유</option>

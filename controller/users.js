@@ -1,8 +1,7 @@
 const mysql   = require('mysql2');
-const db = require('../conf/db');
 const dbQuery = require('../model/query');
 const service = require('../service/users');
-const sanitize_func = require('../Helpers/sanitize_func');
+const sanitize_func = require('../Helpers/validator');
 
 module.exports = {
     getUserGithubId : async (req, res, next) => {
@@ -55,7 +54,7 @@ module.exports = {
         if(!req.session.auth)
             return res.status(403).render('login_error');
 
-        let new_nickname = sanitize_func.notAllowedAll(nickname);
+        let new_nickname = sanitize_func.notAllowedAllHtml(nickname);
         if(!new_nickname) return res.status(400).send(false);
 
         let param = [req.params.nickname, req.session.nickname];
