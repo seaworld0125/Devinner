@@ -4,9 +4,6 @@ const mysql = require('mysql2');
 
 module.exports = {
     getProjectPage : async (req, res, next) => {
-        if(!req.session.auth)
-            return res.status(403).render('login_error', {});
-
         try {
             let projects = await service.getData(dbQuery.GET_PROJECTS);
             return res.status(200).render("project", {"session" : req.session, "projects" : projects});
