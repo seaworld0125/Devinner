@@ -17,7 +17,6 @@ module.exports = {
                 }
             });
             list.reverse();
-            console.log(list);
 
             return res.status(200).render('main', {'board_list' : list, 'session' : (req.session.auth ? req.session : undefined), 'news' : news});
         }
