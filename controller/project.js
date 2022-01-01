@@ -6,7 +6,7 @@ module.exports = {
     getProjectPage : async (req, res, next) => {
         try {
             let projects = await service.getData(dbQuery.GET_PROJECTS);
-            return res.status(200).render("project", {"session" : req.session, "projects" : projects});
+            return res.status(200).render("project", {'session' : (req.session.auth ? req.session : undefined), "projects" : projects});
         }
         catch(error) {
             next(error);
