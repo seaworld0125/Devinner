@@ -55,3 +55,8 @@ Github, Github action
 
 ### 배포
 AWS
+
+# 서버 구조
+
+![image](https://user-images.githubusercontent.com/75168305/147853297-47c6c04e-665a-4252-bb89-446c18c64325.png)
+
