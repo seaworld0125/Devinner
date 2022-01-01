@@ -114,6 +114,8 @@ let appendMsg = (data) => {
     msgBox.scrollTo(0, msgBox.scrollHeight);
 };
 
+const bad_word = /씨발|시발|개새끼|개쉐끼|니미|꺼져|섹스|좆까|조까/g;
+
 msgForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -143,8 +145,9 @@ msgForm.addEventListener('submit', (e) => {
             message_count = 0;
         }
         last_message = message_time;
-    
-        let data = {"msg": inputMsg.value.replace(/<[^>]+>/g, ''), "name": nick_name, "ip": ip_address, "color": chat_color};
+
+        let message = inputMsg.value.replace(/<[^>]+>/g, '').replace(bad_word, "ooo");
+        let data = {"msg": message, "name": nick_name, "ip": ip_address, "color": chat_color};
         socket.emit(CHAT_MSG, data);
         appendMsg(data);
 
