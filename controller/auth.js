@@ -29,6 +29,7 @@ module.exports = {
                     return res.status(303).redirect('back');
                 });
             }
+            else res.status(303).redirect('back');
         }
         catch(error) {
             next(error);
