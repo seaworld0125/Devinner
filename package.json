@@ -37,7 +37,6 @@
     "require": "^0.4.4",
     "sanitize-html": "^2.6.1",
     "socket.io": "^4.2.0",
-    "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5"
   }
 }
