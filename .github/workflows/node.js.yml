@@ -1,0 +1,38 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+# 워크플로우 이름
+name: Node.js CI 
+
+# 이벤트와 브랜치를 설정
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
+# jobs는 여러개의 job으로 이루어져 있다.
+# 기본적으로 병렬 수행되며, 작업에 의존성을 추가해 순차적으로 실행하게 할 수 있다. 
+# "needs: {job 이름}" 으로 의존성 설정 가능.
+# 여러개의 작업이 같은 종속성을 사용하는 경우 파일들을 캐싱해서 재사용할 수 있다.
+# https://github.com/actions/cache/blob/main/examples.md#macos-and-ubuntu
+
+jobs: 
+  build: # build라는 job이다
+
+    runs-on: ubuntu-latest # step // 한 작업의 각 스텝들은 같은 러너에서 실행되므로 데이터를 공유한다.
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci 
+    - run: npm test
