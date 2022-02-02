@@ -5,6 +5,7 @@
 ![site_logo03](https://user-images.githubusercontent.com/75168305/147461280-d53afeeb-3d2c-4c37-a8df-04c25ef0a1d8.png)
 
 [홈페이지 바로가기](devinner.co.kr) 
+
 (배포 예정 21.12.31) -> (배포 완료 21.12.31) -> (서비스 중지 사유 : 이용자 감소에 따른 새로운 서비스 기획 및 적용 준비)
 
 [Devinner 개발 회고록 바로가기](https://velog.io/@seaworld0125/%EC%B4%88%EB%B3%B4-%EA%B0%9C%EB%B0%9C%EC%9E%90%EC%9D%98-1%EC%9D%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%ED%9A%8C%EA%B3%A0)
@@ -55,4 +56,4 @@ Notion
 Github, Github action
 
 ### 배포
-AWS
+AWS, Nginx
