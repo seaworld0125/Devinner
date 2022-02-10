@@ -54,7 +54,7 @@ Express, javascript, HTML, CSS, MySQL
 Notion
 
 ### CI/CD
-Github action, CodeDeploy, S3
+Github actions, CodeDeploy, S3
 
 ### 운영환경
 AWS, Nginx
